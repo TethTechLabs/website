@@ -1,0 +1,134 @@
+/* Hero — full-section workspace background */
+
+.hero--workspace {
+  position: relative;
+  overflow: hidden;
+  min-height: 528px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid var(--border);
+  background-color: #f7f9fc;
+  background-image:
+    linear-gradient(
+      90deg,
+      rgba(248, 250, 252, 1) 0%,
+      rgba(248, 250, 252, 0.99) 32%,
+      rgba(248, 250, 252, 0.96) 46%,
+      rgba(248, 250, 252, 0.8) 58%,
+      rgba(248, 250, 252, 0.52) 70%,
+      rgba(248, 250, 252, 0.26) 82%,
+      rgba(248, 250, 252, 0.1) 100%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(220, 230, 242, 0.06) 30%,
+      rgba(200, 216, 232, 0.14) 100%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(26, 45, 74, 0.02) 35%,
+      rgba(26, 45, 74, 0.05) 100%
+    ),
+    url("/images/hero-workspace.png");
+  background-size: cover;
+  background-position: 90% 38%;
+  background-repeat: no-repeat;
+}
+
+/* Soft white lift — photo recedes as atmosphere */
+.hero--workspace::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: rgba(255, 255, 255, 0.17);
+}
+
+.hero--workspace .hero-inner {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 96px 24px 68px;
+  display: block;
+  grid-template-columns: unset;
+}
+
+.hero--workspace .hero-content {
+  position: relative;
+  z-index: 1;
+  max-width: 560px;
+}
+
+/* Tighten gap before What We Do */
+.hero--workspace + .section {
+  padding-top: 72px;
+}
+
+/* Tablet */
+@media (max-width: 900px) {
+  .hero--workspace {
+    min-height: 468px;
+    background-position: 93% 36%;
+    background-image:
+      linear-gradient(
+        90deg,
+        rgba(248, 250, 252, 1) 0%,
+        rgba(248, 250, 252, 0.98) 40%,
+        rgba(248, 250, 252, 0.86) 55%,
+        rgba(248, 250, 252, 0.48) 75%,
+        rgba(248, 250, 252, 0.14) 100%
+      ),
+      linear-gradient(
+        90deg,
+        rgba(220, 230, 242, 0.08) 35%,
+        rgba(200, 216, 232, 0.16) 100%
+      ),
+      linear-gradient(
+        90deg,
+        rgba(26, 45, 74, 0.03) 40%,
+        rgba(26, 45, 74, 0.055) 100%
+      ),
+      url("/images/hero-workspace.png");
+  }
+
+  .hero--workspace .hero-inner {
+    padding: 84px 24px 60px;
+  }
+
+  .hero--workspace + .section {
+    padding-top: 64px;
+  }
+}
+
+/* Mobile — text-first, background hidden */
+@media (max-width: 640px) {
+  .hero--workspace {
+    min-height: auto;
+    background-image:
+      linear-gradient(
+        180deg,
+        rgba(248, 250, 252, 1) 0%,
+        rgba(248, 250, 252, 0.98) 65%,
+        rgba(248, 250, 252, 0.96) 100%
+      );
+  }
+
+  .hero--workspace::after {
+    display: none;
+  }
+
+  .hero--workspace .hero-inner {
+    padding: 64px 24px 52px;
+  }
+
+  .hero--workspace .hero-content {
+    max-width: none;
+  }
+
+  .hero--workspace + .section {
+    padding-top: 56px;
+  }
+}
