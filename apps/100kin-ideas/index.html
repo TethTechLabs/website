@@ -12,12 +12,12 @@
   <meta property="og:title" content="100均活用術 — Coming Soon | TethTechLabs">
   <meta property="og:description" content="SNSで流れてしまう100均活用術を、探しやすく整理・ストック。iPhone / Android 対応予定。現在開発中・近日公開。">
   <meta property="og:site_name" content="TethTechLabs">
-  <meta property="og:image" content="https://tethtechlabs.com/images/hyakkin/teaser-hero.jpg">
+  <meta property="og:image" content="https://tethtechlabs.com/images/hyakkin/icon-256.png">
   <meta property="og:locale" content="ja_JP">
-  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="100均活用術 — Coming Soon | TethTechLabs">
   <meta name="twitter:description" content="SNSで流れてしまう100均活用術を、探しやすく整理・ストック。現在開発中・近日公開予定。">
-  <meta name="twitter:image" content="https://tethtechlabs.com/images/hyakkin/teaser-hero.jpg">
+  <meta name="twitter:image" content="https://tethtechlabs.com/images/hyakkin/icon-256.png">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -57,137 +57,153 @@
     </header>
 
     <main>
-      <section class="hyakkin-hero">
-        <div class="hyakkin-hero-inner">
-          <div class="hyakkin-hero-copy">
-            <div class="hyakkin-brand-row">
-              <img class="hyakkin-icon" src="/images/hyakkin/icon-256.png" width="72" height="72" alt="100均活用術アプリアイコン">
+      <section class="hk-hero" aria-labelledby="hk-hero-title">
+        <div class="hk-hero-inner">
+          <div class="hk-hero-copy">
+            <div class="hk-brand">
+              <img class="hk-brand-icon" src="/images/hyakkin/icon-256.png" width="56" height="56" alt="">
               <div>
-                <h1 class="hyakkin-app-name">100均活用術</h1>
-                <p class="hyakkin-app-sub">100-yen Shop Ideas App</p>
+                <p class="hk-brand-name">100均活用術</p>
+                <p class="hk-brand-sub">100-yen Shop Ideas App</p>
               </div>
             </div>
-            <p class="hyakkin-catch">SNSで流れてしまう100均活用術を、探しやすく整理・ストック。</p>
-            <p class="hyakkin-lead">ダイソー・セリア・キャンドゥの商品を使った、今すぐ試せる活用術を探す・保存する・投稿するためのアプリです。</p>
-            <div class="hyakkin-status-row" aria-label="公開状況">
-              <span class="badge badge-status">Coming Soon</span>
-              <span class="badge">iPhone 対応予定</span>
-              <span class="badge">Android 対応予定</span>
-              <span class="badge">現在開発中</span>
-            </div>
+
+            <h1 id="hk-hero-title" class="hk-hero-title">
+              SNSで流れてしまう<br>
+              100均活用術を、<br>
+              探しやすく整理・ストック。
+            </h1>
+
+            <p class="hk-hero-lead">
+              ダイソー・セリア・キャンドゥの商品を使った、今すぐ試せる活用術を探す・保存する・投稿するためのアプリです。
+            </p>
+
+            <p class="hk-hero-note">
+              100均へ行く前の確認や、家にある100均グッズをもっと活用したいときに開くアプリを目指しています。
+            </p>
+
             <!--
               Store URL switch:
-              Set APP_STORE_URL / GOOGLE_PLAY_URL below.
-              Empty string → 「近日公開」表示。URL を入れるとストアボタンに切り替わります。
+              data-app-store-url / data-google-play-url に URL を入れるとボタン化。
+              空のままなら「近日公開」表示（空リンクは置かない）。
             -->
-            <div
-              id="hyakkin-store-slot"
-              class="hyakkin-store-slot"
-              data-app-store-url=""
-              data-google-play-url=""
-            ></div>
+            <div class="hk-cta-row">
+              <div
+                id="hyakkin-store-slot"
+                class="hyakkin-store-slot"
+                data-app-store-url=""
+                data-google-play-url=""
+              ></div>
+              <div class="hk-platform" aria-label="対応予定">
+                <span class="hk-platform-item">
+                  <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M16.5 3.5c-.7.1-1.6.6-2.1 1.2-.5.6-.9 1.5-.8 2.3.8.1 1.6-.4 2.1-1 .6-.6 1-1.5.8-2.5zM19.3 17.3c-.5 1.1-.7 1.6-1.4 2.6-.9 1.3-2.1 2.9-3.7 2.9-1.4 0-1.8-.9-3.4-.9s-2.1.9-3.4.9c-1.6.1-2.9-1.5-3.8-2.8C2 17.4.8 13.5 2.5 10.8c1-1.6 2.7-2.6 4.5-2.6 1.4 0 2.7.9 3.4.9s2.3-1.1 4-.9c.7.1 2.6.3 3.8 2-.1.1-2.3 1.3-2.2 4 .1 3.2 2.8 4.2 2.8 4.2l-.5-.1z"/></svg>
+                  iPhone 対応予定
+                </span>
+                <span class="hk-platform-item">
+                  <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M17.6 9.5 14 3H10L6.4 9.5 3 15.4l4.3 2.5L3 20.3l1.7 1 4.3-2.5 1.7 1 1.7-1 4.3 2.5 1.7-1-4.3-2.4 4.3-2.5-3.4-5.9zm-9.3 1.1L10.4 6h3.2l2.1 4.6H8.3zm-.9 1.6h9.2l1.7 3-6.3 3.6-6.3-3.6 1.7-3z"/></svg>
+                  Android 対応予定
+                </span>
+              </div>
+            </div>
           </div>
-          <div class="hyakkin-hero-visual">
-            <figure class="hyakkin-hero-shot">
-              <img
-                src="/images/hyakkin/shot-01-discovery.jpg"
-                width="960"
-                height="2080"
-                alt="100均活用術アプリの紹介画像。活用術を探す画面"
-              >
-            </figure>
-          </div>
-        </div>
-      </section>
 
-      <section class="hyakkin-section">
-        <div class="hyakkin-section-inner hyakkin-concept">
-          <h2 class="hyakkin-section-title">コンセプト</h2>
-          <div class="hyakkin-section-desc">
-            <p>100均の活用術を紹介するサイトや記事はすでにあります。一方で、単発の商品紹介や、メーカー向けのアイデア提案、SNS上の投稿などに情報が分散し、あとから探しにくいことがあります。</p>
-            <p>このアプリでは、日々の暮らしで今すぐ使える100均活用術を、探しやすい形で整理・蓄積します。100均へ行く前の確認や、家にある100均グッズをもっと活用したいときに開くアプリを目指しています。</p>
-          </div>
-        </div>
-      </section>
-
-      <section class="hyakkin-section hyakkin-section-alt">
-        <div class="hyakkin-section-inner">
-          <h2 class="hyakkin-section-title">主な機能</h2>
-          <p class="hyakkin-section-desc">暮らしの中で使いやすいように、探す・保存する・投稿する流れをシンプルにまとめています。</p>
-          <div class="hyakkin-feature-grid">
-            <article class="hyakkin-feature">
-              <h3 class="hyakkin-feature-title">店舗から探せる</h3>
-              <p class="hyakkin-feature-text">ダイソー・セリア・キャンドゥから活用術を探せます。</p>
-            </article>
-            <article class="hyakkin-feature">
-              <h3 class="hyakkin-feature-title">アイデアを保存</h3>
-              <p class="hyakkin-feature-text">気になるアイデアをストックして、あとから見返せます。</p>
-            </article>
-            <article class="hyakkin-feature">
-              <h3 class="hyakkin-feature-title">用途・カテゴリ検索</h3>
-              <p class="hyakkin-feature-text">用途やカテゴリから、今ほしい活用術へたどり着けます。</p>
-            </article>
-            <article class="hyakkin-feature">
-              <h3 class="hyakkin-feature-title">自分の活用術を投稿</h3>
-              <p class="hyakkin-feature-text">試した工夫を投稿して、ほかの人の参考にもできます。</p>
-            </article>
-            <article class="hyakkin-feature">
-              <h3 class="hyakkin-feature-title">ランク別に見つける</h3>
-              <p class="hyakkin-feature-text">良いアイデアをランク別に見つけて、選びやすくします。</p>
-            </article>
+          <div class="hk-hero-visual" aria-hidden="true">
+            <div class="hk-phone-stack">
+              <div class="hk-phone hk-phone--left">
+                <div class="hk-phone-screen hk-ph" data-label="アプリ画面"></div>
+              </div>
+              <div class="hk-phone hk-phone--center">
+                <div class="hk-phone-screen hk-ph" data-label="アプリ画面"></div>
+              </div>
+              <div class="hk-phone hk-phone--right">
+                <div class="hk-phone-screen hk-ph" data-label="アプリ画面"></div>
+              </div>
+            </div>
+            <svg class="hk-leaf" viewBox="0 0 200 160" fill="none" aria-hidden="true">
+              <path d="M20 130C48 88 92 52 168 28c-8 46-34 82-78 108-22 12-46 16-70-6z" fill="currentColor" opacity=".14"/>
+              <path d="M168 28c-42 34-74 72-92 118" stroke="currentColor" stroke-width="2" opacity=".22"/>
+            </svg>
           </div>
         </div>
       </section>
 
-      <section class="hyakkin-section">
-        <div class="hyakkin-section-inner">
-          <h2 class="hyakkin-section-title">スクリーンショット</h2>
-          <p class="hyakkin-section-desc">ストア掲載用として作成中の画面イメージです。</p>
-          <div class="hyakkin-shot-grid">
-            <figure class="hyakkin-shot-card">
-              <img loading="lazy" src="/images/hyakkin/shot-01-discovery.jpg" width="960" height="2080" alt="活用術を探すディスカバリー画面のスクリーンショット">
-              <figcaption class="hyakkin-shot-caption">探す</figcaption>
-            </figure>
-            <figure class="hyakkin-shot-card">
-              <img loading="lazy" src="/images/hyakkin/shot-04-home.jpg" width="780" height="1688" alt="ホーム画面のスクリーンショット">
-              <figcaption class="hyakkin-shot-caption">ホーム</figcaption>
-            </figure>
-            <figure class="hyakkin-shot-card">
-              <img loading="lazy" src="/images/hyakkin/shot-05-stores.jpg" width="780" height="1688" alt="店舗から探す画面のスクリーンショット">
-              <figcaption class="hyakkin-shot-caption">店舗から探す</figcaption>
-            </figure>
-            <figure class="hyakkin-shot-card">
-              <img loading="lazy" src="/images/hyakkin/shot-02-free.jpg" width="960" height="2080" alt="保存・無料体験まわりの画面のスクリーンショット">
-              <figcaption class="hyakkin-shot-caption">保存・体験</figcaption>
-            </figure>
-            <figure class="hyakkin-shot-card">
-              <img loading="lazy" src="/images/hyakkin/shot-03-community.jpg" width="960" height="2080" alt="投稿・コミュニティ画面のスクリーンショット">
-              <figcaption class="hyakkin-shot-caption">投稿</figcaption>
-            </figure>
+      <section class="hk-features" aria-labelledby="hk-features-title">
+        <div class="hk-features-inner">
+          <header class="hk-features-head">
+            <h2 id="hk-features-title" class="hk-features-title">主な機能</h2>
+            <p class="hk-features-desc">探す・保存する・投稿する流れを、シンプルにまとめています。</p>
+          </header>
+
+          <div class="hk-feature-grid">
+            <article class="hk-feature-card">
+              <div class="hk-feature-top">
+                <span class="hk-feature-num">01</span>
+                <span class="hk-feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="6.5"/><path d="M16.2 16.2 20 20"/></svg>
+                </span>
+              </div>
+              <h3 class="hk-feature-name">店舗から探せる</h3>
+              <div class="hk-feature-media hk-ph" data-label="画面プレースホルダー"></div>
+              <p class="hk-feature-text">ダイソー・セリア・キャンドゥから、活用術を探せます。</p>
+            </article>
+
+            <article class="hk-feature-card">
+              <div class="hk-feature-top">
+                <span class="hk-feature-num">02</span>
+                <span class="hk-feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 4.5h10a1 1 0 0 1 1 1V20l-6-3.2L6 20V5.5a1 1 0 0 1 1-1z"/></svg>
+                </span>
+              </div>
+              <h3 class="hk-feature-name">アイデアを保存</h3>
+              <div class="hk-feature-media hk-ph" data-label="画面プレースホルダー"></div>
+              <p class="hk-feature-text">気になるアイデアをストックして、あとから見返せます。</p>
+            </article>
+
+            <article class="hk-feature-card">
+              <div class="hk-feature-top">
+                <span class="hk-feature-num">03</span>
+                <span class="hk-feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="7" height="7" rx="1.5"/><rect x="13" y="4" width="7" height="7" rx="1.5"/><rect x="4" y="13" width="7" height="7" rx="1.5"/><rect x="13" y="13" width="7" height="7" rx="1.5"/></svg>
+                </span>
+              </div>
+              <h3 class="hk-feature-name">用途・カテゴリ検索</h3>
+              <div class="hk-feature-media hk-ph" data-label="画面プレースホルダー"></div>
+              <p class="hk-feature-text">用途やカテゴリから、今ほしい活用術へたどり着けます。</p>
+            </article>
+
+            <article class="hk-feature-card">
+              <div class="hk-feature-top">
+                <span class="hk-feature-num">04</span>
+                <span class="hk-feature-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/><circle cx="12" cy="12" r="9"/></svg>
+                </span>
+              </div>
+              <h3 class="hk-feature-name">活用術を投稿</h3>
+              <div class="hk-feature-media hk-ph" data-label="画面プレースホルダー"></div>
+              <p class="hk-feature-text">試した工夫を投稿して、ほかの人の参考にもできます。</p>
+            </article>
           </div>
-        </div>
-      </section>
 
-      <section class="hyakkin-section hyakkin-section-alt">
-        <div class="hyakkin-section-inner">
-          <h2 class="hyakkin-section-title">対応状況</h2>
-          <p class="hyakkin-section-desc">リリース前のため、現時点ではストア配信中ではありません。</p>
-          <ul class="hyakkin-status-list">
-            <li>iPhone 対応予定</li>
-            <li>Android 対応予定</li>
-            <li>現在開発中</li>
-            <li>近日公開予定</li>
-          </ul>
-          <div class="hyakkin-store-slot" style="margin-top: 24px;" data-mirror-of="hyakkin-store-slot"></div>
-        </div>
-      </section>
+          <aside class="hk-rank-bar" aria-label="ランク表示">
+            <div class="hk-rank-label">
+              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7">
+                <path d="M8 10V6.5a1 1 0 0 1 1-1h6a1 1 0 0 1 1 1V10"/>
+                <path d="M6.5 10h11l-.8 8.2a1.5 1.5 0 0 1-1.5 1.3H8.8a1.5 1.5 0 0 1-1.5-1.3L6.5 10z"/>
+                <path d="M9 4.5h6"/>
+              </svg>
+              <span>良いアイデアをランク別に見つけられる</span>
+            </div>
+            <div class="hk-rank-pills">
+              <span class="hk-pill hk-pill--hall">殿堂入り</span>
+              <span class="hk-pill hk-pill--s">S</span>
+              <span class="hk-pill hk-pill--a">A</span>
+              <span class="hk-pill hk-pill--b">B</span>
+            </div>
+          </aside>
 
-      <section class="hyakkin-section">
-        <div class="hyakkin-section-inner">
-          <h2 class="hyakkin-section-title">運営者情報</h2>
-          <div class="hyakkin-operator">
-            <p class="hyakkin-section-desc">運営：TethTechLabs</p>
-            <div class="hyakkin-operator-links">
+          <div class="hk-operator">
+            <p>運営：TethTechLabs</p>
+            <div class="hk-operator-links">
               <a href="/about.html">About</a>
               <a href="/contact.html">Contact</a>
               <a href="/privacy.html">Privacy Policy</a>
@@ -229,10 +245,6 @@
     (function () {
       'use strict';
 
-      /**
-       * 将来のストア公開時はここ（または data 属性）に URL を入れるだけで
-       * 「近日公開」表示から App Store / Google Play ボタンへ切り替わります。
-       */
       var STORE_URLS = {
         appStore: '',
         googlePlay: ''
@@ -252,7 +264,7 @@
 
         if (!appStore && !googlePlay) {
           var soon = document.createElement('span');
-          soon.className = 'hyakkin-coming-soon';
+          soon.className = 'hk-coming-soon';
           soon.textContent = '近日公開';
           slot.appendChild(soon);
           return;
@@ -260,7 +272,7 @@
 
         if (appStore) {
           var a = document.createElement('a');
-          a.className = 'hyakkin-store-btn';
+          a.className = 'hk-store-btn';
           a.href = appStore;
           a.target = '_blank';
           a.rel = 'noopener noreferrer';
@@ -270,7 +282,7 @@
 
         if (googlePlay) {
           var g = document.createElement('a');
-          g.className = 'hyakkin-store-btn';
+          g.className = 'hk-store-btn';
           g.href = googlePlay;
           g.target = '_blank';
           g.rel = 'noopener noreferrer';
@@ -279,16 +291,7 @@
         }
       }
 
-      var primary = document.getElementById('hyakkin-store-slot');
-      renderStoreSlot(primary);
-
-      document.querySelectorAll('[data-mirror-of="hyakkin-store-slot"]').forEach(function (mirror) {
-        if (primary) {
-          mirror.setAttribute('data-app-store-url', primary.getAttribute('data-app-store-url') || '');
-          mirror.setAttribute('data-google-play-url', primary.getAttribute('data-google-play-url') || '');
-        }
-        renderStoreSlot(mirror);
-      });
+      renderStoreSlot(document.getElementById('hyakkin-store-slot'));
     })();
   </script>
 </body>
