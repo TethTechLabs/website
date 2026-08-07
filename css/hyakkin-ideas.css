@@ -194,6 +194,15 @@
   background: #eef3ef;
 }
 
+/* 実スクショはめ込み: 縦横比維持・上寄せ（ヘッダー切れ防止）。中央トリミングしない */
+.hyakkin-page .hk-phone-screen img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+}
+
 .hyakkin-page .hk-phone--left {
   left: 14px;
   top: 86px;
@@ -336,6 +345,16 @@
   aspect-ratio: 4 / 3;
   border-radius: 12px;
   border: 1px solid var(--hk-line);
+  overflow: hidden;
+  background: #eef3ef;
+}
+
+.hyakkin-page .hk-feature-media img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
 }
 
 .hyakkin-page .hk-feature-text {
