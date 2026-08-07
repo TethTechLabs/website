@@ -286,6 +286,89 @@
   transform: translateY(-50%);
 }
 
+/* ---------- Waiting list CTA ----------
+   このページの唯一の転換先。塗りは #4d6a54 を使う（#6f8f74 は白文字との
+   コントラストが 3.59:1 で AA に届かない。#4d6a54 なら 5.99:1）。 */
+.hyakkin-page .hk-cta {
+  position: relative;
+  z-index: 2;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 14px 30px;
+  border-radius: 999px;
+  background: #4d6a54;
+  color: var(--hk-white);
+  text-decoration: none;
+  text-align: center;
+  box-shadow: 0 14px 28px rgba(38, 52, 41, 0.22);
+  transition: background-color 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.hyakkin-page .hk-cta:hover,
+.hyakkin-page .hk-cta:focus-visible {
+  background: #3f5845;
+  transform: translateY(-1px);
+  box-shadow: 0 18px 34px rgba(38, 52, 41, 0.26);
+}
+
+.hyakkin-page .hk-cta-label {
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+}
+
+.hyakkin-page .hk-cta-sub {
+  font-size: 0.75rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.hyakkin-page .hk-cta-band {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px 28px;
+  flex-wrap: wrap;
+  padding: 26px 28px;
+  border-radius: 16px;
+  background: var(--hk-green-soft);
+  border: 1px solid rgba(111, 143, 116, 0.24);
+  margin-bottom: 28px;
+}
+
+.hyakkin-page .hk-cta-band-copy {
+  flex: 1 1 320px;
+  min-width: 0;
+}
+
+.hyakkin-page .hk-cta-band-title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  color: var(--hk-ink);
+  margin-bottom: 6px;
+}
+
+.hyakkin-page .hk-cta-band-text {
+  font-size: 0.9375rem;
+  line-height: 1.7;
+  color: var(--hk-muted);
+}
+
+.hyakkin-page .hk-cta--band {
+  flex: 0 0 auto;
+}
+
+@media (max-width: 640px) {
+  .hyakkin-page .hk-cta {
+    width: 100%;
+    padding: 15px 20px;
+  }
+}
+
 /* ---------- Features ---------- */
 .hyakkin-page .hk-features {
   padding: 56px 24px 64px;
