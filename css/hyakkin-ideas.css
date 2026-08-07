@@ -115,8 +115,9 @@
   justify-content: center;
 }
 
-.hyakkin-page .hyakkin-phone {
-  width: min(100%, 420px);
+.hyakkin-page .hyakkin-hero-shot {
+  width: min(100%, 460px);
+  margin: 0;
   border-radius: 16px;
   overflow: hidden;
   border: 1px solid var(--border);
@@ -124,11 +125,10 @@
   background: var(--white);
 }
 
-.hyakkin-page .hyakkin-phone img {
+.hyakkin-page .hyakkin-hero-shot img {
   width: 100%;
   height: auto;
   display: block;
-  object-fit: contain;
 }
 
 .hyakkin-page .hyakkin-section {
@@ -305,8 +305,8 @@ a.app-card-link:focus-visible {
     order: -1;
   }
 
-  .hyakkin-page .hyakkin-phone {
-    width: min(100%, 360px);
+  .hyakkin-page .hyakkin-hero-shot {
+    width: min(100%, 380px);
   }
 
   .hyakkin-page .hyakkin-feature-grid {
