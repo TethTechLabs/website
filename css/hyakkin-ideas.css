@@ -367,8 +367,8 @@
 }
 
 /*
- * 縦長のスクショを 4:3 の枠へ直接入れると帯状に切れて何の画面か伝わらない。
- * 枠の寸法は変えず、中に小さな端末を置いて上端から見せ、下は枠外へ逃がす。
+ * 端末の絵はヒーローで足りているので、機能カードは枠を描かずUIそのものを大きく見せる。
+ * 画像は該当UIだけを切り出して撮っているため、上端から見せれば要素が潰れない。
  */
 .hyakkin-page .hk-feature-media {
   position: relative;
@@ -376,75 +376,15 @@
   border-radius: 12px;
   border: 1px solid var(--hk-line);
   overflow: hidden;
-  background:
-    radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0) 70%),
-    var(--hk-green-mist);
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
+  background: var(--hk-white);
 }
 
-.hyakkin-page .hk-mini-phone {
-  --hk-mini-pad: 5px;
-  --hk-mini-pad-top: 12px;
-  --hk-mini-radius: 20px;
-
-  position: relative;
-  box-sizing: border-box;
-  width: 54%;
-  margin-top: 11%;
-  aspect-ratio: 200 / 428;
-  flex: none;
-  border-radius: var(--hk-mini-radius);
-  background: #1b1e1c;
-  padding: var(--hk-mini-pad-top) var(--hk-mini-pad) var(--hk-mini-pad);
-  box-shadow:
-    0 12px 24px rgba(38, 52, 41, 0.22),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
-}
-
-/* 4枚とも真正面だと並びが単調になる。角度と寄せを変えて見せ方を散らす */
-.hyakkin-page .hk-feature-card:nth-child(2) .hk-mini-phone {
-  transform: rotate(-7deg) translateX(-7%);
-}
-
-.hyakkin-page .hk-feature-card:nth-child(3) .hk-mini-phone {
-  transform: rotate(6deg) translateX(8%);
-}
-
-.hyakkin-page .hk-feature-card:nth-child(4) .hk-mini-phone {
-  width: 62%;
-  margin-top: 15%;
-  transform: rotate(-3deg);
-}
-
-.hyakkin-page .hk-mini-phone::before {
-  content: "";
-  position: absolute;
-  top: calc((var(--hk-mini-pad-top) - 4px) / 2);
-  left: 50%;
-  transform: translateX(-50%);
-  width: 30%;
-  height: 4px;
-  border-radius: 999px;
-  background: #0a0c0a;
-}
-
-.hyakkin-page .hk-mini-screen {
-  display: block;
-  width: 100%;
-  height: 100%;
-  border-radius: calc(var(--hk-mini-radius) - var(--hk-mini-pad));
-  overflow: hidden;
-  background: #eef3ef;
-}
-
+/* 幅いっぱいに合わせ、枠より縦に長い分だけ下を逃がす。左右を切らないので
+   検索窓・入力欄・店名などが途中で断ち切られない */
 .hyakkin-page .hk-feature-media img {
   display: block;
   width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: top center;
+  height: auto;
 }
 
 .hyakkin-page .hk-feature-text {
