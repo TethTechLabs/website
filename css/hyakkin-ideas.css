@@ -403,6 +403,21 @@
     inset 0 0 0 1px rgba(255, 255, 255, 0.1);
 }
 
+/* 4枚とも真正面だと並びが単調になる。角度と寄せを変えて見せ方を散らす */
+.hyakkin-page .hk-feature-card:nth-child(2) .hk-mini-phone {
+  transform: rotate(-7deg) translateX(-7%);
+}
+
+.hyakkin-page .hk-feature-card:nth-child(3) .hk-mini-phone {
+  transform: rotate(6deg) translateX(8%);
+}
+
+.hyakkin-page .hk-feature-card:nth-child(4) .hk-mini-phone {
+  width: 62%;
+  margin-top: 15%;
+  transform: rotate(-3deg);
+}
+
 .hyakkin-page .hk-mini-phone::before {
   content: "";
   position: absolute;
@@ -477,14 +492,32 @@
   flex: 0 0 auto;
 }
 
+/* ランク表示は本文の右に離れて置くと目に入りにくい。注釈と縦に組んで一塊にする */
+.hyakkin-page .hk-rank-aside {
+  flex: 0 1 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  min-width: 0;
+}
+
+.hyakkin-page .hk-rank-note {
+  margin: 0;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--hk-muted);
+  text-align: right;
+}
+
 .hyakkin-page .hk-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-height: 26px;
-  padding: 0 10px;
+  min-height: 32px;
+  padding: 0 14px;
   border-radius: 999px;
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
   font-weight: 700;
   background: var(--hk-white);
   border: 1px solid var(--hk-line);
