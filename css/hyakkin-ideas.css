@@ -116,8 +116,8 @@
 }
 
 .hyakkin-page .hyakkin-phone {
-  width: min(100%, 280px);
-  border-radius: 28px;
+  width: min(100%, 420px);
+  border-radius: 16px;
   overflow: hidden;
   border: 1px solid var(--border);
   box-shadow: var(--shadow-lg);
@@ -127,9 +127,8 @@
 .hyakkin-page .hyakkin-phone img {
   width: 100%;
   height: auto;
-  aspect-ratio: 9 / 19.5;
-  object-fit: cover;
-  object-position: top center;
+  display: block;
+  object-fit: contain;
 }
 
 .hyakkin-page .hyakkin-section {
@@ -214,9 +213,8 @@
   width: 100%;
   height: auto;
   border-radius: 12px;
-  aspect-ratio: 9 / 19.5;
-  object-fit: cover;
-  object-position: top center;
+  display: block;
+  object-fit: contain;
   background: var(--off-white);
 }
 
@@ -308,7 +306,7 @@ a.app-card-link:focus-visible {
   }
 
   .hyakkin-page .hyakkin-phone {
-    width: min(100%, 240px);
+    width: min(100%, 360px);
   }
 
   .hyakkin-page .hyakkin-feature-grid {
