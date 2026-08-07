@@ -476,11 +476,13 @@
   color: var(--hk-muted);
 }
 
+/* space-between だと本文とランク表示が両端へ引き離されて中央に大きな空白が残る。
+   左から詰めて、間隔は gap だけで決める */
 .hyakkin-page .hk-rank-bar {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 20px;
+  justify-content: flex-start;
+  gap: 16px 28px;
   flex-wrap: wrap;
   padding: 18px 22px;
   border-radius: 16px;
@@ -490,7 +492,7 @@
 }
 
 .hyakkin-page .hk-rank-copy {
-  flex: 1 1 280px;
+  flex: 0 1 auto;
   min-width: 0;
 }
 
@@ -520,17 +522,18 @@
   flex: 0 1 auto;
   display: flex;
   flex-direction: column;
-  align-items: flex-end;
+  align-items: flex-start;
   gap: 8px;
   min-width: 0;
 }
 
+/* 右寄せだと折り返しが不揃いに見える。左揃えにして、折り返し位置も指定しない */
 .hyakkin-page .hk-rank-note {
   margin: 0;
   font-size: 0.75rem;
-  line-height: 1.6;
+  line-height: 1.7;
   color: var(--hk-muted);
-  text-align: right;
+  text-align: left;
 }
 
 .hyakkin-page .hk-pill {
@@ -652,7 +655,8 @@ a.app-card-link:focus-visible {
 
 @media (max-width: 640px) {
   .hyakkin-page .hk-hero-title {
-    font-size: 1.625rem;
+    /* 「あなたは何のために100均へ？」を1行で保つため幅に追従させる */
+    font-size: clamp(1.25rem, 6vw, 1.625rem);
   }
 
   .hyakkin-page .hk-hero-title br {
