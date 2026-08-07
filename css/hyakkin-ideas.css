@@ -164,32 +164,61 @@
   text-align: center;
 }
 
+/*
+ * 3台は同じ寸法にする（大きさ違いは端末の作り分けに見えてしまう）。
+ * 奥行きは影と縦オフセットだけで出す。
+ * 左右は「幅の6割が中央の外に出る」位置に固定する。中央幅の半分＋0.6幅ぶん
+ * 外側へ置けば、重なりが常に4割になる。stack幅は 2.2 × 端末幅で過不足なし。
+ */
 .hyakkin-page .hk-phone-stack {
+  --hk-phone-w: 200px;
+  --hk-phone-h: 428px;
+  --hk-phone-radius: 38px;
+  --hk-phone-pad: 10px;
+  --hk-phone-pad-top: 24px;
+  --hk-island-h: 9px;
+  --hk-side-top: 34px;
+
   position: relative;
   z-index: 2;
-  width: 420px;
+  width: calc(var(--hk-phone-w) * 2.2);
   max-width: 100%;
-  height: 470px;
+  height: calc(var(--hk-phone-h) + var(--hk-side-top) + 8px);
   margin: 0 auto;
 }
 
 .hyakkin-page .hk-phone {
   position: absolute;
   box-sizing: border-box;
-  width: 178px;
-  height: 364px;
-  border-radius: 30px;
-  background: #dfe6e1;
-  border: 1px solid rgba(70, 90, 75, 0.28);
-  box-shadow: var(--hk-shadow);
-  padding: 11px;
-  opacity: 1;
+  width: var(--hk-phone-w);
+  height: var(--hk-phone-h);
+  border-radius: var(--hk-phone-radius);
+  background: #1b1e1c;
+  padding: var(--hk-phone-pad-top) var(--hk-phone-pad) var(--hk-phone-pad);
+  box-shadow:
+    0 18px 36px rgba(38, 52, 41, 0.2),
+    0 5px 12px rgba(38, 52, 41, 0.12),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+/* Dynamic Island 相当。実スクショにステータスバーが無いので、上ベゼル内に置いて
+   アプリ側のヘッダーを隠さないようにする */
+.hyakkin-page .hk-phone::before {
+  content: "";
+  position: absolute;
+  top: calc((var(--hk-phone-pad-top) - var(--hk-island-h)) / 2);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30%;
+  height: var(--hk-island-h);
+  border-radius: 999px;
+  background: #0a0c0a;
 }
 
 .hyakkin-page .hk-phone-screen {
   width: 100%;
   height: 100%;
-  border-radius: 22px;
+  border-radius: calc(var(--hk-phone-radius) - var(--hk-phone-pad));
   overflow: hidden;
   background: #eef3ef;
 }
@@ -204,29 +233,25 @@
 }
 
 .hyakkin-page .hk-phone--left {
-  left: 14px;
-  top: 86px;
-  transform: translateX(-8px) scale(0.82);
+  left: calc(50% - var(--hk-phone-w) * 1.1);
+  top: var(--hk-side-top);
   z-index: 1;
 }
 
 .hyakkin-page .hk-phone--right {
-  right: 14px;
-  top: 86px;
-  transform: translateX(8px) scale(0.82);
+  left: calc(50% + var(--hk-phone-w) * 0.1);
+  top: var(--hk-side-top);
   z-index: 1;
 }
 
 .hyakkin-page .hk-phone--center {
-  left: 50%;
-  top: 4px;
-  width: 224px;
-  height: 458px;
-  margin-left: -112px;
+  left: calc(50% - var(--hk-phone-w) / 2);
+  top: 0;
   z-index: 3;
-  transform: none;
-  background: #d7e0da;
-  box-shadow: 0 28px 56px rgba(55, 70, 58, 0.18);
+  box-shadow:
+    0 30px 60px rgba(38, 52, 41, 0.28),
+    0 10px 22px rgba(38, 52, 41, 0.18),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.12);
 }
 
 /* Placeholders */
@@ -341,10 +366,60 @@
   line-height: 1.35;
 }
 
+/*
+ * 縦長のスクショを 4:3 の枠へ直接入れると帯状に切れて何の画面か伝わらない。
+ * 枠の寸法は変えず、中に小さな端末を置いて上端から見せ、下は枠外へ逃がす。
+ */
 .hyakkin-page .hk-feature-media {
+  position: relative;
   aspect-ratio: 4 / 3;
   border-radius: 12px;
   border: 1px solid var(--hk-line);
+  overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, 0.9), rgba(255, 255, 255, 0) 70%),
+    var(--hk-green-mist);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.hyakkin-page .hk-mini-phone {
+  --hk-mini-pad: 5px;
+  --hk-mini-pad-top: 12px;
+  --hk-mini-radius: 20px;
+
+  position: relative;
+  box-sizing: border-box;
+  width: 54%;
+  margin-top: 11%;
+  aspect-ratio: 200 / 428;
+  flex: none;
+  border-radius: var(--hk-mini-radius);
+  background: #1b1e1c;
+  padding: var(--hk-mini-pad-top) var(--hk-mini-pad) var(--hk-mini-pad);
+  box-shadow:
+    0 12px 24px rgba(38, 52, 41, 0.22),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.hyakkin-page .hk-mini-phone::before {
+  content: "";
+  position: absolute;
+  top: calc((var(--hk-mini-pad-top) - 4px) / 2);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 30%;
+  height: 4px;
+  border-radius: 999px;
+  background: #0a0c0a;
+}
+
+.hyakkin-page .hk-mini-screen {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: calc(var(--hk-mini-radius) - var(--hk-mini-pad));
   overflow: hidden;
   background: #eef3ef;
 }
@@ -506,25 +581,12 @@ a.app-card-link:focus-visible {
   }
 
   .hyakkin-page .hk-phone-stack {
-    width: 340px;
-    height: 360px;
-  }
-
-  .hyakkin-page .hk-phone {
-    width: 132px;
-    height: 272px;
-  }
-
-  .hyakkin-page .hk-phone--center {
-    width: 168px;
-    height: 344px;
-    margin-left: -84px;
-    top: 6px;
-  }
-
-  .hyakkin-page .hk-phone--left,
-  .hyakkin-page .hk-phone--right {
-    top: 48px;
+    --hk-phone-w: 168px;
+    --hk-phone-h: 360px;
+    --hk-phone-radius: 32px;
+    --hk-phone-pad-top: 20px;
+    --hk-island-h: 8px;
+    --hk-side-top: 28px;
   }
 
   .hyakkin-page .hk-feature-grid {
@@ -550,25 +612,13 @@ a.app-card-link:focus-visible {
   }
 
   .hyakkin-page .hk-phone-stack {
-    width: 280px;
-    height: 300px;
-  }
-
-  .hyakkin-page .hk-phone {
-    width: 112px;
-    height: 230px;
-    border-radius: 22px;
-    padding: 8px;
-  }
-
-  .hyakkin-page .hk-phone-screen {
-    border-radius: 16px;
-  }
-
-  .hyakkin-page .hk-phone--center {
-    width: 146px;
-    height: 298px;
-    margin-left: -73px;
+    --hk-phone-w: 132px;
+    --hk-phone-h: 283px;
+    --hk-phone-radius: 26px;
+    --hk-phone-pad: 7px;
+    --hk-phone-pad-top: 16px;
+    --hk-island-h: 6px;
+    --hk-side-top: 22px;
   }
 
   .hyakkin-page .hk-feature-grid {
