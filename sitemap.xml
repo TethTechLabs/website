@@ -11,6 +11,11 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://tethtechlabs.com/apps/100kin-ideas/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
     <loc>https://tethtechlabs.com/about.html</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
