@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="100" height="100" role="img" aria-label="住宅ローン試算">
+  <rect width="100" height="100" rx="22" fill="#1b45c9"/>
+  <path d="M14 48 L50 18 L86 48 L74 48 L74 84 L26 84 L26 48 Z" fill="none" stroke="#ffffff" stroke-width="5" stroke-linejoin="round"/>
+  <rect x="30" y="54" width="7.5" height="24" rx="1.5" fill="#ffffff"/>
+  <rect x="41" y="59.5" width="7.5" height="18.5" rx="1.5" fill="#ffffff"/>
+  <rect x="52" y="65" width="7.5" height="13" rx="1.5" fill="#ffffff"/>
+  <rect x="63" y="70.5" width="7.5" height="7.5" rx="1.5" fill="#ffffff"/>
+</svg>
