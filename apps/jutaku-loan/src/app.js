@@ -1122,7 +1122,7 @@ function costHintCell(field, value, label) {
   return `<input type="text" inputmode="decimal" class="cell-input" data-field="${field}"
     value="${value === "" || value == null ? "" : value}"
     placeholder="0"
-    aria-label="${label}（万円）"/>`;
+    aria-label="${label}（万円）"/><span class="unit">万円</span>`;
 }
 
 function costsHtml(costs) {
@@ -1171,14 +1171,14 @@ function costsHtml(costs) {
       </div>
       <div class="is-computed">
         <dt>諸費用</dt>
-        <dd><b>${yen(costs.fees)}</b></dd>
+        <dd><b>${man(costs.fees, { decimals: 1 })}</b></dd>
       </div>
       <div>
         <dt>自己資金</dt>
         <dd><input type="text" inputmode="decimal" data-field="ownFundsMan" value="${S.ownFundsMan || ""}" placeholder="0"/><span class="unit">万円</span></dd>
       </div>
     </dl>
-    <p class="cost-required"><span>必要な借入額</span><b>${yen(costs.requiredLoan)}</b></p>
+    <p class="cost-required"><span>必要な借入額</span><b>${man(costs.requiredLoan, { decimals: 1 })}</b></p>
 
     <div class="cost-group boxed">
       <h3>契約時の諸費用（請負・売買）</h3>

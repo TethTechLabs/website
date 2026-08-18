@@ -2517,6 +2517,12 @@ button {
   padding: 6px 0 6px 6px;
 }
 
+.data-table.costs td.amount .unit {
+  margin-left: 6px;
+  font-size: 11px;
+  color: var(--faint);
+}
+
 .cell-amount {
   display: inline-block;
   padding: 4px 0;
