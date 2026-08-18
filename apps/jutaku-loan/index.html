@@ -32,11 +32,15 @@
     <meta property="og:locale" content="ja_JP" />
     <meta name="twitter:card" content="summary_large_image" />
 
+    <!-- adsense:start — Web版のみ。AdSenseはアプリ内での使用が規約で禁止されているため、
+         ストアアプリ用のビルド（scripts/build-dist.sh）ではこのブロックごと削除する。
+         アプリ側の広告は AdMob（src/ads-native.js）で出す。 -->
     <script
       async
       src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7330372157278017"
       crossorigin="anonymous"
     ></script>
+    <!-- adsense:end -->
 
     <link rel="stylesheet" href="./src/styles.css" />
     <script>
