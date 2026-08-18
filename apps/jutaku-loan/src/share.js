@@ -121,5 +121,7 @@ export function buildShareText(data) {
     `総返済：${data.total}`,
     "",
     `※${data.disclaimer}`,
+    // 受け取った人が自分の条件で試せるように、最後に公開URLを置く。
+    ...(data.url ? ["", data.url] : []),
   ].join("\n");
 }

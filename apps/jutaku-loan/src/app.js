@@ -30,6 +30,12 @@ const TODAY_LABEL = new Date().toLocaleDateString("ja-JP", {
 
 const STORAGE_KEY = "loan-sim-v4";
 
+/**
+ * 共有テキストに載せる公開URL。受け取った人がここから試算に来られるようにする。
+ * ストアアプリ版では location が capacitor:// などになるため、実行時ではなく定数で持つ。
+ */
+const APP_URL = "https://tethtechlabs.com/apps/jutaku-loan/";
+
 const defaults = {
   principalMan: 3000,
   years: 35,
@@ -286,6 +292,7 @@ function shareData(c) {
     total: manShort(c.base.totalPaid),
     rows,
     disclaimer: "入力条件にもとづく試算値です。実際の返済額・適用金利・審査結果を保証するものではありません。",
+    url: APP_URL,
   };
 }
 
