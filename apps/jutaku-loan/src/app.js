@@ -365,12 +365,16 @@ function sliderCard({ key, label, hint, unit, decimals = 0, presets = [], scale 
     </div>`;
 }
 
-/** 広告枠の器。実際のタグ・アフィリエイトリンクが決まるまでのプレースホルダー。 */
+/**
+ * 広告の差し込み位置。実タグが決まるまでは何も描かない。
+ *
+ * 「広告枠（準備中）」と書いた空箱を出していたが、AdSense も AdMob も
+ * この要素を埋めないため、利用者にはただの未完成な箱に見える。
+ * App Store はプレースホルダーの残ったアプリを審査で落とす（2.1）。
+ * 実タグを入れる段階で、この関数の中身だけ戻せばよい。
+ */
 function adSlotHtml(id) {
-  return `<div class="ad-slot" data-ad-slot="${id}">
-    <span class="ad-slot-badge">広告</span>
-    <p class="ad-slot-copy">広告枠（準備中）</p>
-  </div>`;
+  return `<div class="ad-slot is-empty" data-ad-slot="${id}" aria-hidden="true"></div>`;
 }
 
 function scaffold() {

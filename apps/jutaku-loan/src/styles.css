@@ -585,6 +585,11 @@ button {
   background: var(--surface-2);
 }
 
+/* 実タグを入れるまでは場所も取らない。空の破線枠は未完成に見えるため。 */
+.ad-slot.is-empty {
+  display: none;
+}
+
 .ad-slot-badge {
   position: absolute;
   top: 8px;
