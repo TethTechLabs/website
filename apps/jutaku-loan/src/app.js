@@ -730,7 +730,12 @@ function applyScreen() {
  * 現状はSDKがまだ無いので何もしない。
  */
 let matrixInterstitialShown = false;
-function maybeShowMatrixInterstitial() {}
+function maybeShowMatrixInterstitial() {
+  if (!globalThis.Capacitor?.isNativePlatform?.()) return;
+  import("./ads-native.js")
+    .then((m) => m.showMatrixInterstitial())
+    .catch(() => {});
+}
 
 function applyResultTab() {
   for (const el of app.querySelectorAll("[data-tabpanel]")) {
@@ -1763,3 +1768,9 @@ if (!localStorage.getItem(STORAGE_KEY)) {
 
 applyScreen();
 syncAll();
+
+if (globalThis.Capacitor?.isNativePlatform?.()) {
+  import("./ads-native.js")
+    .then((m) => m.initNativeAds())
+    .catch(() => {});
+}
