@@ -673,6 +673,13 @@ function scaffold() {
       <p>本画面は入力値にもとづく試算であり、融資の約束でも審査の合否でもありません。金利の将来水準を予測するものではありません。税務・契約の判断、特定商品の勧誘・取次は行いません。</p>
       </footer>
 
+      <section class="support">
+        <h2>お問い合わせ</h2>
+        <p>不具合のご報告、ご要望はこちらへお願いします。</p>
+        <p><a href="mailto:info@tethtechlabs.com">info@tethtechlabs.com</a></p>
+        <p class="support-owner">提供：TethTechLabs</p>
+      </section>
+
       <nav class="legal-links" aria-label="関連ページ">
         <a href="https://tethtechlabs.com/apps/jutaku-loan/privacy.html" target="_blank" rel="noopener">プライバシーポリシー</a>
         <a href="https://tethtechlabs.com/apps/jutaku-loan/terms.html" target="_blank" rel="noopener">利用規約</a>

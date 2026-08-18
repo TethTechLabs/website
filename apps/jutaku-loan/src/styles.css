@@ -1075,6 +1075,41 @@ button {
   color: var(--muted);
 }
 
+/* App Store・Play はサポートURLに連絡先があることを求める（1.5）。
+   公開URLがアプリ本体そのものなので、問い合わせ先はこの画面に置く。 */
+.support {
+  margin-top: 18px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.support h2 {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.support p {
+  margin: 0 0 4px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.support a {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.support-owner {
+  margin: 6px 0 0;
+  font-size: 11px;
+  color: var(--faint);
+}
+
 .legal-links {
   display: flex;
   flex-wrap: wrap;
