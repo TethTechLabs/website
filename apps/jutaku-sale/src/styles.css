@@ -1,0 +1,3431 @@
+/* ============================================================
+   住宅ローン試算 — 数字が主役。装飾は数字を読ませるためだけに置く。
+   ============================================================ */
+
+:root {
+  color-scheme: light dark;
+
+  --bg: #f4f5f7;
+  --surface: #ffffff;
+  --surface-2: #f0f2f5;
+  --ink: #0f1319;
+  --muted: #5c6472;
+  --faint: #8b93a1;
+  --line: #e1e5ea;
+  --line-strong: #cdd3db;
+
+  --accent: #1b45c9;
+  --accent-ink: #ffffff;
+  --warm: #d4761b;
+  --warn: #c02a20;
+  --ok: #0f7350;
+
+  --radius: 14px;
+  --radius-lg: 20px;
+  --shadow: 0 1px 2px rgb(15 19 25 / 0.05), 0 8px 24px -12px rgb(15 19 25 / 0.18);
+
+  --num: "SF Mono", "Menlo", "Consolas", ui-monospace, monospace;
+  --font: system-ui, -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN",
+    "Yu Gothic", "Noto Sans JP", sans-serif;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #0b0d11;
+    --surface: #14181f;
+    --surface-2: #1b212a;
+    --ink: #eef1f6;
+    --muted: #98a1b0;
+    --faint: #6d7686;
+    --line: #242a34;
+    --line-strong: #333b48;
+
+    --accent: #6d97ff;
+    --accent-ink: #08101f;
+    --warm: #e9a64a;
+    --warn: #ff7266;
+    --ok: #3fbd90;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 10px 30px -14px rgb(0 0 0 / 0.7);
+  }
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+    --bg: #0b0d11;
+    --surface: #14181f;
+    --surface-2: #1b212a;
+    --ink: #eef1f6;
+    --muted: #98a1b0;
+    --faint: #6d7686;
+    --line: #242a34;
+    --line-strong: #333b48;
+
+    --accent: #6d97ff;
+    --accent-ink: #08101f;
+    --warm: #e9a64a;
+    --warn: #ff7266;
+    --ok: #3fbd90;
+    --shadow: 0 1px 2px rgb(0 0 0 / 0.4), 0 10px 30px -14px rgb(0 0 0 / 0.7);
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  height: 100%;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+button,
+input {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  height: 100dvh;
+  max-width: 780px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.screen-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+  padding: 12px 14px 24px;
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ------------------------------------------------------------ hero */
+
+.hero {
+  flex: 0 0 auto;
+  z-index: 20;
+  padding: calc(16px + env(safe-area-inset-top)) 20px 12px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+  align-items: end;
+  column-gap: 16px;
+}
+
+.hero[hidden] {
+  display: none;
+}
+
+.hero-label {
+  margin: 0;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.hero-value {
+  margin: 1px 0 0;
+  font-size: clamp(32px, 10.5vw, 52px);
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+}
+
+.hero-value2 {
+  margin: 1px 0 0;
+  font-size: clamp(19px, 6vw, 26px);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.03em;
+  color: var(--warm);
+  font-variant-numeric: tabular-nums;
+}
+
+.hero-value2.is-none {
+  color: var(--faint);
+  font-weight: 500;
+  font-size: 16px;
+}
+
+.hero-main,
+.hero-bonus {
+  min-width: 0;
+}
+
+.hero-stats {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 4px;
+  margin: 10px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+
+.hero-stats div {
+  min-width: 0;
+}
+
+.hero-stats dt {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.hero-stats dd {
+  margin: 1px 0 0;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: clip;
+}
+
+/* ------------------------------------------------------------ スライダー */
+
+.controls {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+/* 返済期間と金利。スマホ幅では±ボタンが窮屈になるため縦積みのまま、
+   タブレット以上の余裕がある幅でだけ横並びにする。 */
+.controls-pair {
+  display: grid;
+  width: 100%;
+  min-width: 0;
+  gap: 10px;
+}
+
+@media (min-width: 640px) {
+  .controls-pair {
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+  }
+}
+
+.ctrl {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 14px 16px 15px;
+  box-shadow: var(--shadow);
+}
+
+.ctrl-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.ctrl-label {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.ctrl-hint {
+  font-size: 11px;
+  color: var(--faint);
+  text-align: right;
+}
+
+.ctrl-value {
+  display: grid;
+  grid-template-columns: 56px 1fr 56px;
+  align-items: center;
+  gap: 10px;
+  margin: 6px 0 4px;
+}
+
+.ctrl-num {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.ctrl-num b {
+  font-size: clamp(30px, 9vw, 40px);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.ctrl-num span {
+  font-size: 14px;
+  color: var(--muted);
+  margin-left: 3px;
+  font-weight: 600;
+}
+
+.step {
+  width: 56px;
+  height: 56px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--ink);
+  transition: transform 0.08s ease, background 0.12s ease;
+}
+
+.step svg {
+  width: 24px;
+  height: 24px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2.4;
+  stroke-linecap: round;
+}
+
+.step:hover {
+  background: var(--line);
+}
+
+.step:active {
+  transform: scale(0.92);
+  background: var(--accent);
+  color: var(--accent-ink);
+  border-color: var(--accent);
+}
+
+.step.tiny {
+  width: 34px;
+  height: 34px;
+}
+
+.step.tiny svg {
+  width: 16px;
+  height: 16px;
+}
+
+.step:disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
+.range {
+  --pct: 50%;
+  -webkit-appearance: none;
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 34px;
+  margin: 0;
+  background: transparent;
+}
+
+.range::-webkit-slider-runnable-track {
+  height: 14px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--accent) 0 var(--pct),
+    var(--surface-2) var(--pct) 100%
+  );
+  border: 1px solid var(--line-strong);
+}
+
+.range::-moz-range-track {
+  height: 14px;
+  border-radius: 999px;
+  background: linear-gradient(
+    to right,
+    var(--accent) 0 var(--pct),
+    var(--surface-2) var(--pct) 100%
+  );
+  border: 1px solid var(--line-strong);
+}
+
+.range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 34px;
+  height: 34px;
+  margin-top: -11px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 3px solid var(--accent);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.22);
+  transition: transform 0.1s ease;
+}
+
+.range::-moz-range-thumb {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--surface);
+  border: 3px solid var(--accent);
+  box-shadow: 0 2px 8px rgb(0 0 0 / 0.22);
+}
+
+.range:active::-webkit-slider-thumb {
+  transform: scale(1.12);
+}
+
+.ctrl-scale {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2px;
+  font-size: 11px;
+  color: var(--faint);
+}
+
+.presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+.pill {
+  min-height: 38px;
+  padding: 0 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+.pill[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.row-label {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.seg {
+  display: inline-flex;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--surface-2);
+}
+
+.seg button {
+  min-height: 42px;
+  padding: 0 14px;
+  border: 0;
+  background: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.seg button + button {
+  border-left: 1px solid var(--line-strong);
+}
+
+.seg button[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.seg.small button {
+  min-height: 38px;
+  padding: 0 11px;
+  font-size: 12px;
+}
+
+/* グリッドの子は既定の min-width:auto で縮まないので、明示的に潰せるようにする。 */
+.grid-inputs > *,
+.minis > *,
+.controls > * {
+  min-width: 0;
+}
+
+.grid-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.grid-inputs label {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+  line-height: 1.35;
+  color: var(--muted);
+}
+
+.grid-inputs input {
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  padding: 0 12px;
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  background: var(--surface-2);
+  font-size: 17px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.grid-inputs.tight {
+  margin-bottom: 14px;
+}
+
+.minis {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.mini {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: var(--surface-2);
+}
+
+.mini span {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.mini b {
+  display: block;
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.mini small {
+  font-size: 11px;
+  color: var(--faint);
+}
+
+.mini.is-warn b {
+  color: var(--warn);
+}
+
+.hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--faint);
+}
+
+/* ------------------------------------------------------------ パネル */
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  padding: 18px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow);
+}
+
+.ad-slot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 90px;
+  padding: 18px;
+  margin-bottom: 12px;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface-2);
+}
+
+/* 実タグを入れるまでは場所も取らない。空の破線枠は未完成に見えるため。 */
+.ad-slot.is-empty {
+  display: none;
+}
+
+.ad-slot-badge {
+  position: absolute;
+  top: 8px;
+  left: 10px;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--faint);
+}
+
+.ad-slot-copy {
+  margin: 0;
+  font-size: 12px;
+  color: var(--faint);
+}
+
+.aff {
+  margin-bottom: 12px;
+  padding: 16px 18px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.aff-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.aff h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.aff-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--faint);
+}
+
+.aff-lead {
+  margin: 0 0 4px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.aff-item {
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+
+.aff-item:first-of-type {
+  margin-top: 8px;
+}
+
+.aff-item h3 {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.aff-item p {
+  margin: 0 0 10px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.aff-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.aff-links a.pill {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.aff-note {
+  margin: 12px 0 0;
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--faint);
+}
+
+.panel-head {
+  margin-bottom: 14px;
+}
+
+.panel h2 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.panel-sub {
+  margin: 3px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.panel-note {
+  margin: 12px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+/* ------------------------------------------------------------ マトリクス */
+
+.matrix-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.budget {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.budget[hidden] {
+  display: none;
+}
+
+.budget b {
+  min-width: 52px;
+  text-align: center;
+  font-size: 16px;
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.matrix-scroll {
+  overflow-x: auto;
+  margin: 0 -18px;
+  padding: 0 18px;
+  scrollbar-width: thin;
+}
+
+.matrix {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 3px;
+  table-layout: fixed;
+}
+
+.matrix th {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.matrix thead th {
+  padding-bottom: 2px;
+}
+
+.matrix .corner {
+  width: 62px;
+  font-size: 9.5px;
+  color: var(--faint);
+  text-align: left;
+  white-space: normal;
+  line-height: 1.25;
+}
+
+.matrix tbody th {
+  text-align: right;
+  padding-right: 5px;
+  font-size: 11.5px;
+}
+
+.cell {
+  width: 100%;
+  min-height: 48px;
+  display: grid;
+  place-content: center;
+  padding: 0 2px;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: var(--surface-2);
+  font-variant-numeric: tabular-nums;
+  line-height: 1.15;
+  transition: transform 0.08s ease;
+}
+
+.cell b {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  white-space: nowrap;
+}
+
+.cell b span {
+  font-size: 10px;
+  font-weight: 500;
+  color: var(--muted);
+  margin-left: 1px;
+}
+
+.cell.is-ok {
+  background: color-mix(in oklab, var(--accent) calc(7% + var(--heat) * 20%), var(--surface));
+}
+
+.cell.is-over {
+  background: color-mix(in oklab, var(--warn) calc(5% + var(--heat) * 17%), var(--surface));
+  color: var(--muted);
+}
+
+.cell.is-over b {
+  font-weight: 500;
+}
+
+.cell:active {
+  transform: scale(0.95);
+}
+
+.cell.is-current {
+  border-color: var(--ink);
+  box-shadow: inset 0 0 0 2px var(--surface);
+}
+
+.cell.is-current::after {
+  content: "";
+  position: absolute;
+}
+
+.matrix td {
+  position: relative;
+  padding: 0;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 16px;
+  margin: 12px 0 0;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+
+.legend > span {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+}
+
+.legend .sw {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 3px;
+  margin-right: 5px;
+  vertical-align: -2px;
+}
+
+.sw.ok {
+  background: color-mix(in oklab, var(--accent) 22%, var(--surface));
+  border: 1px solid color-mix(in oklab, var(--accent) 40%, transparent);
+}
+
+.sw.over {
+  background: color-mix(in oklab, var(--warn) 18%, var(--surface));
+  border: 1px solid color-mix(in oklab, var(--warn) 36%, transparent);
+}
+
+.sw.principal {
+  background: var(--c-principal);
+}
+
+.sw.interest {
+  background: var(--c-interest);
+}
+
+.legend-note {
+  color: var(--faint);
+}
+
+/* ------------------------------------------------------------ グラフ */
+
+.scrub-hint {
+  margin: 0 0 4px;
+  font-size: 11.5px;
+  text-align: center;
+  color: var(--faint);
+  animation: scrub-hint-pulse 2.2s ease-in-out infinite;
+}
+
+.scrub-hint.is-done {
+  display: none;
+}
+
+@keyframes scrub-hint-pulse {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scrub-hint {
+    animation: none;
+    opacity: 0.7;
+  }
+}
+
+.chart-wrap {
+  margin: 0 -4px;
+  touch-action: pan-y;
+}
+
+.chart {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.chart .grid {
+  stroke: var(--line);
+  stroke-width: 1;
+}
+
+.chart .ax-y {
+  fill: var(--faint);
+  font-size: 13px;
+  text-anchor: end;
+  font-family: var(--font);
+}
+
+.chart .ax-x {
+  fill: var(--faint);
+  font-size: 13px;
+  text-anchor: middle;
+  font-family: var(--font);
+}
+
+.chart .marker,
+.chart .branch {
+  stroke: var(--faint);
+  stroke-width: 1.5;
+  stroke-dasharray: 3 4;
+}
+
+.chart .marker-text {
+  fill: var(--muted);
+  font-size: 13px;
+  font-family: var(--font);
+}
+
+.chart .fan {
+  fill: none;
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke: var(--c-base);
+}
+
+.chart .fan.is-base {
+  stroke-width: 2.6;
+  stroke: var(--c-base);
+}
+
+.chart .fan.is-picked {
+  stroke: var(--c-scenario);
+}
+
+.chart .hit {
+  fill: transparent;
+}
+
+.chart .scrub-line {
+  stroke: var(--ink);
+  stroke-width: 1;
+  pointer-events: none;
+}
+
+.chart-title {
+  margin: 16px 0 2px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+
+.readout {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 14px;
+  align-items: baseline;
+  margin-top: 8px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  background: var(--surface-2);
+  font-size: 12.5px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+  min-height: 44px;
+}
+
+.readout b {
+  font-size: 14px;
+  color: var(--ink);
+}
+
+.readout .principal {
+  color: var(--c-principal);
+  font-weight: 600;
+}
+
+.readout .interest {
+  color: var(--c-interest);
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------ 分岐 */
+
+.branch-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.dot {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  margin-right: 6px;
+  vertical-align: -1px;
+  background: color-mix(in oklab, var(--c-scenario) 45%, transparent);
+}
+
+.dot.is-base {
+  background: var(--c-base);
+}
+
+.dot.is-on {
+  background: var(--c-scenario);
+  box-shadow: 0 0 0 3px color-mix(in oklab, var(--c-scenario) 22%, transparent);
+}
+
+/* ------------------------------------------------------------ 表 */
+
+.data-table {
+  width: 100%;
+  min-width: 320px;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  font-variant-numeric: tabular-nums;
+}
+
+.data-table th,
+.data-table td {
+  padding: 9px 5px;
+  border-bottom: 1px solid var(--line);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.data-table thead th {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--muted);
+  white-space: normal;
+}
+
+.data-table th:first-child,
+.data-table td:first-child {
+  text-align: left;
+}
+
+.data-table tbody th {
+  font-weight: 600;
+}
+
+.data-table .is-warn {
+  color: var(--warn);
+  font-weight: 700;
+}
+
+.data-table .is-diff {
+  color: var(--warm);
+  font-weight: 600;
+}
+
+.table-warn {
+  margin: 10px 0 0;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid color-mix(in oklab, var(--warn) 34%, transparent);
+  background: color-mix(in oklab, var(--warn) 8%, var(--surface));
+  font-size: 12.5px;
+  line-height: 1.65;
+  color: var(--ink);
+}
+
+.table-warn b {
+  color: var(--warn);
+  font-variant-numeric: tabular-nums;
+}
+
+.data-table tr.is-base th {
+  color: var(--ink);
+}
+
+.data-table.costs {
+  min-width: 0;
+}
+
+.data-table.costs th {
+  font-weight: 500;
+  white-space: normal;
+}
+
+.data-table.costs small {
+  display: block;
+  font-size: 11px;
+  font-weight: 400;
+  color: var(--faint);
+  line-height: 1.4;
+}
+
+/* ------------------------------------------------------------ 脚注 */
+
+.legal {
+  margin-top: 22px;
+  font-size: 11.5px;
+  line-height: 1.8;
+  color: var(--faint);
+}
+
+.legal p {
+  margin: 0 0 8px;
+}
+
+.legal b {
+  color: var(--muted);
+}
+
+/* App Store・Play はサポートURLに連絡先があることを求める（1.5）。
+   公開URLがアプリ本体そのものなので、問い合わせ先はこの画面に置く。 */
+.support {
+  margin-top: 18px;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.support h2 {
+  margin: 0 0 6px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.support p {
+  margin: 0 0 4px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.support a {
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.support-owner {
+  margin: 6px 0 0;
+  font-size: 11px;
+  color: var(--faint);
+}
+
+.legal-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.legal-links a {
+  font-size: 12px;
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.legal-links a:hover {
+  text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ============================================================
+   刻みの選択・ボーナスの内訳・仮定の答え・グラフの動き
+   ============================================================ */
+
+.steps {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-top: 12px;
+}
+
+.steps > span {
+  font-size: 11px;
+  color: var(--faint);
+  margin-right: 2px;
+}
+
+.tick {
+  min-height: 30px;
+  padding: 0 9px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-2);
+  font-size: 11.5px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+.tick[aria-pressed="true"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--surface);
+}
+
+.presets.tight {
+  margin-top: 8px;
+  gap: 5px;
+}
+
+.pill.sm {
+  flex: 1 1 auto;
+  min-width: 0;
+  min-height: 34px;
+  padding: 0 6px;
+  font-size: 12px;
+}
+
+.bonus {
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line-strong);
+}
+
+.bonus-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  text-align: left;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.bonus-toggle span {
+  flex: 1 1 auto;
+}
+
+.bonus-toggle b {
+  flex: 0 0 auto;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+}
+
+.bonus-toggle::after {
+  content: "";
+  flex: 0 0 auto;
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid var(--muted);
+  border-bottom: 2px solid var(--muted);
+  transform: rotate(45deg);
+  transition: transform 0.18s ease;
+}
+
+.bonus-toggle[aria-expanded="true"]::after {
+  transform: rotate(-135deg);
+}
+
+.bonus-panel {
+  margin-top: 14px;
+}
+
+.split {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+.split b {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- 仮定の答え --- */
+
+.answer {
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  padding: 14px;
+  margin-bottom: 14px;
+}
+
+/* 狭い画面では数字に幅を明け渡し、矢印を段の間に寝かせる。 */
+.ans-flow {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 6px;
+}
+
+.ans-cell {
+  min-width: 0;
+}
+
+.ans-cell span {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.35;
+}
+
+.ans-cell b {
+  display: block;
+  font-size: clamp(21px, 6.6vw, 30px);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+
+.ans-cell small {
+  display: block;
+  font-size: 11px;
+  color: var(--faint);
+}
+
+.ans-cell.is-after b {
+  color: var(--warm);
+}
+
+.ans-cell small i {
+  font-style: normal;
+  font-weight: 700;
+  color: var(--warm);
+}
+
+.ans-arrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--faint);
+  padding: 2px 0;
+}
+
+.ans-arrow svg {
+  flex: 0 0 auto;
+  width: 30px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  rotate: 90deg;
+}
+
+.ans-arrow em {
+  font-style: normal;
+  font-size: 11.5px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+@media (min-width: 520px) {
+  .ans-flow {
+    grid-template-columns: 1fr auto 1.15fr;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .ans-arrow {
+    display: grid;
+    justify-items: center;
+    gap: 2px;
+    padding: 0;
+  }
+
+  .ans-arrow svg {
+    rotate: none;
+    width: 34px;
+    height: 18px;
+  }
+
+  .ans-arrow em {
+    font-size: 10.5px;
+    font-weight: 500;
+  }
+}
+
+.ans-total {
+  display: grid;
+  gap: 4px;
+  margin: 12px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  font-size: 12.5px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.ans-total > div {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.ans-total dt {
+  flex: 0 0 68px;
+  font-size: 11px;
+}
+
+.ans-total dd {
+  margin: 0;
+  min-width: 0;
+}
+
+.ans-total b {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.ans-total i {
+  font-style: normal;
+  font-weight: 700;
+  color: var(--warm);
+  white-space: nowrap;
+}
+
+/* 125%ルールで返しきれないときだけ出る、満期残債の警告 */
+
+.residual-warn {
+  margin-top: 12px;
+  padding: 12px 14px;
+  border: 1px solid color-mix(in oklab, var(--warn) 40%, transparent);
+  border-radius: var(--radius);
+  background: color-mix(in oklab, var(--warn) 7%, var(--surface));
+}
+
+.residual-head {
+  margin: 0 0 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--warn);
+}
+
+.residual-warn dl {
+  display: grid;
+  gap: 4px;
+  margin: 0;
+  font-size: 12.5px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.residual-warn dl > div {
+  display: flex;
+  gap: 10px;
+  align-items: baseline;
+}
+
+.residual-warn dt {
+  flex: 0 0 96px;
+  font-size: 11px;
+}
+
+.residual-warn dd {
+  margin: 0;
+  min-width: 0;
+}
+
+.residual-warn dd b {
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.residual-warn .is-sum {
+  margin-top: 4px;
+  padding-top: 6px;
+  border-top: 1px solid color-mix(in oklab, var(--warn) 25%, transparent);
+}
+
+.residual-warn .is-sum dd b {
+  font-size: 15px;
+  color: var(--warn);
+}
+
+.residual-note {
+  margin: 8px 0 0;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.data-table tr.is-picked {
+  background: color-mix(in oklab, var(--accent) 8%, transparent);
+}
+
+.data-table tr.is-picked th,
+.data-table tr.is-picked td {
+  font-weight: 700;
+}
+
+/* --- グラフの線の強弱 --- */
+
+.chart .fan.is-picked {
+  stroke-width: 3.2;
+  opacity: 1;
+}
+
+.chart .ceiling {
+  stroke: var(--c-limit);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 4;
+}
+
+.chart .ceiling-text {
+  fill: var(--c-limit);
+  font-size: 10px;
+  font-family: var(--font);
+  font-variant-numeric: tabular-nums;
+}
+
+/* --- 動き。スライダー操作中は切って直結感を保つ。 --- */
+
+@keyframes area-grow {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+@keyframes line-draw {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+.chart .fan {
+  stroke-dasharray: 100;
+  animation: line-draw 0.6s cubic-bezier(0.35, 0.6, 0.25, 1) both;
+}
+
+.chart .fan.is-picked {
+  animation-duration: 0.75s;
+}
+
+.chart-wrap.no-anim .chart * {
+  animation: none !important;
+  stroke-dasharray: none !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chart * {
+    animation: none !important;
+    stroke-dasharray: none !important;
+  }
+}
+
+/* ============================================================
+   2段の償却グラフ・上げ幅の刻み・ルールの説明
+   ============================================================ */
+
+.chart .panel-tag {
+  fill: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  font-family: var(--font);
+}
+
+.chart .area-balance {
+  fill: color-mix(in oklab, var(--c-principal) 16%, transparent);
+}
+
+.chart .line-balance {
+  fill: none;
+  stroke: var(--c-principal);
+  stroke-width: 2.4;
+  stroke-linejoin: round;
+}
+
+.chart .bar-principal {
+  fill: var(--c-principal);
+}
+
+.chart .bar-interest {
+  fill: var(--c-interest);
+}
+
+.chart .marker-dot {
+  fill: var(--c-principal);
+  stroke: var(--surface);
+  stroke-width: 2;
+}
+
+.sw.balance {
+  background: color-mix(in oklab, var(--c-principal) 22%, var(--surface));
+  border: 1.5px solid var(--c-principal);
+}
+
+/* 棒は左から順に立ち上がる */
+@keyframes bar-rise {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
+
+.chart .bar {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: bar-rise 0.34s cubic-bezier(0.2, 0.75, 0.3, 1) both;
+  animation-delay: calc(var(--n) * 9ms);
+}
+
+.chart .area-balance {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: area-grow 0.5s cubic-bezier(0.22, 0.75, 0.3, 1) both;
+}
+
+.chart .line-balance {
+  stroke-dasharray: 100;
+  animation: line-draw 0.7s cubic-bezier(0.35, 0.6, 0.25, 1) both;
+}
+
+/* ============================================================
+   金利の想定エディタ
+   ============================================================ */
+
+.rate-path {
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  padding: 13px;
+  margin-bottom: 14px;
+  background: var(--surface-2);
+}
+
+.rp-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 10px;
+  margin-bottom: 10px;
+}
+
+.rp-head > span {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.rp-head em {
+  font-style: normal;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.rp-head em b {
+  color: var(--ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.rp-rows {
+  display: grid;
+  gap: 8px;
+}
+
+.rp-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
+  align-items: end;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: var(--surface);
+}
+
+.rp-cell {
+  min-width: 0;
+}
+
+.rp-tag {
+  display: block;
+  font-size: 10.5px;
+  color: var(--faint);
+  margin-bottom: 2px;
+}
+
+.rp-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4px;
+}
+
+.rp-stepper b {
+  font-size: 14px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.rp-stepper b.is-down {
+  color: var(--ok);
+}
+
+.rp-result {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 1px dashed var(--line);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.rp-result b {
+  font-size: 17px;
+  color: var(--warn);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.rp-del {
+  grid-row: 1;
+  grid-column: 3;
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 16px;
+  line-height: 1;
+}
+
+.rp-del:hover {
+  border-color: var(--warn);
+  color: var(--warn);
+}
+
+.costs-entry {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  min-height: 40px;
+  margin-bottom: 12px;
+  border: 1px dashed var(--line-strong);
+  border-radius: var(--radius);
+  background: none;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.costs-entry:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.costs-entry::after {
+  content: "›";
+  font-size: 15px;
+  line-height: 1;
+}
+
+.cost-apply {
+  width: 100%;
+  min-height: 46px;
+  margin-top: 18px;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.rp-add {
+  width: 100%;
+  min-height: 42px;
+  margin-top: 8px;
+  border: 1px dashed var(--line-strong);
+  border-radius: 11px;
+  background: none;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.rp-add:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.rp-empty {
+  margin: 0;
+  font-size: 12px;
+  color: var(--faint);
+}
+
+.rp-summary {
+  margin: 10px 0 0;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+  font-size: 12px;
+  line-height: 1.9;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.rp-summary b {
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.rp-arrow {
+  color: var(--faint);
+  margin: 0 2px 0 6px;
+}
+
+.rp-when {
+  color: var(--ink);
+  font-weight: 600;
+}
+
+/* 段の一覧 */
+
+.ans-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+}
+
+.ans-steps li {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 6px 9px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--surface);
+}
+
+.ans-steps li span {
+  display: block;
+  font-size: 10.5px;
+  color: var(--faint);
+}
+
+.ans-steps li b {
+  font-size: 14px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.ans-steps li:last-child b {
+  color: var(--warn);
+}
+
+/* グラフ: 差の帯と変更ポイントのラベル */
+
+.chart .diff-band {
+  fill: color-mix(in oklab, var(--c-scenario) 18%, transparent);
+}
+
+.chart .mark-year {
+  fill: var(--ink);
+  font-size: 10.5px;
+  font-weight: 700;
+  font-family: var(--font);
+}
+
+.chart .mark-rate {
+  fill: var(--c-scenario);
+  font-size: 10.5px;
+  font-weight: 700;
+  font-family: var(--font);
+  font-variant-numeric: tabular-nums;
+}
+
+.chart .step-value {
+  fill: var(--c-scenario);
+  font-size: 11px;
+  font-weight: 700;
+  font-family: var(--font);
+  font-variant-numeric: tabular-nums;
+}
+
+.data-table tbody th small {
+  display: block;
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--faint);
+  padding-left: 15px;
+}
+
+@media (min-width: 560px) {
+  .rp-row {
+    grid-template-columns: 1fr 1fr 1fr auto;
+    align-items: center;
+  }
+
+  .rp-result {
+    grid-column: 3;
+    grid-row: 1;
+    border-top: 0;
+    padding-top: 0;
+    justify-content: flex-end;
+  }
+
+  .rp-del {
+    grid-column: 4;
+  }
+}
+
+.chart .axis-break {
+  fill: none;
+  stroke: var(--faint);
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.chart .axis-break-text {
+  fill: var(--faint);
+  font-size: 9.5px;
+  font-family: var(--font);
+}
+
+
+/* ============================================================
+   グラフの配色。UIの色（ボタン・スライダー）とは分けてある。
+   どれも青系×暖色系、または明度差だけで組んであり、
+   色覚特性のある人にも、白黒印刷でも読み分けられる。
+   ============================================================ */
+
+:root {
+  --c-principal: #1b45c9;
+  --c-interest: #d4761b;
+  --c-base: #1b45c9;
+  --c-scenario: #c02a20;
+  --c-limit: #0f7350;
+}
+
+:root[data-palette="ai"] {
+  --c-principal: #23407c;
+  --c-interest: #dd5b24;
+  --c-base: #23407c;
+  --c-scenario: #a8261c;
+  --c-limit: #3d6b46;
+}
+
+:root[data-palette="teal"] {
+  --c-principal: #0d6a6d;
+  --c-interest: #c2660c;
+  --c-base: #0d6a6d;
+  --c-scenario: #9c2f8f;
+  --c-limit: #2f6a2a;
+}
+
+:root[data-palette="mono"] {
+  --c-principal: #333e4d;
+  --c-interest: #b3bcc8;
+  --c-base: #97a1af;
+  --c-scenario: #10151c;
+  --c-limit: #5d6675;
+}
+
+/* 暗い面では、同じ色相のまま明度と彩度を上げる。 */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --c-principal: #6d97ff;
+    --c-interest: #e9a64a;
+    --c-base: #6d97ff;
+    --c-scenario: #ff7266;
+    --c-limit: #3fbd90;
+  }
+
+  :root:not([data-theme="light"])[data-palette="ai"] {
+    --c-principal: #7ea6f5;
+    --c-interest: #f4884d;
+    --c-base: #7ea6f5;
+    --c-scenario: #ff8071;
+    --c-limit: #74c08a;
+  }
+
+  :root:not([data-theme="light"])[data-palette="teal"] {
+    --c-principal: #45c3c6;
+    --c-interest: #f0a63f;
+    --c-base: #45c3c6;
+    --c-scenario: #ef7fdc;
+    --c-limit: #74c86a;
+  }
+
+  :root:not([data-theme="light"])[data-palette="mono"] {
+    --c-principal: #aeb8c6;
+    --c-interest: #4d5766;
+    --c-base: #6b7583;
+    --c-scenario: #f2f5f9;
+    --c-limit: #8a93a1;
+  }
+}
+
+:root[data-theme="dark"] {
+  --c-principal: #6d97ff;
+  --c-interest: #e9a64a;
+  --c-base: #6d97ff;
+  --c-scenario: #ff7266;
+  --c-limit: #3fbd90;
+}
+
+:root[data-theme="dark"][data-palette="ai"] {
+  --c-principal: #7ea6f5;
+  --c-interest: #f4884d;
+  --c-base: #7ea6f5;
+  --c-scenario: #ff8071;
+  --c-limit: #74c08a;
+}
+
+:root[data-theme="dark"][data-palette="teal"] {
+  --c-principal: #45c3c6;
+  --c-interest: #f0a63f;
+  --c-base: #45c3c6;
+  --c-scenario: #ef7fdc;
+  --c-limit: #74c86a;
+}
+
+:root[data-theme="dark"][data-palette="mono"] {
+  --c-principal: #aeb8c6;
+  --c-interest: #4d5766;
+  --c-base: #6b7583;
+  --c-scenario: #f2f5f9;
+  --c-limit: #8a93a1;
+}
+
+/* 濃淡だけの配色では、線を色で分けられない。太さと破線で分ける。 */
+:root[data-palette="mono"] .chart .fan.is-base {
+  stroke-dasharray: 5 4;
+  stroke-width: 2;
+  /* 破線と描画アニメの dasharray がぶつかるので、この線だけ animation を切る。 */
+  animation: none;
+}
+
+/* ============================================================
+   表示の設定
+   ============================================================ */
+
+.prefs {
+  display: grid;
+  gap: 14px;
+}
+
+.pref-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px 12px;
+}
+
+.pref-label {
+  flex: 0 0 auto;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--muted);
+  min-width: 74px;
+}
+
+.swatches {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.swatch {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 40px;
+  padding: 0 12px 0 9px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.swatch[aria-pressed="true"] {
+  border-color: var(--accent);
+  color: var(--ink);
+  background: color-mix(in oklab, var(--accent) 7%, var(--surface));
+}
+
+.swatch i {
+  display: flex;
+  gap: 2px;
+}
+
+.swatch i b {
+  width: 9px;
+  height: 16px;
+  border-radius: 2px;
+}
+
+/* 線の凡例。色に頼らず、太さと破線も見本に写す。 */
+.sw.base {
+  height: 0;
+  border-top: 2px solid var(--c-base);
+  border-radius: 0;
+  align-self: center;
+}
+
+:root[data-palette="mono"] .sw.base {
+  border-top-style: dashed;
+}
+
+.sw.scenario {
+  height: 0;
+  border-top: 3px solid var(--c-scenario);
+  border-radius: 0;
+  align-self: center;
+}
+
+.sw.diff {
+  background: color-mix(in oklab, var(--c-scenario) 18%, var(--surface));
+  border: 1px solid color-mix(in oklab, var(--c-scenario) 34%, transparent);
+}
+
+/* ============================================================
+   ボーナスの指定・1行のルール・広い画面の2カラム
+   ============================================================ */
+
+.bonus-head {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 10px;
+}
+
+.bonus-yen {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.bonus-yen input {
+  flex: 1 1 90px;
+  min-width: 0;
+  min-height: 44px;
+  padding: 0 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  background: var(--surface-2);
+  font-size: 19px;
+  font-weight: 700;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.bonus-yen > span {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.bonus-yen em {
+  flex: 1 1 100%;
+  font-style: normal;
+  font-size: 11px;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.pill.ghost {
+  border-style: dashed;
+  background: none;
+}
+
+.pill.ghost:hover {
+  border-style: solid;
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* --- ルールは1行 --- */
+
+.rules-row {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 6px 8px;
+  margin-bottom: 12px;
+}
+
+.chip-toggle {
+  min-height: 36px;
+  padding: 0 12px 0 30px;
+  position: relative;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.chip-toggle::before {
+  content: "";
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  translate: 0 -50%;
+  width: 12px;
+  height: 12px;
+  border-radius: 4px;
+  border: 2px solid var(--line-strong);
+}
+
+.chip-toggle[aria-pressed="true"] {
+  color: var(--ink);
+  border-color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 7%, var(--surface));
+}
+
+.chip-toggle[aria-pressed="true"]::before {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.chip-toggle:disabled {
+  opacity: 0.4;
+}
+
+.help-btn {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--line-strong);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.help-btn[aria-expanded="true"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--surface);
+}
+
+.help-body {
+  margin: -4px 0 14px;
+  padding: 11px 13px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: var(--surface-2);
+}
+
+.help-body p {
+  margin: 0 0 6px;
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+.help-body p:last-child {
+  margin-bottom: 0;
+}
+
+.help-body b {
+  color: var(--ink);
+}
+
+
+
+/* ============================================================
+   条件カード（共有用の見た目）・共有ボタン・金利タイプ・
+   マトリクスの表示範囲パン
+   ============================================================ */
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.cond-card {
+  margin: 0 0 12px;
+  padding: 14px 16px 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.cond-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.cond-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--accent) 12%, var(--surface));
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.cond-date {
+  font-size: 11.5px;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.cond-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 4px 14px;
+}
+
+.cond-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: 6px 0;
+  border-bottom: 1px solid var(--line);
+  min-width: 0;
+}
+
+.cond-item span {
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+.cond-item b {
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.35;
+  overflow-wrap: break-word;
+  font-variant-numeric: tabular-nums;
+}
+
+.cond-foot {
+  margin: 10px 0 0;
+  font-size: 11px;
+  color: var(--faint);
+}
+
+.share-panel .share-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.share-status {
+  min-height: 16px;
+  margin: 10px 0 0;
+  padding: 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--accent);
+}
+
+.share-status:not(:empty) {
+  padding: 10px 12px;
+  border-radius: var(--radius);
+  background: color-mix(in oklab, var(--accent) 10%, var(--surface));
+}
+
+.rate-extra {
+  display: flex;
+  gap: 14px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px dashed var(--line-strong);
+}
+
+.rate-extra .rate-type {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+.mini-label {
+  display: block;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  margin-bottom: 8px;
+}
+
+.matrix-bar .pan {
+  display: flex;
+  gap: 4px;
+}
+
+.matrix tbody th {
+  cursor: grab;
+  touch-action: none;
+  user-select: none;
+  border-radius: 6px;
+}
+
+.matrix tbody th:active {
+  cursor: grabbing;
+  background: var(--surface-2);
+}
+
+@media (min-width: 460px) {
+  .cond-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+
+
+/* ============================================================
+   4画面構成（入力・結果・条件と共有・設定）とタブ
+   ============================================================ */
+
+.back-btn {
+  min-height: 38px;
+  padding: 0 4px;
+  margin-bottom: 10px;
+  border: 0;
+  background: none;
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 600;
+}
+
+/* --- 結果画面のタブ --- */
+
+.result-meta {
+  margin: 0 0 10px;
+  font-size: 11px;
+  line-height: 1.6;
+  color: var(--faint);
+}
+
+.tabbar {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+  padding-bottom: 2px;
+}
+
+.tabbar button {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 40px;
+  padding: 0 4px;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: var(--surface);
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.tabbar button[aria-selected="true"] {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--surface);
+}
+
+[data-tabpanel][hidden] {
+  display: none;
+}
+
+/* --- 画面下部固定のナビ（入力／結果） --- */
+
+.bottom-nav {
+  flex: 0 0 auto;
+  z-index: 30;
+  display: flex;
+  gap: 8px;
+  padding: 8px 14px calc(8px + env(safe-area-inset-bottom));
+  background: var(--surface);
+  border-top: 1px solid var(--line);
+}
+
+.bottom-nav[hidden] {
+  display: none;
+}
+
+.nav-main {
+  flex: 1 1 auto;
+  display: flex;
+  gap: 2px;
+  min-width: 0;
+}
+
+.nav-main button {
+  flex: 1 1 50%;
+  min-height: 46px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.nav-main button:first-child {
+  border-radius: 12px 0 0 12px;
+  border-right: 0;
+}
+
+.nav-main button:last-child {
+  border-radius: 0 12px 12px 0;
+}
+
+.nav-main button[aria-pressed="true"],
+.nav-icon[aria-pressed="true"] {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-ink);
+}
+
+.nav-icon {
+  flex: 0 0 auto;
+  min-width: 56px;
+  min-height: 46px;
+  padding: 0 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  background: var(--surface-2);
+  color: var(--muted);
+  font-size: 11.5px;
+  font-weight: 700;
+}
+
+.screen[hidden] {
+  display: none;
+}
+
+/* ============================================================
+   「払える額」タブ: 毎月とボーナスを別々に入力
+   ============================================================ */
+
+.afford-inputs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 20px;
+  margin-bottom: 8px;
+  padding: 12px 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+}
+
+.afford-note {
+  margin: 0 0 16px;
+  font-size: 11.5px;
+  line-height: 1.6;
+  color: var(--faint);
+}
+
+/* ============================================================
+   諸費用: 単体の物件価格入力／表の中で直接編集できる金額セル
+   ============================================================ */
+
+.data-table.costs td.amount {
+  padding: 6px 0 6px 6px;
+}
+
+.data-table.costs td.amount .unit {
+  margin-left: 6px;
+  font-size: 11px;
+  color: var(--faint);
+}
+
+.cell-amount {
+  display: inline-block;
+  padding: 4px 0;
+}
+
+.cell-input {
+  width: 92px;
+  min-height: 36px;
+  padding: 0 8px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--surface-2);
+  text-align: right;
+  font-size: 16px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.cell-input:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 0;
+  border-color: var(--accent);
+}
+
+/* ============================================================
+   諸費用: 物件価格・諸費用・自己資金の3段書きと、必要な借入額
+   ============================================================ */
+
+.cost-tiers {
+  margin: 0 0 10px;
+}
+
+.cost-tiers > div {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.cost-tiers dt {
+  flex: 0 0 auto;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.cost-tiers dd {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cost-tiers input {
+  width: 130px;
+  min-height: 42px;
+  padding: 0 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 9px;
+  background: var(--surface-2);
+  text-align: right;
+  font-size: 16px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.cost-tiers .unit {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.cost-tiers .is-computed dd b {
+  font-size: 17px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.cost-required {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin: 0 0 4px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: color-mix(in oklab, var(--accent) 8%, var(--surface));
+  border: 1px solid color-mix(in oklab, var(--accent) 24%, transparent);
+}
+
+.cost-required span {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--muted);
+}
+
+.cost-required b {
+  font-size: 20px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+.cost-group {
+  margin-top: 20px;
+}
+
+.cost-group.boxed {
+  padding: 14px;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.cost-group h3 {
+  margin: 0 0 10px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.contract-items {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.contract-row {
+  display: grid;
+  grid-template-columns: 1fr 92px auto 28px;
+  align-items: center;
+  gap: 8px;
+}
+
+.contract-label {
+  min-width: 0;
+  min-height: 40px;
+  padding: 0 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 8px;
+  background: var(--surface-2);
+  font-size: 16px;
+}
+
+.contract-row .unit {
+  font-size: 11px;
+  color: var(--faint);
+}
+
+.row-del {
+  width: 26px;
+  height: 26px;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: var(--surface);
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1;
+}
+
+.row-del:hover {
+  border-color: var(--warn);
+  color: var(--warn);
+}
+
+.row-del-space {
+  display: inline-block;
+  width: 26px;
+}
+
+.data-table.costs th {
+  vertical-align: middle;
+}
+
+/* ============================================================
+   売却側のグラフ。
+   1. 手取りまでの落ち方（ウォーターフォール）
+   2. 売れた価格ごとの手取り
+   ============================================================ */
+
+.chart .wf-bar {
+  fill: var(--c-interest);
+}
+
+.chart .wf-bar.is-start {
+  fill: color-mix(in oklab, var(--c-base) 62%, var(--surface));
+}
+
+.chart .wf-bar.is-total {
+  fill: var(--c-limit);
+}
+
+/* 手取りがマイナスに落ちた棒。ここだけは色ではなく注意の色で出す。 */
+.chart .wf-bar.is-short {
+  fill: var(--warn);
+}
+
+.chart .wf-value {
+  fill: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+  text-anchor: middle;
+  font-family: var(--font);
+  font-variant-numeric: tabular-nums;
+}
+
+.chart .wf-label {
+  fill: var(--muted);
+  font-size: 12.5px;
+  text-anchor: middle;
+  font-family: var(--font);
+}
+
+/* 落ちた先を次の棒の頭につなぐ。段差が連続していることを示すだけの線。 */
+.chart .wf-link {
+  stroke: var(--faint);
+  stroke-width: 1;
+  stroke-dasharray: 2 3;
+}
+
+.chart .zero-line {
+  stroke: var(--muted);
+  stroke-width: 1.5;
+}
+
+.chart .line-net {
+  fill: none;
+  stroke: var(--c-principal);
+  stroke-width: 2.6;
+  stroke-linejoin: round;
+}
+
+/* 手取りが0を下回る帯。面で塗って、価格の下限があることを見せる。 */
+.chart .short-area {
+  fill: color-mix(in oklab, var(--warn) 18%, transparent);
+}
+
+.chart .wf {
+  transform-box: fill-box;
+  transform-origin: bottom;
+  animation: bar-rise 0.34s cubic-bezier(0.2, 0.75, 0.3, 1) both;
+  animation-delay: calc(var(--n) * 40ms);
+}
+
+.chart .line-net {
+  stroke-dasharray: 100;
+  animation: line-draw 0.7s cubic-bezier(0.35, 0.6, 0.25, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .chart .wf,
+  .chart .line-net {
+    animation: none;
+  }
+}
+
+/* 手取りがマイナスのときのヒーロー数値。 */
+.hero-value.is-warn {
+  color: var(--warn);
+}
+
+/* 表の外でも、不足を示す数字は注意の色で出す。 */
+.ans-total b.is-warn,
+.tnum.is-warn {
+  color: var(--warn);
+}
+
+/* ============================================================
+   相場・価格の幅・注意点
+   ============================================================ */
+
+.src-list {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.src-item {
+  display: grid;
+  gap: 3px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-2);
+  text-decoration: none;
+}
+
+.src-item b {
+  font-size: 13.5px;
+  color: var(--accent);
+}
+
+.src-item span {
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.est-result {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 14px 0 10px;
+  padding: 12px 14px;
+  border-radius: 12px;
+  background: color-mix(in oklab, var(--accent) 8%, var(--surface-2));
+}
+
+.est-result span {
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.est-result b {
+  font-size: 24px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* 3本の幅。真ん中がいま置いている価格。 */
+.band {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  margin-bottom: 12px;
+}
+
+.band-cell {
+  display: grid;
+  gap: 2px;
+  padding: 10px 6px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--surface-2);
+  text-align: center;
+}
+
+.band-cell.is-current {
+  border-color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 9%, var(--surface-2));
+}
+
+.band-cell span {
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.band-price {
+  font-size: 15px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.band-cell em {
+  font-style: normal;
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--ok);
+  font-variant-numeric: tabular-nums;
+}
+
+.band-cell em.is-warn {
+  color: var(--warn);
+}
+
+/* 注意点。段階ごとに左の帯の色を変える。色だけに頼らないよう見出しも変える。 */
+.note-group {
+  border-left: 4px solid var(--line-strong);
+}
+
+.note-group.is-danger {
+  border-left-color: var(--warn);
+}
+
+.note-group.is-check {
+  border-left-color: var(--warm);
+}
+
+.note-group.is-know {
+  border-left-color: var(--accent);
+}
+
+.note-count {
+  display: inline-grid;
+  place-content: center;
+  min-width: 20px;
+  height: 20px;
+  margin-left: 8px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: var(--surface-3, var(--line));
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--muted);
+  vertical-align: 2px;
+}
+
+.note {
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+
+.note:first-of-type {
+  border-top: none;
+}
+
+.note h3 {
+  margin: 0 0 5px;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.note p {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.75;
+  color: var(--muted);
+}
+
+/* タブの注意点バッジ。先に手を打つものがあるときだけ数を出す。 */
+[data-out="noteBadge"] {
+  display: none;
+}
+
+[data-out="noteBadge"].is-danger {
+  display: inline-grid;
+  place-content: center;
+  min-width: 17px;
+  height: 17px;
+  margin-left: 4px;
+  border-radius: 999px;
+  background: var(--warn);
+  font-size: 10px;
+  color: #fff;
+}
+
+/* 段取り。金額が動くところに印をつける。 */
+.flow-steps {
+  margin: 0;
+  padding-left: 20px;
+  display: grid;
+  gap: 12px;
+}
+
+.flow-steps li {
+  font-size: 13px;
+}
+
+.flow-steps b {
+  display: block;
+  font-size: 13.5px;
+}
+
+.flow-steps em {
+  display: inline-block;
+  margin: 3px 0;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: color-mix(in oklab, var(--warm) 14%, transparent);
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--warm);
+}
+
+.flow-steps span {
+  display: block;
+  margin-top: 2px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--muted);
+}
+
+/* タブが4つになると、既定の余白では文字が詰まる。 */
+.tabbar button {
+  padding-left: 6px;
+  padding-right: 6px;
+  font-size: 13px;
+}
+
+.band-cell i {
+  font-style: normal;
+  font-size: 10.5px;
+  color: var(--muted);
+}
+
+/* セグメントを含む行は、上下に余白を取る。詰めると隣の行と重なって見える。 */
+.est-row {
+  margin: 12px 0;
+}
+
+.est-row .seg {
+  flex: 1 1 auto;
+}
+
+/* ============================================================
+   いまの段階。入口の分岐
+   ============================================================ */
+
+.stage {
+  margin-bottom: 14px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+
+.stage h2 {
+  margin: 0 0 10px;
+  font-size: 14px;
+}
+
+.stage-seg {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.stage-seg button {
+  display: grid;
+  gap: 2px;
+  min-height: 56px;
+  padding: 8px 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  background: var(--surface-2);
+  text-align: left;
+}
+
+.stage-seg button b {
+  font-size: 13.5px;
+  font-weight: 700;
+}
+
+.stage-seg button span {
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+
+.stage-seg button[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 10%, var(--surface-2));
+}
+
+.stage-seg button[aria-pressed="true"] b {
+  color: var(--accent);
+}
+
+.stage .hint {
+  margin: 10px 0 0;
+}
+
+/* まだ数字がない人には、相場の入口を主役にする。 */
+.costs-entry.is-primary {
+  border-style: solid;
+  border-color: var(--accent);
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* ============================================================
+   手順の前後移動。結果に着くまではこれだけを出す。
+   ============================================================ */
+
+.steps-nav {
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--line);
+  background: color-mix(in oklab, var(--surface) 92%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+.steps-nav button {
+  min-height: 46px;
+  padding: 0 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.step-back {
+  border: 1px solid var(--line-strong);
+  background: var(--surface-2);
+  color: var(--ink);
+}
+
+.step-back:disabled {
+  opacity: 0.35;
+}
+
+.step-next {
+  border: none;
+  background: var(--accent);
+  color: #fff;
+}
+
+/* 進み具合。点と「3 / 5」を並べる。点だけだと数が読み取りにくい。 */
+.steps-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  margin: 0;
+}
+
+.steps-dots i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--line-strong);
+}
+
+.steps-dots i.is-done {
+  background: color-mix(in oklab, var(--accent) 55%, var(--line-strong));
+}
+
+.steps-dots i.is-on {
+  width: 18px;
+  border-radius: 999px;
+  background: var(--accent);
+}
+
+.steps-dots span {
+  margin-left: 6px;
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+  color: var(--muted);
+}
+
+.step-note {
+  margin: 14px 2px 0;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+/* 段階の画面は、ヒーローが無いぶん上に余白を足す。 */
+[data-screen-panel="stage"] {
+  padding-top: 18px;
+}
+
+.nav-main.is-single {
+  grid-template-columns: 1fr;
+}
+
+/* display を持つ要素は、hidden 属性だけでは消えない。
+   作者スタイルが UA の [hidden] を上書きするため、明示的に打ち消す。 */
+.steps-nav[hidden],
+.costs-entry[hidden] {
+  display: none;
+}
+
+/* 位置づけの断り書き。読み飛ばされない程度に、本文より一段落とす。 */
+.legal-lead {
+  margin: 0 0 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--surface-2);
+  font-size: 11.5px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.est-result span em {
+  display: block;
+  font-style: normal;
+  font-size: 10.5px;
+  color: var(--faint);
+}
+
+/* 個別相談を受けない旨は、読み飛ばされると困る。枠で囲って本文と分ける。 */
+.support-strong {
+  margin-top: 10px;
+  padding: 12px 14px;
+  border: 1px solid color-mix(in oklab, var(--warn) 34%, transparent);
+  border-radius: 12px;
+  background: color-mix(in oklab, var(--warn) 6%, var(--surface));
+}
+
+/* ============================================================
+   近隣の取引事例
+   ============================================================ */
+
+.grid-inputs select {
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  padding: 0 10px;
+  border: 1px solid var(--line-strong);
+  border-radius: 10px;
+  background: var(--surface-2);
+  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+  font-family: inherit;
+}
+
+.case-list {
+  display: grid;
+  gap: 8px;
+  margin: 12px 0;
+}
+
+/* 1件を4つの情報で出す。地区と時期、仕様、㎡単価、総額。
+   選ぶ基準は㎡単価なので、そこだけ大きくする。 */
+.case-item {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 2px 12px;
+  padding: 11px 13px;
+  border: 1px solid var(--line-strong);
+  border-radius: 12px;
+  background: var(--surface-2);
+  text-align: left;
+}
+
+.case-item.is-on {
+  border-color: var(--accent);
+  border-width: 2px;
+  padding: 10px 12px;
+  background: color-mix(in oklab, var(--accent) 9%, var(--surface-2));
+}
+
+.case-place {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.case-place em {
+  margin-left: 6px;
+  font-style: normal;
+  font-size: 10.5px;
+  font-weight: 500;
+  color: var(--faint);
+}
+
+.case-spec {
+  grid-column: 1;
+  font-size: 11.5px;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.case-unit {
+  grid-column: 2;
+  grid-row: 1 / 3;
+  align-self: center;
+  font-size: 19px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--accent);
+  white-space: nowrap;
+}
+
+.case-unit i {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+.case-total {
+  grid-column: 1 / -1;
+  margin-top: 3px;
+  padding-top: 5px;
+  border-top: 1px solid var(--line);
+  font-size: 11px;
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
+}
+
+.legal-lead code {
+  padding: 1px 4px;
+  border-radius: 4px;
+  background: var(--surface);
+  font-size: 10.5px;
+}
