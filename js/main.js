@@ -48,4 +48,12 @@
       window.location.href = mailto;
     });
   }
+
+  if (!document.querySelector('script[src*="cloudflareinsights.com/beacon.min.js"]')) {
+    var beacon = document.createElement('script');
+    beacon.defer = true;
+    beacon.src = 'https://static.cloudflareinsights.com/beacon.min.js';
+    beacon.setAttribute('data-cf-beacon', '{"token": "836b6a8cf8b148418b408f133efbc2d9"}');
+    document.body.appendChild(beacon);
+  }
 })();
