@@ -223,6 +223,12 @@
   background: #eef3ef;
 }
 
+.hyakkin-page .hk-phone-screen picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
 /* 実スクショはめ込み: 縦横比維持・上寄せ（ヘッダー切れ防止）。中央トリミングしない */
 .hyakkin-page .hk-phone-screen img {
   display: block;
@@ -460,6 +466,10 @@
   border: 1px solid var(--hk-line);
   overflow: hidden;
   background: var(--hk-white);
+}
+
+.hyakkin-page .hk-feature-media picture {
+  display: block;
 }
 
 /* 幅いっぱいに合わせ、枠より縦に長い分だけ下を逃がす。左右を切らないので
