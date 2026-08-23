@@ -977,6 +977,13 @@ function applyScreen() {
       .catch(() => {});
   }
 
+  // 画面が変わったら pick は閉じる。外側スクロールのロックを持ち越さない。
+  for (const key of Object.keys(pickOpen)) {
+    pickOpen[key] = false;
+    pickQuery[key] = "";
+  }
+  syncPickLock();
+
   // 数字を入れる前に答えを出さない。売る値段に触れる画面から先で出す。
   const hero = app.querySelector("#hero");
   if (hero) hero.hidden = screen !== "result" || !inputsReady();
@@ -1702,6 +1709,19 @@ function replacePreservingFocus(el, html) {
   ) {
     return;
   }
+  // 選択が終わって閉じている pick の検索欄には、フォーカスを戻さない。
+  // 戻すと focusin がリストを開き直し、外側スクロールがロックされたまま
+  // ページが動かなくなる（syncPickLock を参照）。
+  if (
+    el.contains(active) &&
+    active.matches &&
+    active.matches("[data-pick-q]") &&
+    !pickOpen[active.dataset.pickQ]
+  ) {
+    el.innerHTML = html;
+    syncPickLock();
+    return;
+  }
   if (!el.contains(active)) {
     el.innerHTML = html;
     return;
@@ -2005,16 +2025,18 @@ app.addEventListener("focusout", (e) => {
   const box = e.target.closest("[data-pick-box]");
   if (!box) return;
   const key = box.dataset.pickBox;
-  requestAnimationFrame(() => {
-    if (box.contains(document.activeElement)) return;
-    if (!pickOpen[key]) return;
-    pickOpen[key] = false;
-    pickQuery[key] = "";
-    const input = box.querySelector("[data-pick-q]");
-    const select = box.querySelector("[data-select]");
-    if (input) input.value = select?.selectedOptions[0]?.textContent || "";
-    refreshPickList(key);
-  });
+  // relatedTarget は「次にフォーカスが移る先」。requestAnimationFrame で
+  // activeElement を見に行くと、バックグラウンドのタブや省電力で rAF が
+  // 止まったときに閉じる処理ごと止まり、外側スクロールがロックされたまま
+  // ページが動かなくなる。同期的に判定する。
+  if (box.contains(e.relatedTarget)) return;
+  if (!pickOpen[key]) return;
+  pickOpen[key] = false;
+  pickQuery[key] = "";
+  const input = box.querySelector("[data-pick-q]");
+  const select = box.querySelector("[data-select]");
+  if (input) input.value = select?.selectedOptions[0]?.textContent || "";
+  refreshPickList(key);
 });
 
 app.addEventListener("keydown", (e) => {
