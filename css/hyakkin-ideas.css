@@ -381,10 +381,10 @@ html[data-lp-phase="store"] .hk-phase-waitlist {
   flex-direction: row;
   flex-wrap: nowrap;
   justify-content: center;
-  align-items: stretch;
+  align-items: center;
   gap: 10px 12px;
   width: 100%;
-  max-width: 420px;
+  max-width: 430px;
 }
 
 .hyakkin-page .hk-cta-band-store {
@@ -393,14 +393,47 @@ html[data-lp-phase="store"] .hk-phase-waitlist {
   max-width: none;
 }
 
-.hyakkin-page .hk-cta-band-store .hk-cta--store {
+.hyakkin-page .hk-store-badge {
+  display: flex;
   flex: 0 0 auto;
+  align-items: center;
+  justify-content: center;
+  height: 64px;
+  line-height: 0;
+  transition: transform 160ms ease, opacity 160ms ease;
 }
 
-.hyakkin-page .hk-cta--store {
-  flex: 1 1 0;
-  min-width: 0;
-  padding: 12px 16px;
+.hyakkin-page .hk-store-badge:hover {
+  transform: translateY(-2px);
+  opacity: 0.92;
+}
+
+.hyakkin-page .hk-store-badge:focus-visible {
+  outline: 3px solid rgba(76, 125, 85, 0.35);
+  outline-offset: 3px;
+  border-radius: 10px;
+}
+
+.hyakkin-page .hk-store-badge img {
+  display: block;
+  max-width: none;
+  height: auto;
+}
+
+.hyakkin-page .hk-store-badge--apple {
+  width: 190px;
+}
+
+.hyakkin-page .hk-store-badge--apple img {
+  width: 190px;
+}
+
+.hyakkin-page .hk-store-badge--google {
+  width: 216px;
+}
+
+.hyakkin-page .hk-store-badge--google img {
+  width: 232px;
 }
 
 @media (max-width: 640px) {
@@ -419,7 +452,7 @@ html[data-lp-phase="store"] .hk-phase-waitlist {
     width: 100%;
   }
 
-  .hyakkin-page .hk-cta--store {
+  .hyakkin-page .hk-store-badge {
     flex: 0 0 auto;
   }
 }
