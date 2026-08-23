@@ -639,6 +639,7 @@ function scaffold() {
         </div>
         <div data-out="purchasePanel"></div>
       </section>
+      ${adSlotHtml(AD_SLOT)}
     </div>
 
     <div class="screen" data-screen-panel="tax">
@@ -687,6 +688,7 @@ function scaffold() {
         </div>
         <p class="hint">住み替えは税額の計算を変えません。当てはまる場合に見落としやすい点を、注意点として出すために使います。</p>
       </section>
+      ${adSlotHtml(AD_SLOT)}
     </div>
 
     <div class="screen" data-screen-panel="result">
@@ -737,6 +739,7 @@ function scaffold() {
         </div>
         <div data-out="costs"></div>
       </section>
+      ${adSlotHtml(AD_SLOT)}
     </div>
 
     <div class="screen" data-screen-panel="market">
@@ -787,6 +790,7 @@ function scaffold() {
           <span>路線価と固定資産税評価額を地図で引けます。このアプリの試算には使いません。</span>
         </a>
       </section>
+      ${adSlotHtml(AD_SLOT)}
     </div>
 
     <div class="screen" data-screen-panel="share">
