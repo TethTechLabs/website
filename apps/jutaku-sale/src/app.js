@@ -503,12 +503,28 @@ function kindSegHtml(kinds, aria = "物件の種類") {
   </div>`;
 }
 
-/**
- * 広告の差し込み位置。実タグが決まるまでは何も描かない。
- * プレースホルダーを置いたままだと審査で落ちるため、空要素にしておく。
- */
+const AD_SLOT = "8443825124";
+const AD_CLIENT = "ca-pub-7330372157278017";
+
 function adSlotHtml(id) {
-  return `<div class="ad-slot is-empty" data-ad-slot="${id}" aria-hidden="true"></div>`;
+  return `<div class="ad-slot" data-ad-slot="${id}" aria-hidden="true"></div>`;
+}
+
+function fillAdSlots() {
+  const panel = document.querySelector(`[data-screen-panel="${screen}"]`);
+  if (!panel || panel.hidden) return;
+  for (const slot of panel.querySelectorAll(".ad-slot:not(.ad-filled)")) {
+    slot.classList.add("ad-filled");
+    const ins = document.createElement("ins");
+    ins.className = "adsbygoogle";
+    ins.style.display = "block";
+    ins.dataset.adClient = AD_CLIENT;
+    ins.dataset.adSlot = slot.dataset.adSlot;
+    ins.dataset.adFormat = "auto";
+    ins.dataset.fullWidthResponsive = "true";
+    slot.appendChild(ins);
+    (window.adsbygoogle = window.adsbygoogle || []).push({});
+  }
 }
 
 /* ------------------------------------------------------------ 画面 */
@@ -577,6 +593,7 @@ function scaffold() {
           <ul class="prep-list" data-out="prepList"></ul>
         </div>
       </section>
+      ${adSlotHtml(AD_SLOT)}
     </div>
 
     <div class="screen" data-screen-panel="sell">
@@ -604,6 +621,7 @@ function scaffold() {
           <div data-out="loanBox"></div>
         </div>
       </section>
+      ${adSlotHtml(AD_SLOT)}
     </div>
 
     <div class="screen" data-screen-panel="basis">
@@ -976,6 +994,12 @@ function applyScreen() {
       .then((m) => m.setBannerVisible(screen !== "result"))
       .catch(() => {});
   }
+
+  // AdSense: DOM に <ins> を挿入して push する。scaffold 時点では空 div だけ
+  // 置いておき、画面が表示されてレイアウトが確定してから挿入する。
+  // scaffold 内に <ins> を書くと、AdSense スクリプトが初期化時に DOM を触り
+  // レイアウトが壊れる。
+  setTimeout(fillAdSlots, 100);
 
   // 画面が変わったら pick は閉じる。外側スクロールのロックを持ち越さない。
   for (const key of Object.keys(pickOpen)) {
