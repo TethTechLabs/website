@@ -503,16 +503,12 @@ function kindSegHtml(kinds, aria = "物件の種類") {
   </div>`;
 }
 
+/**
+ * 広告の差し込み位置。実タグが決まるまでは何も描かない。
+ * プレースホルダーを置いたままだと審査で落ちるため、空要素にしておく。
+ */
 function adSlotHtml(id) {
-  return `
-    <div class="ad-slot" data-ad-slot="${id}" aria-hidden="true">
-      <ins class="adsbygoogle"
-        style="display:block"
-        data-ad-client="ca-pub-7330372157278017"
-        data-ad-slot="${id}"
-        data-ad-format="auto"
-        data-full-width-responsive="true"></ins>
-    </div>`;
+  return `<div class="ad-slot is-empty" data-ad-slot="${id}" aria-hidden="true"></div>`;
 }
 
 /* ------------------------------------------------------------ 画面 */
@@ -581,7 +577,6 @@ function scaffold() {
           <ul class="prep-list" data-out="prepList"></ul>
         </div>
       </section>
-      ${adSlotHtml("8443825124")}
     </div>
 
     <div class="screen" data-screen-panel="sell">
@@ -609,7 +604,6 @@ function scaffold() {
           <div data-out="loanBox"></div>
         </div>
       </section>
-      ${adSlotHtml("8443825124")}
     </div>
 
     <div class="screen" data-screen-panel="basis">
@@ -876,7 +870,6 @@ function scaffold() {
 const app = document.getElementById("app");
 app.innerHTML = scaffold();
 
-
 const out = {};
 for (const node of app.querySelectorAll("[data-out]")) out[node.dataset.out] = node;
 
@@ -983,17 +976,6 @@ function applyScreen() {
       .then((m) => m.setBannerVisible(screen !== "result"))
       .catch(() => {});
   }
-
-  // AdSense: 表示中の画面にある未初期化の <ins> だけ push する。
-  // 非表示（width=0）のまま push すると TagError になる。
-  // setTimeout で次タスクに回し、ブラウザのレイアウト完了後に push する。
-  setTimeout(() => {
-    const panel = app.querySelector(`[data-screen-panel="${screen}"]`);
-    if (!panel || panel.hidden) return;
-    for (const ins of panel.querySelectorAll(".adsbygoogle:not([data-adsbygoogle-status])")) {
-      (window.adsbygoogle = window.adsbygoogle || []).push({});
-    }
-  }, 0);
 
   // 画面が変わったら pick は閉じる。外側スクロールのロックを持ち越さない。
   for (const key of Object.keys(pickOpen)) {
