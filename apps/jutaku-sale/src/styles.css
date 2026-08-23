@@ -3348,31 +3348,6 @@ input[type="number"] {
   opacity: 0.4;
 }
 
-.media-kinds {
-  display: grid;
-  gap: 8px;
-  margin: 0 0 10px;
-}
-
-.media-kinds div {
-  padding: 8px 10px;
-  border: 1px solid var(--line);
-  border-radius: 10px;
-  background: var(--surface-2);
-}
-
-.media-kinds b {
-  display: block;
-  margin-bottom: 2px;
-  font-size: 13px;
-  color: var(--ink);
-}
-
-.media-kinds span {
-  font-size: 12px;
-  line-height: 1.5;
-}
-
 .kind-row {
   display: grid;
   gap: 8px;
