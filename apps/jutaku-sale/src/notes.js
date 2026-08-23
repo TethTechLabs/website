@@ -153,22 +153,8 @@ export function sellingNotes({ input, result, ownedYears = 0, flags = {} }) {
     body: "買主から受け取る日割り精算金は、税務上は売買代金の一部です。確定申告で漏れやすいのでご注意ください。",
   });
 
-  if (stage === "quoted") {
-    add({
-      id: "stage-quoted",
-      stageNote: true,
-      level: "danger",
-      title: "査定額はそのまま売れる金額ではありません",
-      body: "媒介契約を取るために相場より高い査定を出す会社があります。根拠にした成約事例を具体的に示せるかどうかで見分けられます。",
-    });
-  }
-
   const order = { danger: 0, check: 1, know: 2 };
-  return notes.sort(
-    (a, b) =>
-      order[a.level] - order[b.level] ||
-      Number(Boolean(b.stageNote)) - Number(Boolean(a.stageNote))
-  );
+  return notes.sort((a, b) => order[a.level] - order[b.level]);
 }
 
 export function countByLevel(notes) {
