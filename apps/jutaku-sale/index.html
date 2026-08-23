@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#0b0d11" media="(prefers-color-scheme: dark)" />
+    <title>住宅売却の手取り試算</title>
+    <meta
+      name="description"
+      content="売却価格からローン残債・仲介手数料・譲渡所得税を引いて、手元にいくら残るかを出す。登録も査定の申し込みも不要。入力はすべて端末の中だけで完結します。"
+    />
+
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="./apple-touch-icon.png" />
+    <link rel="manifest" href="./site.webmanifest" />
+    <meta name="apple-mobile-web-app-title" content="売却試算" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="住宅売却の手取り試算" />
+    <meta property="og:title" content="住宅売却の手取り試算" />
+    <meta
+      property="og:description"
+      content="いくらで売れたら、いくら残るか。ローン残債・諸費用・譲渡所得税まで引いた手取りを、登録なしでその場で出します。査定の申し込みはありません。"
+    />
+    <meta property="og:url" content="https://tethtechlabs.com/apps/jutaku-sale/" />
+    <meta property="og:image" content="https://tethtechlabs.com/apps/jutaku-sale/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:locale" content="ja_JP" />
+    <meta name="twitter:card" content="summary_large_image" />
+
+    <!-- adsense:start — Web版のみ。AdSenseはアプリ内での使用が規約で禁止されているため、
+         ストアアプリ用のビルド（scripts/build-dist.sh）ではこのブロックごと削除する。
+         アプリ側の広告は AdMob（src/ads-native.js）で出す。 -->
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7330372157278017"
+      crossorigin="anonymous"
+    ></script>
+    <!-- adsense:end -->
+
+    <link rel="stylesheet" href="./src/styles.css?v=16" />
+    <script>
+      // 保存した表示設定を、描画前に当てる。読み込み直後のちらつきを避ける。
+      try {
+        var pref = JSON.parse(localStorage.getItem("sale-sim-v1") || "{}");
+        if (pref.theme === "light" || pref.theme === "dark") {
+          document.documentElement.dataset.theme = pref.theme;
+        }
+        document.documentElement.dataset.palette = pref.palette || "standard";
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <main class="app" id="app"></main>
+    <script type="module" src="./src/app.js?v=16"></script>
+  </body>
+</html>
