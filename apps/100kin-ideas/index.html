@@ -260,6 +260,10 @@
   </div>
   <script src="/js/main.js"></script>
   <script src="/js/100kin-funnel.js" type="module"></script>
+  <script type="module">
+    import { createMonetization } from "/js/monetization.js";
+    createMonetization({ propertyId: "100kin" }).pageView({ placement: "auto" });
+  </script>
   <!-- Cloudflare Web Analytics --><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7487423d34c14ee1b51f28a905a89006"}'></script><!-- End Cloudflare Web Analytics -->
 </body>
 </html>

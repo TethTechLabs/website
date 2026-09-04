@@ -1,44 +1,40 @@
 /**
  * Web版だけの商品紹介（広告）。ストアアプリでは出さない。
  *
- * ここに不動産の一括査定・買取業者への送客は置かない。
- * このツールの中身は「登録せずに自分で手取りを出せること」なので、
- * 結果の直後に査定の申込口を置いた時点で、業者のシミュレーターと
- * 同じものになる。成果単価は査定送客のほうがはるかに高いが、
- * それを取ると売り物そのものが無くなる。
- *
- * 置くのは、売却が決まったあとに実際に買う物だけ。
  * Amazon は審査がある。楽天は先に通ることが多い。
  * 空の ID は出さない。入っているネットのボタンだけ出す。
+ * 住宅ローン商品・銀行申込の送客は置かない。
+ *
+ * ID が届いたら、下の amazonTag / rakutenId に貼るだけ。
  */
 export const AFFILIATE = {
-  /** Amazon アソシエイトのトラッキング ID（例: something-22） */
+  /** Amazon アソシエイトのトラッキング ID。発行済み tethtechlabs-22。審査と AdSense 通過まで空のまま。 */
   amazonTag: "",
-  /** 楽天アフィリエイト ID（例: xxxx.yyyy.zzzz） */
+  /** 楽天アフィリエイト ID。発行済み 56afa1ad.d9f67324.56afa1ae.7bb4984d。AdSense 通過まで空のまま。 */
   rakutenId: "",
 };
 
 const RELAY_ORIGIN = "https://app-waitlist.tethtechlabs.workers.dev";
-const PROPERTY_ID = "jutaku-sale";
+const PROPERTY_ID = "jutaku-loan";
 
 const ITEMS = [
   {
-    id: "packing-supplies",
-    title: "引き渡しまでの片づけ",
-    blurb: "残置物の処分袋や梱包材など、明け渡しの前にそろえるもの。",
-    query: "引っ越し 梱包 資材",
+    id: "moving-boxes",
+    title: "引っ越しの梱包",
+    blurb: "段ボールや緩衝材など、転居のときにそろえる消耗品。",
+    query: "引っ越し 段ボール",
   },
   {
-    id: "cleaning-set",
-    title: "内見前の手入れ",
-    blurb: "水回りや床の清掃用品。写真と内見の印象に効くところ。",
-    query: "ハウスクリーニング 洗剤 セット",
+    id: "new-life-appliances",
+    title: "新生活の家電",
+    blurb: "冷蔵庫・洗濯機など、住み始めに検討することが多いもの。",
+    query: "新生活 家電",
   },
   {
-    id: "sale-tax-book",
-    title: "売却と税の本",
-    blurb: "確定申告や特例の要件を、自分で一度読んでおくとき。",
-    query: "不動産 売却 確定申告",
+    id: "housing-loan-book",
+    title: "住まいの入門書",
+    blurb: "購入やローンの仕組みを、本で先に押さえておくとき。",
+    query: "住宅ローン 入門",
   },
 ];
 
@@ -106,16 +102,20 @@ export function affiliateHtml({
 
   const notes = [];
   if (amazon) {
-    notes.push("Amazonのアソシエイトとして、TethTechLabsは適格販売により収入を得ています。");
+    notes.push(
+      "Amazonのアソシエイトとして、TethTechLabsは適格販売により収入を得ています。"
+    );
   }
-  if (rakuten) notes.push("一部のリンクは楽天アフィリエイトです。");
+  if (rakuten) {
+    notes.push("一部のリンクは楽天アフィリエイトです。");
+  }
 
   return `<aside class="aff" aria-labelledby="h-aff">
       <div class="aff-head">
-        <h2 id="h-aff">売却の準備</h2>
+        <h2 id="h-aff">住まいの準備</h2>
         <span class="aff-badge">広告</span>
       </div>
-      <p class="aff-lead">試算の数字とは関係ありません。売却が決まったあとに使う物を探すリンクです。査定や買取の申込先は置いていません。</p>
+      <p class="aff-lead">試算の数字とは別です。引っ越しや新生活で使うものを探すリンクです。融資の申込先ではありません。</p>
       ${items}
       <p class="aff-note">${notes.join(" ")}</p>
     </aside>`;

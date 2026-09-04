@@ -21,6 +21,7 @@ import {
   xForIndex,
 } from "./charts.js";
 import { buildShareCanvas, buildShareText } from "./share.js";
+import { affiliateHtml, shownAffiliateNetworks } from "./affiliates.js";
 
 const TODAY_LABEL = new Date().toLocaleDateString("ja-JP", {
   year: "numeric",
@@ -296,14 +297,6 @@ function shareData(c) {
   };
 }
 
-/** 結果画面の各タブ共通で出す、試算の前提を一行にした表示。 */
-function resultMetaText(c) {
-  const rateTypeLabel = RATE_TYPES.find((t) => t.id === S.rateType)?.label || "変動";
-  const methodLabel = S.method === "equal-payment" ? "元利均等" : "元金均等";
-  const bonusLabel = c.split.bonus > 0 ? "ボーナス返済あり" : "ボーナス返済なし";
-  return `${TODAY_LABEL}時点の試算・${trim(num(S.rate))}%（${rateTypeLabel}）・${methodLabel}・${bonusLabel}・表示額に諸費用は含まない`;
-}
-
 function riseSummary() {
   const pts = points();
   if (!pts.length) return "未設定";
@@ -333,7 +326,7 @@ function sliderCard({ key, label, hint, unit, decimals = 0, presets = [], scale 
     <div class="ctrl" data-key="${key}">
       <div class="ctrl-head">
         <label class="ctrl-label" for="r-${key}">${label}</label>
-        <span class="ctrl-hint">${hint}</span>
+        ${hint ? `<span class="ctrl-hint">${hint}</span>` : ""}
       </div>
       <div class="ctrl-value">
         <button type="button" class="step" data-nudge="-1" aria-label="${label}を減らす">
@@ -395,13 +388,19 @@ function scaffold() {
       </dl>
     </header>
 
+    <button type="button" class="back-btn" data-back hidden>← 戻る</button>
+
     <div class="screen-scroll" data-screen-scroll>
     <div class="screen" data-screen-panel="input">
     <button type="button" class="costs-entry" data-goto="costs">物件価格から計算する</button>
     <section class="controls" aria-label="借入条件">
+      <div class="ctrl-head ctrl-head-stack">
+        <span class="ctrl-label">借入条件</span>
+        <span class="ctrl-req">（借入予定額、返済期間、金利は必ず入力）</span>
+      </div>
       ${sliderCard({
         key: "principalMan",
-        label: "借入予定額（元金）",
+        label: "借入予定額",
         hint: "",
         unit: "万円",
         scale: ["1万", "2億"],
@@ -468,8 +467,8 @@ function scaffold() {
 
     <section class="ctrl" aria-label="家計情報">
       <div class="ctrl-head">
-        <span class="ctrl-label">家計情報</span>
-        <span class="ctrl-hint">収入合算時は合計金額を入力</span>
+        <span class="ctrl-label">家計情報（任意）</span>
+        <span class="ctrl-hint">収入合算時は合計</span>
       </div>
       <div class="grid-inputs">
         <label>税込年収（万円）<input type="number" inputmode="decimal" data-field="incomeMan" value="${S.incomeMan || ""}" placeholder="600"/></label>
@@ -480,11 +479,11 @@ function scaffold() {
       </div>
       <div class="household" data-out="household"></div>
     </section>
+    <button type="button" class="result-entry" data-goto="result">結果で内訳を見る</button>
 
     </div>
 
     <div class="screen" data-screen-panel="result">
-      <p class="result-meta" data-out="resultMeta"></p>
       <div class="tabbar" role="tablist" aria-label="結果の見方">
         <button type="button" role="tab" data-tab="matrix" aria-controls="tabpanel-matrix">マトリクス</button>
         <button type="button" role="tab" data-tab="chart" aria-controls="tabpanel-chart">残高推移</button>
@@ -518,7 +517,7 @@ function scaffold() {
           </button>
         </div>
       </div>
-      <p class="afford-note">ボーナスに毎月分は含まない（借りたい額の考え方と同じ）。</p>
+      <p class="afford-note">ボーナスに毎月分は含まない。</p>
 
       <div class="matrix-bar">
         <div class="seg small" role="group" aria-label="縦軸">
@@ -597,10 +596,10 @@ function scaffold() {
       </div>
 
       ${adSlotHtml("result-banner")}
+      ${affiliateHtml()}
     </div>
 
     <div class="screen" data-screen-panel="costs">
-      <button type="button" class="back-btn" data-back>← 戻る</button>
       <section class="panel" aria-labelledby="h-cost">
         <div class="panel-head">
           <h2 id="h-cost">住宅購入・借入にかかる諸費用</h2>
@@ -611,10 +610,9 @@ function scaffold() {
     </div>
 
     <div class="screen" data-screen-panel="share">
-      <button type="button" class="back-btn" data-back>← 戻る</button>
       <section class="cond-card" aria-labelledby="h-cond">
         <div class="cond-head">
-          <span class="cond-badge">試算値</span>
+          <span class="cond-badge">試算</span>
           <span class="cond-date" data-out="condDate"></span>
         </div>
         <h2 id="h-cond" class="visually-hidden">この試算の条件</h2>
@@ -637,7 +635,6 @@ function scaffold() {
     </div>
 
     <div class="screen" data-screen-panel="settings">
-      <button type="button" class="back-btn" data-back>← 戻る</button>
       <section class="panel" aria-labelledby="h-prefs">
       <div class="panel-head">
         <h2 id="h-prefs">表示</h2>
@@ -696,7 +693,8 @@ function scaffold() {
       <button type="button" class="nav-icon" data-goto="costs">諸費用</button>
       <button type="button" class="nav-icon" data-goto="share">共有</button>
       <button type="button" class="nav-icon" data-goto="settings">設定</button>
-    </nav>`;
+    </nav>
+    <div class="ad-dock" data-ad-dock aria-hidden="true"></div>`;
 }
 
 /* ------------------------------------------------------------ 描画 */
@@ -725,10 +723,13 @@ function applyScreen() {
     el.hidden = el.dataset.screenPanel !== screen;
   }
   const isMain = screen === "input" || screen === "result";
+  app.classList.toggle("is-sub", !isMain);
   const hero = app.querySelector("#hero");
   if (hero) hero.hidden = !isMain;
   const nav = app.querySelector("[data-bottom-nav]");
   if (nav) nav.hidden = !isMain;
+  const back = app.querySelector("[data-back]");
+  if (back) back.hidden = isMain;
   for (const b of app.querySelectorAll("[data-goto]")) {
     b.setAttribute("aria-pressed", String(b.dataset.goto === screen));
   }
@@ -738,7 +739,6 @@ function applyScreen() {
  * ストアアプリ版でAdMobの全画面広告を挟むための差し込み点。
  * Web版（AdSense）では呼ばない。一覧表（マトリクス）タブを、
  * 結果画面に来て以降・別タブから切り替えて開いたときだけ、1セッション1回で呼ぶ。
- * 現状はSDKがまだ無いので何もしない。
  */
 let matrixInterstitialShown = false;
 function maybeShowMatrixInterstitial() {
@@ -1152,7 +1152,7 @@ function costsHtml(costs) {
   const contractRows = costs.contractItems
     .map(
       (item, i) => `<div class="contract-row">
-        <input type="text" class="contract-label" data-contract-label="${i}" value="${item.label}" placeholder="項目名（例: 収入印紙）"/>
+        <input type="text" class="contract-label" data-contract-label="${i}" value="${item.label}" placeholder="項目名"/>
         <input type="text" inputmode="decimal" class="cell-input" data-contract-man="${i}"
           value="${item.man === "" || item.man == null ? "" : item.man}"
           placeholder="0"
@@ -1175,7 +1175,7 @@ function costsHtml(costs) {
   const settlementExtraRows = costs.settlementExtra
     .map(
       (item, i) => `<div class="contract-row">
-        <input type="text" class="contract-label" data-settlement-label="${i}" value="${item.label}" placeholder="項目名（例: 引越し費用）"/>
+        <input type="text" class="contract-label" data-settlement-label="${i}" value="${item.label}" placeholder="項目名"/>
         <input type="text" inputmode="decimal" class="cell-input" data-settlement-man="${i}"
           value="${item.man === "" || item.man == null ? "" : item.man}"
           placeholder="0"
@@ -1326,7 +1326,6 @@ function update() {
   out.heroTotal.textContent = manShort(c.base.totalPaid);
   out.heroInterest.textContent = manShort(c.base.totalInterest);
   out.heroShare.textContent = percent(c.base.totalPaid > 0 ? c.base.totalInterest / c.base.totalPaid : null);
-  out.resultMeta.textContent = resultMetaText(c);
 
   out.bonusBody.innerHTML = bonusBodyHtml(c);
   out.split.innerHTML =
@@ -1783,5 +1782,15 @@ syncAll();
 if (globalThis.Capacitor?.isNativePlatform?.()) {
   import("./ads-native.js")
     .then((m) => m.initNativeAds())
+    .catch(() => {});
+} else {
+  import("./monetization.js")
+    .then((m) => {
+      const mon = m.createMonetization({ propertyId: "jutaku-loan" });
+      mon.pageView({ placement: "auto" });
+      for (const network of shownAffiliateNetworks()) {
+        mon.affiliateView({ network, placement: "result" });
+      }
+    })
     .catch(() => {});
 }

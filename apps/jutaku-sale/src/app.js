@@ -19,7 +19,12 @@ import {
 } from "./calc.js";
 import { waterfallChart, proceedsChart, indexFromPointer, xForIndex } from "./charts.js";
 import { buildShareCanvas, buildShareText } from "./share.js";
-import { affiliateHtml } from "./affiliates.js";
+import { affiliateHtml, shownAffiliateNetworks } from "./affiliates.js";
+import { createMonetization } from "./monetization.js";
+
+const mon = globalThis.Capacitor?.isNativePlatform?.()
+  ? null
+  : createMonetization({ propertyId: "jutaku-sale" });
 import { sellingNotes, LEVELS, countByLevel } from "./notes.js";
 import {
   PREFECTURES,
@@ -511,6 +516,9 @@ function adSlotHtml(id) {
 }
 
 function fillAdSlots() {
+  // ローカル検証で本番AdSenseへリクエストを送らない。ストアアプリ版では index.html
+  // からAdSense自体を除いているため、ここは公開Web版だけが通る。
+  if (/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)) return;
   const panel = document.querySelector(`[data-screen-panel="${screen}"]`);
   if (!panel || panel.hidden) return;
   for (const slot of panel.querySelectorAll(".ad-slot:not(.ad-filled)")) {
@@ -518,12 +526,15 @@ function fillAdSlots() {
     const ins = document.createElement("ins");
     ins.className = "adsbygoogle";
     ins.style.display = "block";
+    // .ad-slot は中央寄せの flex。幅を明示しないと AdSense が availableWidth=0 と判断する。
+    ins.style.width = "100%";
     ins.dataset.adClient = AD_CLIENT;
     ins.dataset.adSlot = slot.dataset.adSlot;
     ins.dataset.adFormat = "auto";
     ins.dataset.fullWidthResponsive = "true";
     slot.appendChild(ins);
     (window.adsbygoogle = window.adsbygoogle || []).push({});
+    if (mon) mon.observeAdSlots(ins);
   }
 }
 
@@ -905,13 +916,24 @@ let lastMain = "stage";
  * 査定額をもらっている人にとっては、自分の数字がすでにあるので回り道になる。
  */
 function flow() {
-  return ["stage", "market", "sell", "costs", "basis", "tax", "result"];
+  // 査定額を持っている人に相場入力を強制すると、手元の数字を入れるまで遠回りになる。
+  // 相場画面は未査定の人だけが通る入口にする。
+  const pricePath = S.stage === "quoted" ? ["stage", "sell"] : ["stage", "market", "sell"];
+  return [...pricePath, "costs", "basis", "tax", "result"];
 }
 
 const STEP_NEXT_LABEL = {
-  market: "この価格で進む",
+  market: "売却価格を入力する",
+  sell: "諸費用を確認する",
+  costs: "取得費を入力する",
+  basis: "税金条件を確認する",
   tax: "手取りを見る",
 };
+
+function stepNextLabel() {
+  if (screen === "stage") return S.stage === "quoted" ? "売却価格を入力する" : "相場を確認する";
+  return STEP_NEXT_LABEL[screen] || "次へ";
+}
 
 const STEP_TITLES = {
   stage: "事前チェック",
@@ -969,6 +991,13 @@ function goStep(delta) {
       out.sellError.hidden = false;
     }
     return;
+  }
+  // 結果は先に読めるようにし、次の試算へ戻るという自然な区切りでだけ全画面広告を出す。
+  // Web版では Capacitor が無いため、この処理はストアアプリだけに限る。
+  if (screen === "result" && delta < 0 && globalThis.Capacitor?.isNativePlatform?.()) {
+    import("./ads-native.js")
+      .then((m) => m.showMatrixInterstitial())
+      .catch(() => {});
   }
   // 相場から進むときは、出した想定価格をそのまま売却価格に入れる。
   // S に代入するだけでは、スライダーの位置と表示が既定値のまま取り残される。
@@ -1030,7 +1059,7 @@ function applyScreen() {
       .map((_, k) => `<i class="${k === i ? "is-on" : k < i ? "is-done" : "is-todo"}"></i>`)
       .join("");
     out.stepDots.innerHTML = `<span class="steps-now">${i + 1} / ${total}　${esc(title)}</span><span class="steps-marks" aria-hidden="true">${dots}</span>`;
-    out.stepNext.textContent = STEP_NEXT_LABEL[screen] || "次へ";
+    out.stepNext.textContent = stepNextLabel();
     out.stepNext.disabled = screen === "basis" && purchaseIncomplete();
     app.querySelector("[data-step=\"-1\"]").disabled = i === 0;
   }
@@ -2331,4 +2360,9 @@ if (globalThis.Capacitor?.isNativePlatform?.()) {
   import("./ads-native.js")
     .then((m) => m.initNativeAds())
     .catch(() => {});
+} else {
+  mon?.pageView({ placement: "auto" });
+  for (const network of shownAffiliateNetworks()) {
+    mon?.affiliateView({ network, placement: "result" });
+  }
 }

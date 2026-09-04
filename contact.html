@@ -141,5 +141,9 @@
     </footer>
   </div>
   <script src="/js/main.js"></script>
+  <script type="module">
+    import { createMonetization } from "/js/monetization.js";
+    createMonetization({ propertyId: "site" }).pageView({ placement: "auto" });
+  </script>
 </body>
 </html>
