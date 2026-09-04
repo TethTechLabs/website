@@ -504,7 +504,7 @@ function kindSegHtml(kinds, aria = "物件の種類") {
 }
 
 const AD_SLOT = "8443825124";
-const AD_CLIENT = "ca-pub-7330372157278017";
+const AD_CLIENT = "ca-pub-9222260774149288";
 
 function adSlotHtml(id) {
   return `<div class="ad-slot" data-ad-slot="${id}" aria-hidden="true"></div>`;
