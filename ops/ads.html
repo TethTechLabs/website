@@ -149,7 +149,7 @@
         <tr>
           <td>100均 Pages 本体</td>
           <td>下部バナー</td>
-          <td><span class="st ok">入れた</span> 下部バナー <code>9849652972</code>。ストアアプリでは出さない。本番は <code>release</code> マージ後</td>
+          <td><span class="st code">一部</span> コードは <code>main</code>。本番（<code>release</code>）未。スロット <code>9849652972</code></td>
         </tr>
         <tr>
           <td>Guide 記事・比較・診断</td>
@@ -180,12 +180,29 @@
     </table>
 
     <div class="box">
+      <p><strong>残り（2026-09-07 23:10）</strong></p>
+      <ul class="tight">
+        <li>100均 Pages を本番へ。<code>main</code> → <code>release</code>。いまの <a class="ext" href="https://100-bbz.pages.dev/" target="_blank" rel="noopener">100-bbz.pages.dev</a> にはバナーも ads.txt も無い。</li>
+        <li>Guide。A8 に再ログインして掲載 URL を取る。URL が無い間は出さない。</li>
+        <li>売却アプリのストア提出。広告コードの追加ではない。</li>
+        <li>AdSense 審査。<code>tethtechlabs.com</code> は ads.txt 承認済み・サイトは要審査。Pages 2サイト（<code>book-movie.pages.dev</code> / <code>100-bbz.pages.dev</code>）は追加済み・所有権確認待ち。自動広告は3サイトともオフ。</li>
+      </ul>
+    </div>
+
+    <div class="box">
       <p><strong>読み方</strong>　方針＝これから守る決め。実装＝コードに入っているか。チェックはこのブラウザにだけ残る。この一覧に無いページは対象外（ウェイトリスト、調味料 Web、開発中アプリ）。</p>
     </div>
 
     <div class="box">
-      <p><strong>AdSense 入り口（2026-09-07）</strong>　口座は <code>pub-9222260774149288</code>（TETHTECHLABS / akkybooo@）。AdMob と同一パブ。Web 接続は <a class="ext" href="https://www.google.com/adsense/signup" target="_blank" rel="noopener">signup</a> で続行済み。広告ユニットは <a class="ext" href="https://adsense.google.com/adsense/u/0/pub-9222260774149288/myads/units" target="_blank" rel="noopener">myads/units</a>。<code>/ads</code> 直リンクは使わない。</p>
-      <p><code>tethtechlabs.com</code> の自動広告はオフのまま。会社サイトに出さない。サイト連携の「必須」は ads.txt 済みでもオンボーディングに残ることがある。</p>
+      <p><strong>AdSense（2026-09-07）</strong>　口座は <code>pub-9222260774149288</code>（TETHTECHLABS / akkybooo@）。AdMob と同一パブ。ユニットは <a class="ext" href="https://adsense.google.com/adsense/u/0/pub-9222260774149288/myads/units" target="_blank" rel="noopener">myads/units</a>。<code>/ads</code> 直リンクは使わない。</p>
+      <ul class="tight">
+        <li><code>jutaku-sale-main</code> <code>3355562669</code></li>
+        <li><code>jutaku-loan-banner</code> <code>4402367671</code></li>
+        <li><code>jutaku-loan-interstitial</code> <code>3901367893</code></li>
+        <li><code>book-movie-ranking-banner</code> <code>5946066988</code></li>
+        <li><code>hyakkin-pages-banner</code> <code>9849652972</code></li>
+      </ul>
+      <p>サイト：<code>tethtechlabs.com</code>（要審査／ads.txt 承認済み）、<code>book-movie.pages.dev</code>、<code>100-bbz.pages.dev</code>。自動広告はオフ。会社サイトに出さない。</p>
     </div>
 
     <h2 id="corp">会社サイト</h2>
@@ -242,7 +259,7 @@
             下部バナーのみ。<br>
             今後：インタースティシャルまたはリワード。アフィリエイトも。
           </td>
-          <td><span class="st ok">入れた</span> 下部バナー <code>9849652972</code>。ネイティブでは出さない。公開は <code>release</code> マージ後</td>
+          <td><span class="st code">一部</span> コードは <code>main</code>（<code>9849652972</code>）。本番未。ネイティブでは出さない</td>
         </tr>
         <tr>
           <td class="page"><a class="ext" href="https://100-bbz.pages.dev/lp.html" target="_blank" rel="noopener">Pages 内 LP</a></td>
@@ -486,6 +503,16 @@
           <td><span class="st ok">残す</span> <code>7330</code> と <code>9222</code> の両方。消さない。</td>
           <td><span class="st ok">入れた</span> 2行とも公開中</td>
         </tr>
+        <tr>
+          <td class="page"><a class="ext" href="https://book-movie.pages.dev/ads.txt" target="_blank" rel="noopener">book-movie.pages.dev/ads.txt</a></td>
+          <td><span class="st ok">残す</span> ランキング配信用。7330 行は消さない。</td>
+          <td><span class="st ok">入れた</span> 公開中</td>
+        </tr>
+        <tr>
+          <td class="page">100-bbz.pages.dev/ads.txt</td>
+          <td><span class="st ok">残す</span> Pages 本体用。<code>release</code> に乗せてから有効。</td>
+          <td><span class="st code">一部</span> <code>main</code> にある。本番は index.html に落ちて広告用ファイルになっていない</td>
+        </tr>
       </tbody>
     </table>
 
@@ -495,20 +522,20 @@
     <h3>A. アカウント</h3>
     <div class="box">
       <label class="task"><input type="checkbox" data-task="P01"><span><strong>P01</strong> AdSense <code>9222</code>（akkybooo@）を Web 用に続行する。 <a class="ext" href="https://www.google.com/adsense/signup" target="_blank" rel="noopener">signup</a><span class="dep">済み（2026-09-07）。パブ <code>9222</code> / TETHTECHLABS / AdMob 紐付け。左に「広告」が出る。次はユニット作成。</span></span></label>
-      <label class="task"><input type="checkbox" data-task="P02"><span><strong>P02</strong> ローン本体の AdSense は承認済み <code>9222</code> を使う。旧 <code>7330</code> は未承認なので使わない。<span class="dep">次は P12。ads.txt の 7330 行は消さない。</span></span></label>
+      <label class="task"><input type="checkbox" data-task="P02"><span><strong>P02</strong> ローン本体の AdSense は承認済み <code>9222</code> を使う。旧 <code>7330</code> は未承認なので使わない。<span class="dep">P12 済み。ads.txt の 7330 行は消さない。</span></span></label>
       <label class="task"><input type="checkbox" data-task="P03"><span><strong>P03</strong> 支払い。W-8BEN 済み。基準額まで口座を出さない。赤帯で新規プロファイルを作らない。</span></label>
       <label class="task"><input type="checkbox" data-task="P04"><span><strong>P04</strong> <a class="ext" href="https://tethtechlabs.com/ads.txt" target="_blank" rel="noopener">ads.txt</a> / <a class="ext" href="https://tethtechlabs.com/app-ads.txt" target="_blank" rel="noopener">app-ads.txt</a> の2行は残す。</span></label>
     </div>
 
     <h3>B. 出さないページから旧スクリプトを外す</h3>
     <div class="box">
-      <p>済み（2026-09-07）。会社サイト、100均 LP、ローン規約3ページ、ローン本体から旧 <code>7330</code> を外した。本体へ承認済みユニットを入れるのは P12。</p>
+      <p>済み（2026-09-07）。会社サイト、100均 LP、ローン規約3ページ、ローン本体から旧 <code>7330</code> を外した。P12 も済み。</p>
     </div>
 
     <h3>C. 出すページを実装する</h3>
     <div class="box">
       <label class="task"><input type="checkbox" data-task="P12"><span><strong>P12</strong> ローン Web 本体。下部バナー、インタースティシャル、Amazon、楽天。<span class="dep">済み（2026-09-07）。バナー <code>4402367671</code>、インタースティシャル <code>3901367893</code>、Amazon <code>tethtechlabs-22</code>、楽天 ID。対象は <a class="ext" href="https://tethtechlabs.com/apps/jutaku-loan/" target="_blank" rel="noopener">本体だけ</a>。規約には付けない。自動広告はオンにしない。</span></span></label>
-      <label class="task"><input type="checkbox" data-task="P13"><span><strong>P13</strong> 100均 Pages 本体に下部バナーを入れる。<span class="dep">コード済み（2026-09-07）。スロット <code>9849652972</code>（<code>hyakkin-pages-banner</code>）。ストアアプリでは出さない。<a class="ext" href="https://100-bbz.pages.dev/" target="_blank" rel="noopener">100-bbz.pages.dev</a> の本番は <code>release</code> マージ後。Pages 内 LP には付けない。自動広告はオンにしない。</span></span></label>
+      <label class="task"><input type="checkbox" data-task="P13"><span><strong>P13</strong> 100均 Pages 本体に下部バナーを入れる。<span class="dep">コードは <code>main</code>（2026-09-07）。スロット <code>9849652972</code>。本番未。次は <code>main</code> → <code>release</code>。ストアアプリでは出さない。Pages 内 LP には付けない。自動広告はオンにしない。</span></span></label>
       <label class="task"><input type="checkbox" data-task="P14"><span><strong>P14</strong> 本と映画はランキングにアフィリと下部バナー。トップには出さない。<span class="dep">済み（2026-09-07）。アフィリ ID とバナー <code>5946066988</code>。出す：<a class="ext" href="https://book-movie.pages.dev/ranking" target="_blank" rel="noopener">ランキング</a>。出さない：<a class="ext" href="https://book-movie.pages.dev/" target="_blank" rel="noopener">トップ</a>。映画行にアフィリは付けない。アプリには出さない。自動広告はオンにしない。</span></span></label>
       <label class="task"><input type="checkbox" data-task="P20"><span><strong>P20</strong> 売却 Web。AdSense <code>9222</code> で新ユニットを作る。 <a class="ext" href="https://adsense.google.com/adsense/u/0/pub-9222260774149288/myads/units" target="_blank" rel="noopener">myads/units</a><span class="dep">済み（2026-09-07）。ユニット名 <code>jutaku-sale-main</code>。スロット <code>3355562669</code>。旧 8443825124 は使わない。自動広告はオンにしない。</span></span></label>
       <label class="task"><input type="checkbox" data-task="P21"><span><strong>P21</strong> 売却本体のスロット番号を差し替え。<span class="dep">済み（2026-09-07）<code>3355562669</code>。確認：<a class="ext" href="https://tethtechlabs.com/apps/jutaku-sale/" target="_blank" rel="noopener">本体</a>。結果画面と規約3ページには出さない。</span></span></label>
@@ -549,7 +576,7 @@
       </tbody>
     </table>
 
-    <p class="foot">進捗の記録日：2026-09-07。しおり：<a class="ext" href="https://tethtechlabs.com/ops/ads.html">https://tethtechlabs.com/ops/ads.html</a>。検索には出さない。</p>
+    <p class="foot">進捗の記録日：2026-09-07 23:10。しおり：<a class="ext" href="https://tethtechlabs.com/ops/ads.html">https://tethtechlabs.com/ops/ads.html</a>。検索には出さない。</p>
   </main>
   <script>
     const KEY = "tethtech-ads-ops-tasks-v2";
