@@ -102,8 +102,9 @@
 <body>
   <main>
     <h1>運営サイトと広告手続き</h1>
-    <p class="lede">ページごとに方針が違うので、1行1ページ。方針は「出す／出さない／今後」の決定。実装はいまのコード。しおりは <a class="ext" href="https://tethtechlabs.com/ops/ads.html">https://tethtechlabs.com/ops/ads.html</a>。公開ナビには載せない。</p>
+    <p class="lede">ページごとに方針が違うので、1行1ページ。実装列の先頭は「入れた／一部／未／出さない」だけ。しおりは <a class="ext" href="https://tethtechlabs.com/ops/ads.html">https://tethtechlabs.com/ops/ads.html</a>。公開ナビには載せない。</p>
     <nav>
+      <a href="#progress">進捗</a>
       <a href="#corp">会社</a>
       <a href="#100kin">100均</a>
       <a href="#loan">ローン</a>
@@ -116,8 +117,72 @@
       <a href="#never">やらない</a>
     </nav>
 
+    <h2 id="progress">進捗（2026-09-07）</h2>
+    <p class="count">コードに入ったかどうか。配信が見えるかは別（審査・件数・キャッシュ）。</p>
+    <table>
+      <thead>
+        <tr><th>面</th><th>入れるもの</th><th>いま</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ローン Web 本体</td>
+          <td>下部バナー / インタースティシャル / Amazon / 楽天</td>
+          <td>
+            <span class="st ok">入れた</span> AdSense 下部バナー <code>4402367671</code><br>
+            <span class="st off">未</span> インタースティシャル、Amazon、楽天
+          </td>
+        </tr>
+        <tr>
+          <td>売却 Web 本体</td>
+          <td>AdSense / Amazon / 楽天（結果画面は出さない）</td>
+          <td>
+            <span class="st ok">入れた</span> AdSense <code>3355562669</code>（入力〜税金）<br>
+            <span class="st off">未</span> Amazon、楽天
+          </td>
+        </tr>
+        <tr>
+          <td>本と映画 ランキング</td>
+          <td>アフィリ / 下部バナー（映画行はアフィリなし）</td>
+          <td>
+            <span class="st ok">入れた</span> Amazon <code>tethtechlabs-22</code>、楽天 ID<br>
+            <span class="st off">未</span> 下部バナー。件数不足で本の行もまだ出ない
+          </td>
+        </tr>
+        <tr>
+          <td>100均 Pages 本体</td>
+          <td>下部バナー</td>
+          <td><span class="st off">未</span> コードなし</td>
+        </tr>
+        <tr>
+          <td>Guide 記事・比較・診断</td>
+          <td>A8 / Amazon / 楽天</td>
+          <td><span class="st off">未</span> 公式直リンクのみ</td>
+        </tr>
+        <tr>
+          <td>調味料アプリ</td>
+          <td>バナー（全画面は出さない）</td>
+          <td><span class="st ok">入れた</span> バナー配信中</td>
+        </tr>
+        <tr>
+          <td>ローンアプリ</td>
+          <td>AdMob バナー＋全画面</td>
+          <td><span class="st ok">入れた</span> 本番配信中</td>
+        </tr>
+        <tr>
+          <td>売却アプリ</td>
+          <td>AdMob（公開後）</td>
+          <td><span class="st code">一部</span> コード本番。ストア未公開</td>
+        </tr>
+        <tr>
+          <td>会社サイト / 各規約 / 100均 LP / 本と映画トップ・アプリ</td>
+          <td>出さない</td>
+          <td><span class="st never">出さない</span> コードなし</td>
+        </tr>
+      </tbody>
+    </table>
+
     <div class="box">
-      <p><strong>読み方</strong>　方針＝これから守る決め。実装＝いま付いているもの。チェックはこのブラウザにだけ残る。この一覧に無いページは対象外（ウェイトリスト、調味料 Web、開発中アプリ）。</p>
+      <p><strong>読み方</strong>　方針＝これから守る決め。実装＝コードに入っているか。チェックはこのブラウザにだけ残る。この一覧に無いページは対象外（ウェイトリスト、調味料 Web、開発中アプリ）。</p>
     </div>
 
     <div class="box">
@@ -129,7 +194,7 @@
     <p class="count">コーポレート。全ページ広告なし。</p>
     <table>
       <thead>
-        <tr><th>ページ</th><th>方針</th><th>実装</th></tr>
+        <tr><th>ページ</th><th>方針</th><th>実装（入れた／一部／未）</th></tr>
       </thead>
       <tbody>
         <tr>
@@ -164,7 +229,7 @@
     <p class="count">会社サイト側 LP とアプリは広告なし。Pages 本体はこれから下部バナー。ウェイトリストはこの一覧に載せない。</p>
     <table>
       <thead>
-        <tr><th>ページ</th><th>方針</th><th>実装</th></tr>
+        <tr><th>ページ</th><th>方針</th><th>実装（入れた／一部／未）</th></tr>
       </thead>
       <tbody>
         <tr>
@@ -179,7 +244,7 @@
             下部バナーのみ。<br>
             今後：インタースティシャルまたはリワード。アフィリエイトも。
           </td>
-          <td><span class="st never">広告なし</span> P13</td>
+          <td><span class="st off">未</span> 下部バナーのコードなし</td>
         </tr>
         <tr>
           <td class="page"><a class="ext" href="https://100-bbz.pages.dev/lp.html" target="_blank" rel="noopener">Pages 内 LP</a></td>
@@ -198,7 +263,7 @@
     <p class="count">広告は Web 本体だけ。規約3ページは出さない。アプリは別。</p>
     <table>
       <thead>
-        <tr><th>ページ</th><th>方針</th><th>実装</th></tr>
+        <tr><th>ページ</th><th>方針</th><th>実装（入れた／一部／未）</th></tr>
       </thead>
       <tbody>
         <tr>
@@ -207,7 +272,10 @@
             <span class="st off">出す</span>
             下部バナー。インタースティシャル。Amazon。楽天。
           </td>
-          <td><span class="st code">9222 / スロット 4402367671</span> 下部バナー。インタースティシャルは未。Amazon/楽天は空。</td>
+          <td>
+            <span class="st ok">入れた</span> AdSense 下部バナー <code>4402367671</code>（入力・結果）2026-09-07<br>
+            <span class="st off">未</span> インタースティシャル、Amazon、楽天
+          </td>
         </tr>
         <tr>
           <td class="page"><a class="ext" href="https://tethtechlabs.com/apps/jutaku-loan/privacy.html" target="_blank" rel="noopener">privacy</a></td>
@@ -227,7 +295,7 @@
         <tr>
           <td class="page">ストアアプリ</td>
           <td><span class="st ok">出す</span> AdMob バナー＋全画面。正本は <code>住宅ローン/</code></td>
-          <td><span class="st ok">本番配信中</span> 会社サイト内コピーはテスト ID。使わない。P51</td>
+          <td><span class="st ok">入れた</span> AdMob 本番配信中。会社サイト内コピーはテスト ID。使わない</td>
         </tr>
       </tbody>
     </table>
@@ -236,7 +304,7 @@
     <p class="count">広告は Web 本体の結果以外。規約は出さない。アプリはストア公開後。</p>
     <table>
       <thead>
-        <tr><th>ページ</th><th>方針</th><th>実装</th></tr>
+        <tr><th>ページ</th><th>方針</th><th>実装（入れた／一部／未）</th></tr>
       </thead>
       <tbody>
         <tr>
@@ -245,7 +313,10 @@
             <span class="st off">出す</span>
             AdSense。Amazon。楽天。結果画面の隣には置かない。
           </td>
-          <td><span class="st code">9222 / スロット 3355562669</span> Amazon/楽天は空。P30</td>
+          <td>
+            <span class="st ok">入れた</span> AdSense <code>3355562669</code>（入力〜税金）2026-09-07。結果画面には出さない<br>
+            <span class="st off">未</span> Amazon、楽天
+          </td>
         </tr>
         <tr>
           <td class="page"><a class="ext" href="https://tethtechlabs.com/apps/jutaku-sale/privacy.html" target="_blank" rel="noopener">privacy</a></td>
@@ -265,7 +336,7 @@
         <tr>
           <td class="page">ストアアプリ</td>
           <td><span class="st hold">出す（公開後）</span> AdMob バナー＋全画面。結果ではバナーを隠す。</td>
-          <td><span class="st code">コード本番。ストア未公開</span> P52</td>
+          <td><span class="st code">一部</span> AdMob コードは本番。ストア未公開</td>
         </tr>
       </tbody>
     </table>
@@ -274,58 +345,58 @@
     <p class="count">記事・比較・診断はアフィリ予定。about / privacy / contact / 広告方針は出さない。AdSense は今はやらない。</p>
     <table>
       <thead>
-        <tr><th>ページ</th><th>方針</th><th>実装</th></tr>
+        <tr><th>ページ</th><th>方針</th><th>実装（入れた／一部／未）</th></tr>
       </thead>
       <tbody>
         <tr>
           <td class="page"><a class="ext" href="https://guide.tethtechlabs.com/" target="_blank" rel="noopener">トップ</a></td>
           <td><span class="st hold">アフィリ予定</span> A8 / Amazon / 楽天。報酬で順位を変えない。</td>
-          <td><span class="st never">公式直リンクのみ</span> P40</td>
+          <td><span class="st off">未</span> 公式直リンクのみ。A8 掲載 URL なし</td>
         </tr>
         <tr>
           <td class="page"><a class="ext" href="https://guide.tethtechlabs.com/tools/virtual-office" target="_blank" rel="noopener">診断</a></td>
           <td><span class="st hold">アフィリ予定</span></td>
-          <td><span class="st never">未接続</span></td>
+          <td><span class="st off">未</span> アフィリなし</td>
         </tr>
         <tr>
           <td class="page"><a class="ext" href="https://guide.tethtechlabs.com/compare/virtual-office" target="_blank" rel="noopener">比較</a></td>
           <td><span class="st hold">アフィリ予定</span></td>
-          <td><span class="st never">公式直リンク</span> P41</td>
+          <td><span class="st off">未</span> 公式直リンクのみ</td>
         </tr>
         <tr>
           <td class="page"><a class="ext" href="https://guide.tethtechlabs.com/guides/virtual-office" target="_blank" rel="noopener">VOとは</a></td>
           <td><span class="st hold">アフィリ予定</span></td>
-          <td><span class="st never">未接続</span></td>
+          <td><span class="st off">未</span> アフィリなし</td>
         </tr>
         <tr>
           <td class="page"><a class="ext" href="https://guide.tethtechlabs.com/guides/home-address-registration" target="_blank" rel="noopener">自宅登記</a></td>
           <td><span class="st hold">アフィリ予定</span></td>
-          <td><span class="st never">未接続</span></td>
+          <td><span class="st off">未</span> アフィリなし</td>
         </tr>
         <tr>
           <td class="page"><a class="ext" href="https://guide.tethtechlabs.com/virtual-office/freelance" target="_blank" rel="noopener">フリーランス</a></td>
           <td><span class="st hold">アフィリ予定</span></td>
-          <td><span class="st never">未接続</span></td>
+          <td><span class="st off">未</span> アフィリなし</td>
         </tr>
         <tr>
           <td class="page"><a class="ext" href="https://guide.tethtechlabs.com/virtual-office/ec" target="_blank" rel="noopener">EC</a></td>
           <td><span class="st hold">アフィリ予定</span></td>
-          <td><span class="st never">未接続</span></td>
+          <td><span class="st off">未</span> アフィリなし</td>
         </tr>
         <tr>
           <td class="page"><a class="ext" href="https://guide.tethtechlabs.com/virtual-office/indie-developer" target="_blank" rel="noopener">個人開発</a></td>
           <td><span class="st hold">アフィリ予定</span></td>
-          <td><span class="st never">未接続</span></td>
+          <td><span class="st off">未</span> アフィリなし</td>
         </tr>
         <tr>
           <td class="page"><a class="ext" href="https://guide.tethtechlabs.com/virtual-office/side-job" target="_blank" rel="noopener">副業</a></td>
           <td><span class="st hold">アフィリ予定</span></td>
-          <td><span class="st never">未接続</span></td>
+          <td><span class="st off">未</span> アフィリなし</td>
         </tr>
         <tr>
           <td class="page"><a class="ext" href="https://guide.tethtechlabs.com/virtual-office/company-formation" target="_blank" rel="noopener">法人設立</a></td>
           <td><span class="st hold">アフィリ予定</span></td>
-          <td><span class="st never">未接続</span></td>
+          <td><span class="st off">未</span> アフィリなし</td>
         </tr>
         <tr>
           <td class="page"><a class="ext" href="https://guide.tethtechlabs.com/about" target="_blank" rel="noopener">about</a></td>
@@ -354,13 +425,13 @@
     <p class="count">この一覧はアプリだけ。Web LP と Web 規約は載せない。</p>
     <table>
       <thead>
-        <tr><th>ページ</th><th>方針</th><th>実装</th></tr>
+        <tr><th>ページ</th><th>方針</th><th>実装（入れた／一部／未）</th></tr>
       </thead>
       <tbody>
         <tr>
           <td class="page">ストアアプリ</td>
           <td><span class="st ok">出す</span> 下部バナー。全画面は保留（出さない）。</td>
-          <td><span class="st ok">バナー配信中</span> <code>9222</code>。確認は実機。P50</td>
+          <td><span class="st ok">入れた</span> バナー配信中 <code>9222</code>。全画面は入れない</td>
         </tr>
       </tbody>
     </table>
@@ -369,7 +440,7 @@
     <p class="count">ストアアプリは広告なし。Web はランキングにだけアフィリと下部バナー。トップ・privacy・削除は出さない。映画行にはアフィリを付けない。</p>
     <table>
       <thead>
-        <tr><th>ページ</th><th>方針</th><th>実装</th></tr>
+        <tr><th>ページ</th><th>方針</th><th>実装（入れた／一部／未）</th></tr>
       </thead>
       <tbody>
         <tr>
@@ -380,7 +451,10 @@
         <tr>
           <td class="page"><a class="ext" href="https://book-movie.pages.dev/ranking" target="_blank" rel="noopener">ランキング</a><span class="sub">公開済み。本＋映画の人数統計</span></td>
           <td><span class="st off">入れる</span> アフィリエイト。下部バナー。映画行にはアフィリを付けない。</td>
-          <td><span class="st ok">Amazon/楽天 ID 入れ済み</span> 下部バナーなし。ユニットは P20（入り口は signup）</td>
+          <td>
+            <span class="st ok">入れた</span> Amazon <code>tethtechlabs-22</code>、楽天 ID。本の行だけ。2026-09-07<br>
+            <span class="st off">未</span> 下部バナー。ランキング件数が空なので購入リンクもまだ見えない
+          </td>
         </tr>
         <tr>
           <td class="page"><a class="ext" href="https://book-movie.pages.dev/privacy" target="_blank" rel="noopener">privacy</a></td>
@@ -403,7 +477,7 @@
     <h2 id="other">その他</h2>
     <table>
       <thead>
-        <tr><th>ページ</th><th>方針</th><th>実装</th></tr>
+        <tr><th>ページ</th><th>方針</th><th>実装（入れた／一部／未）</th></tr>
       </thead>
       <tbody>
         <tr>
@@ -413,7 +487,7 @@
             <a class="ext" href="https://tethtechlabs.com/app-ads.txt" target="_blank" rel="noopener">app-ads.txt</a>
           </td>
           <td><span class="st ok">残す</span> <code>7330</code> と <code>9222</code> の両方。消さない。</td>
-          <td><span class="st ok">設置済み</span> P04</td>
+          <td><span class="st ok">入れた</span> 2行とも公開中</td>
         </tr>
       </tbody>
     </table>
@@ -438,7 +512,7 @@
     <div class="box">
       <label class="task"><input type="checkbox" data-task="P12"><span><strong>P12</strong> ローン Web 本体。下部バナー、インタースティシャル、Amazon、楽天。<span class="dep">下部バナーは 2026-09-07 に入れた。スロット <code>4402367671</code>（<code>jutaku-loan-banner</code>）。インタースティシャルと Amazon/楽天は未。対象は <a class="ext" href="https://tethtechlabs.com/apps/jutaku-loan/" target="_blank" rel="noopener">本体だけ</a>。規約には付けない。</span></span></label>
       <label class="task"><input type="checkbox" data-task="P13"><span><strong>P13</strong> 100均 Pages 本体に下部バナーを入れる。まだ付いていない。<span class="dep"><a class="ext" href="https://100-bbz.pages.dev/" target="_blank" rel="noopener">100-bbz.pages.dev</a>。今後：インタースティシャルまたはリワード、アフィリ。Pages 内 LP には付けない。</span></span></label>
-      <label class="task"><input type="checkbox" data-task="P14"><span><strong>P14</strong> 本と映画はランキングにアフィリと下部バナー。トップには出さない。<span class="dep">アフィリ ID は 2026-09-07 に入れ済み。下部バナーは P20 のあと。出す：<a class="ext" href="https://book-movie.pages.dev/ranking" target="_blank" rel="noopener">ランキング</a>。出さない：<a class="ext" href="https://book-movie.pages.dev/" target="_blank" rel="noopener">トップ</a>。映画行にアフィリは付けない。アプリには出さない。</span></span></label>
+      <label class="task"><input type="checkbox" data-task="P14"><span><strong>P14</strong> 本と映画はランキングにアフィリと下部バナー。トップには出さない。<span class="dep">アフィリ ID は入れた（2026-09-07）。下部バナーは未。出す：<a class="ext" href="https://book-movie.pages.dev/ranking" target="_blank" rel="noopener">ランキング</a>。出さない：<a class="ext" href="https://book-movie.pages.dev/" target="_blank" rel="noopener">トップ</a>。映画行にアフィリは付けない。アプリには出さない。</span></span></label>
       <label class="task"><input type="checkbox" data-task="P20"><span><strong>P20</strong> 売却 Web。AdSense <code>9222</code> で新ユニットを作る。 <a class="ext" href="https://adsense.google.com/adsense/u/0/pub-9222260774149288/myads/units" target="_blank" rel="noopener">myads/units</a><span class="dep">済み（2026-09-07）。ユニット名 <code>jutaku-sale-main</code>。スロット <code>3355562669</code>。旧 8443825124 は使わない。自動広告はオンにしない。</span></span></label>
       <label class="task"><input type="checkbox" data-task="P21"><span><strong>P21</strong> 売却本体のスロット番号を差し替え。<span class="dep">済み（2026-09-07）<code>3355562669</code>。確認：<a class="ext" href="https://tethtechlabs.com/apps/jutaku-sale/" target="_blank" rel="noopener">本体</a>。結果画面と規約3ページには出さない。</span></span></label>
       <label class="task"><input type="checkbox" data-task="P22"><span><strong>P22</strong> 売却の不動産カテゴリ／査定 URL ブロックが残っているか見る。<span class="dep">2026-08-23 に AdSense/AdMob とも済み。今日はコンソールを再確認していない。</span></span></label>
@@ -478,7 +552,7 @@
       </tbody>
     </table>
 
-    <p class="foot">方針の記録日：2026-09-07。しおり：<a class="ext" href="https://tethtechlabs.com/ops/ads.html">https://tethtechlabs.com/ops/ads.html</a>。AdSense 入り口は 2026-09-07 に signup へ修正。承認数字は 2026-09-04 メモ。調味料アプリのバナーは本人確認。検索には出さない。</p>
+    <p class="foot">進捗の記録日：2026-09-07。しおり：<a class="ext" href="https://tethtechlabs.com/ops/ads.html">https://tethtechlabs.com/ops/ads.html</a>。検索には出さない。</p>
   </main>
   <script>
     const KEY = "tethtech-ads-ops-tasks-v2";
