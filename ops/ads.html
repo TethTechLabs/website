@@ -121,8 +121,8 @@
     </div>
 
     <div class="box">
-      <p><strong>AdSense 入り口（2026-09-07）</strong>　口座は <code>pub-9222260774149288</code>（TETHTECHLABS / akkybooo@）。AdMob と同一パブ。Web 広告の入り口は <a class="ext" href="https://www.google.com/adsense/signup" target="_blank" rel="noopener">adsense/signup</a>。「このアカウントで続行しますか？」が出たら <strong>続行</strong>。別アカウントでつながない。</p>
-      <p>使わない：<code>/adsense/new/…/ads</code> と <code>/adsense/u/0/…/home</code>。ホーム・支払いに飛ばして、左に「広告」が出ない。シークレットでも同じ。</p>
+      <p><strong>AdSense 入り口（2026-09-07）</strong>　口座は <code>pub-9222260774149288</code>（TETHTECHLABS / akkybooo@）。AdMob と同一パブ。Web 接続は <a class="ext" href="https://www.google.com/adsense/signup" target="_blank" rel="noopener">signup</a> で続行済み。広告ユニットは <a class="ext" href="https://adsense.google.com/adsense/u/0/pub-9222260774149288/myads/units" target="_blank" rel="noopener">myads/units</a>。<code>/ads</code> 直リンクは使わない。</p>
+      <p><code>tethtechlabs.com</code> の自動広告はオフのまま。会社サイトに出さない。サイト連携の「必須」は ads.txt 済みでもオンボーディングに残ることがある。</p>
     </div>
 
     <h2 id="corp">会社サイト</h2>
@@ -207,7 +207,7 @@
             <span class="st off">出す</span>
             下部バナー。インタースティシャル。Amazon。楽天。
           </td>
-          <td><span class="st never">広告なし</span> P12 で承認済み <code>9222</code> を入れる。Amazon/楽天は ID 空。</td>
+          <td><span class="st code">9222 / スロット 4402367671</span> 下部バナー。インタースティシャルは未。Amazon/楽天は空。</td>
         </tr>
         <tr>
           <td class="page"><a class="ext" href="https://tethtechlabs.com/apps/jutaku-loan/privacy.html" target="_blank" rel="noopener">privacy</a></td>
@@ -245,7 +245,7 @@
             <span class="st off">出す</span>
             AdSense。Amazon。楽天。結果画面の隣には置かない。
           </td>
-          <td><span class="st code">9222 だがスロットが旧番号</span> Amazon/楽天は空。P01 続行 → P20 → P21 → P30</td>
+          <td><span class="st code">9222 / スロット 3355562669</span> Amazon/楽天は空。P30</td>
         </tr>
         <tr>
           <td class="page"><a class="ext" href="https://tethtechlabs.com/apps/jutaku-sale/privacy.html" target="_blank" rel="noopener">privacy</a></td>
@@ -423,7 +423,7 @@
 
     <h3>A. アカウント</h3>
     <div class="box">
-      <label class="task"><input type="checkbox" data-task="P01"><span><strong>P01</strong> AdSense <code>9222</code>（akkybooo@）を Web 用に続行する。 <a class="ext" href="https://www.google.com/adsense/signup" target="_blank" rel="noopener">signup</a><span class="dep">2026-09-07：「このアカウントで続行しますか？」まで到達。パブ <code>9222</code> / TETHTECHLABS / AdMob 紐付け。続行する。別アカウントでつながない。次は P20。</span></span></label>
+      <label class="task"><input type="checkbox" data-task="P01"><span><strong>P01</strong> AdSense <code>9222</code>（akkybooo@）を Web 用に続行する。 <a class="ext" href="https://www.google.com/adsense/signup" target="_blank" rel="noopener">signup</a><span class="dep">済み（2026-09-07）。パブ <code>9222</code> / TETHTECHLABS / AdMob 紐付け。左に「広告」が出る。次はユニット作成。</span></span></label>
       <label class="task"><input type="checkbox" data-task="P02"><span><strong>P02</strong> ローン本体の AdSense は承認済み <code>9222</code> を使う。旧 <code>7330</code> は未承認なので使わない。<span class="dep">次は P12。ads.txt の 7330 行は消さない。</span></span></label>
       <label class="task"><input type="checkbox" data-task="P03"><span><strong>P03</strong> 支払い。W-8BEN 済み。基準額まで口座を出さない。赤帯で新規プロファイルを作らない。</span></label>
       <label class="task"><input type="checkbox" data-task="P04"><span><strong>P04</strong> <a class="ext" href="https://tethtechlabs.com/ads.txt" target="_blank" rel="noopener">ads.txt</a> / <a class="ext" href="https://tethtechlabs.com/app-ads.txt" target="_blank" rel="noopener">app-ads.txt</a> の2行は残す。</span></label>
@@ -436,12 +436,12 @@
 
     <h3>C. 出すページを実装する</h3>
     <div class="box">
-      <label class="task"><input type="checkbox" data-task="P12"><span><strong>P12</strong> ローン Web 本体。下部バナー、インタースティシャル、Amazon、楽天。<span class="dep">対象は <a class="ext" href="https://tethtechlabs.com/apps/jutaku-loan/" target="_blank" rel="noopener">本体だけ</a>。Amazon/楽天は AdSense 通過後（P30）。規約には付けない。</span></span></label>
+      <label class="task"><input type="checkbox" data-task="P12"><span><strong>P12</strong> ローン Web 本体。下部バナー、インタースティシャル、Amazon、楽天。<span class="dep">下部バナーは 2026-09-07 に入れた。スロット <code>4402367671</code>（<code>jutaku-loan-banner</code>）。インタースティシャルと Amazon/楽天は未。対象は <a class="ext" href="https://tethtechlabs.com/apps/jutaku-loan/" target="_blank" rel="noopener">本体だけ</a>。規約には付けない。</span></span></label>
       <label class="task"><input type="checkbox" data-task="P13"><span><strong>P13</strong> 100均 Pages 本体に下部バナーを入れる。まだ付いていない。<span class="dep"><a class="ext" href="https://100-bbz.pages.dev/" target="_blank" rel="noopener">100-bbz.pages.dev</a>。今後：インタースティシャルまたはリワード、アフィリ。Pages 内 LP には付けない。</span></span></label>
       <label class="task"><input type="checkbox" data-task="P14"><span><strong>P14</strong> 本と映画はランキングにアフィリと下部バナー。トップには出さない。<span class="dep">アフィリ ID は 2026-09-07 に入れ済み。下部バナーは P20 のあと。出す：<a class="ext" href="https://book-movie.pages.dev/ranking" target="_blank" rel="noopener">ランキング</a>。出さない：<a class="ext" href="https://book-movie.pages.dev/" target="_blank" rel="noopener">トップ</a>。映画行にアフィリは付けない。アプリには出さない。</span></span></label>
-      <label class="task"><input type="checkbox" data-task="P20"><span><strong>P20</strong> 売却 Web。AdSense <code>9222</code> で新ユニットを作る。 <a class="ext" href="https://www.google.com/adsense/signup" target="_blank" rel="noopener">signup</a><span class="dep">P01 の続行のあと。スロット 8443825124 は 7330 時代。9222 には無い。<code>/ads</code> 直リンクは使わない。</span></span></label>
-      <label class="task"><input type="checkbox" data-task="P21"><span><strong>P21</strong> 売却本体のスロット番号を差し替え。<span class="dep">確認：<a class="ext" href="https://tethtechlabs.com/apps/jutaku-sale/" target="_blank" rel="noopener">本体</a>。結果画面と規約3ページには出さない。</span></span></label>
-      <label class="task"><input type="checkbox" data-task="P22"><span><strong>P22</strong> 売却の不動産カテゴリ／査定 URL ブロックが残っているか見る。</span></label>
+      <label class="task"><input type="checkbox" data-task="P20"><span><strong>P20</strong> 売却 Web。AdSense <code>9222</code> で新ユニットを作る。 <a class="ext" href="https://adsense.google.com/adsense/u/0/pub-9222260774149288/myads/units" target="_blank" rel="noopener">myads/units</a><span class="dep">済み（2026-09-07）。ユニット名 <code>jutaku-sale-main</code>。スロット <code>3355562669</code>。旧 8443825124 は使わない。自動広告はオンにしない。</span></span></label>
+      <label class="task"><input type="checkbox" data-task="P21"><span><strong>P21</strong> 売却本体のスロット番号を差し替え。<span class="dep">済み（2026-09-07）<code>3355562669</code>。確認：<a class="ext" href="https://tethtechlabs.com/apps/jutaku-sale/" target="_blank" rel="noopener">本体</a>。結果画面と規約3ページには出さない。</span></span></label>
+      <label class="task"><input type="checkbox" data-task="P22"><span><strong>P22</strong> 売却の不動産カテゴリ／査定 URL ブロックが残っているか見る。<span class="dep">2026-08-23 に AdSense/AdMob とも済み。今日はコンソールを再確認していない。</span></span></label>
       <label class="task"><input type="checkbox" data-task="P30"><span><strong>P30</strong> ローン本体・売却本体の Amazon / 楽天。AdSense 通過まで ID は空。<span class="dep"><a class="ext" href="https://tethtechlabs.com/apps/jutaku-loan/" target="_blank" rel="noopener">ローン本体</a>　<a class="ext" href="https://tethtechlabs.com/apps/jutaku-sale/" target="_blank" rel="noopener">売却本体</a></span></span></label>
       <label class="task"><input type="checkbox" data-task="P40"><span><strong>P40</strong> Guide。A8 管理画面の掲載 URL だけ使う。about / privacy / contact / 広告方針には出さない。<span class="dep">メディア：<a class="ext" href="https://guide.tethtechlabs.com/" target="_blank" rel="noopener">トップ</a>　比較：<a class="ext" href="https://guide.tethtechlabs.com/compare/virtual-office" target="_blank" rel="noopener">比較</a>　出さない：<a class="ext" href="https://guide.tethtechlabs.com/about" target="_blank" rel="noopener">about</a>　<a class="ext" href="https://guide.tethtechlabs.com/privacy" target="_blank" rel="noopener">privacy</a>　<a class="ext" href="https://guide.tethtechlabs.com/contact" target="_blank" rel="noopener">contact</a>　<a class="ext" href="https://guide.tethtechlabs.com/advertising-editorial" target="_blank" rel="noopener">広告方針</a>　<a class="ext" href="https://www.a8.net/" target="_blank" rel="noopener">A8</a></span></span></label>
     </div>
