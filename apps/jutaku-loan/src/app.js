@@ -359,28 +359,38 @@ function sliderCard({ key, label, hint, unit, decimals = 0, presets = [], scale 
 }
 
 const AD_SLOT = "4402367671";
+const AD_INTERSTITIAL_SLOT = "3901367893";
 const AD_CLIENT = "ca-pub-9222260774149288";
 
 function adSlotHtml(id) {
   return `<div class="ad-slot" data-ad-slot="${id}" aria-hidden="true"></div>`;
 }
 
+function isLocalHost() {
+  return /^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname);
+}
+
+function fillSlot(slot) {
+  if (!slot || slot.classList.contains("ad-filled")) return;
+  slot.classList.add("ad-filled");
+  const ins = document.createElement("ins");
+  ins.className = "adsbygoogle";
+  ins.style.display = "block";
+  ins.style.width = "100%";
+  ins.dataset.adClient = AD_CLIENT;
+  ins.dataset.adSlot = slot.dataset.adSlot;
+  ins.dataset.adFormat = "auto";
+  ins.dataset.fullWidthResponsive = "true";
+  slot.appendChild(ins);
+  (window.adsbygoogle = window.adsbygoogle || []).push({});
+}
+
 function fillAdSlots() {
-  if (/^(localhost|127\.0\.0\.1|\[::1\])$/.test(location.hostname)) return;
+  if (isLocalHost()) return;
   const panel = document.querySelector(`[data-screen-panel="${screen}"]`);
   if (!panel || panel.hidden) return;
   for (const slot of panel.querySelectorAll(".ad-slot:not(.ad-filled)")) {
-    slot.classList.add("ad-filled");
-    const ins = document.createElement("ins");
-    ins.className = "adsbygoogle";
-    ins.style.display = "block";
-    ins.style.width = "100%";
-    ins.dataset.adClient = AD_CLIENT;
-    ins.dataset.adSlot = slot.dataset.adSlot;
-    ins.dataset.adFormat = "auto";
-    ins.dataset.fullWidthResponsive = "true";
-    slot.appendChild(ins);
-    (window.adsbygoogle = window.adsbygoogle || []).push({});
+    fillSlot(slot);
   }
 }
 
@@ -751,16 +761,40 @@ function applyScreen() {
 }
 
 /**
- * ストアアプリ版でAdMobの全画面広告を挟むための差し込み点。
- * Web版（AdSense）では呼ばない。一覧表（マトリクス）タブを、
- * 結果画面に来て以降・別タブから切り替えて開いたときだけ、1セッション1回で呼ぶ。
+ * 一覧表（マトリクス）タブを、結果画面に来て以降・別タブから切り替えて開いたときだけ、
+ * 1セッション1回。ストアアプリは AdMob。Web は閉じられるオーバーレイにディスプレイ広告。
  */
 let matrixInterstitialShown = false;
 function maybeShowMatrixInterstitial() {
-  if (!globalThis.Capacitor?.isNativePlatform?.()) return;
-  import("./ads-native.js")
-    .then((m) => m.showMatrixInterstitial())
-    .catch(() => {});
+  if (globalThis.Capacitor?.isNativePlatform?.()) {
+    import("./ads-native.js")
+      .then((m) => m.showMatrixInterstitial())
+      .catch(() => {});
+    return;
+  }
+  showWebInterstitial();
+}
+
+function showWebInterstitial() {
+  if (isLocalHost()) return;
+  if (document.querySelector(".ad-interstitial")) return;
+  const overlay = document.createElement("div");
+  overlay.className = "ad-interstitial";
+  overlay.setAttribute("role", "dialog");
+  overlay.setAttribute("aria-label", "広告");
+  overlay.innerHTML = `<div class="ad-interstitial-card">
+      <div class="ad-interstitial-head">
+        <span>広告</span>
+        <button type="button" data-ad-dismiss>閉じる</button>
+      </div>
+      ${adSlotHtml(AD_INTERSTITIAL_SLOT)}
+    </div>`;
+  const dismiss = () => overlay.remove();
+  overlay.addEventListener("click", (e) => {
+    if (e.target === overlay || e.target.closest("[data-ad-dismiss]")) dismiss();
+  });
+  document.body.appendChild(overlay);
+  fillSlot(overlay.querySelector(".ad-slot"));
 }
 
 function applyResultTab() {

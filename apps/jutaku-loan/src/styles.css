@@ -606,6 +606,126 @@ button {
   color: var(--faint);
 }
 
+.ad-interstitial {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  background: color-mix(in srgb, var(--ink) 45%, transparent);
+}
+
+.ad-interstitial-card {
+  margin: 0 16px calc(16px + env(safe-area-inset-bottom));
+  padding: 16px;
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.ad-interstitial-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 10px;
+}
+
+.ad-interstitial-head span {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--faint);
+}
+
+.ad-interstitial-head button {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.aff {
+  margin-bottom: 12px;
+  padding: 16px 18px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.aff-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.aff h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.aff-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--faint);
+}
+
+.aff-lead {
+  margin: 0 0 4px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.aff-item {
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+
+.aff-item:first-of-type {
+  margin-top: 8px;
+}
+
+.aff-item h3 {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.aff-item p {
+  margin: 0 0 10px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.aff-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.aff-links a.pill {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.aff-note {
+  margin: 12px 0 0;
+  font-size: 11px;
+  line-height: 1.7;
+  color: var(--faint);
+}
+
 .panel-head {
   margin-bottom: 14px;
 }

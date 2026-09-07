@@ -12,10 +12,8 @@
  * 空の ID は出さない。入っているネットのボタンだけ出す。
  */
 export const AFFILIATE = {
-  /** Amazon アソシエイトのトラッキング ID（例: something-22） */
-  amazonTag: "",
-  /** 楽天アフィリエイト ID（例: xxxx.yyyy.zzzz） */
-  rakutenId: "",
+  amazonTag: "tethtechlabs-22",
+  rakutenId: "56afa1ad.d9f67324.56afa1ae.7bb4984d",
 };
 
 const RELAY_ORIGIN = "https://app-waitlist.tethtechlabs.workers.dev";
@@ -95,8 +93,8 @@ export function affiliateHtml({
 
   const items = ITEMS.map((item) => {
     const links = [];
-    if (amazon) links.push(storeLink("Amazonで探す", relayUrl("amazon", item.id)));
-    if (rakuten) links.push(storeLink("楽天で探す", relayUrl("rakuten", item.id)));
+    if (amazon) links.push(storeLink("Amazonで探す", amazonUrl(item.query, amazonTag)));
+    if (rakuten) links.push(storeLink("楽天で探す", rakutenUrl(item.query, rakutenId)));
     return `<article class="aff-item">
         <h3>${item.title}</h3>
         <p>${item.blurb}</p>
