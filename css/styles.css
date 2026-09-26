@@ -928,6 +928,12 @@ a:hover {
   color: var(--white);
 }
 
+.footer-note {
+  font-size: 0.75rem;
+  color: rgba(255, 255, 255, 0.5);
+  max-width: 28em;
+}
+
 .footer-nav h3 {
   font-size: 0.8125rem;
   font-weight: 600;

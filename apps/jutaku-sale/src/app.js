@@ -874,6 +874,7 @@ function scaffold() {
         <h2>お問い合わせ</h2>
         <p>不具合のご報告、機能に関するご要望はこちらへお願いします。上記のとおり、個別のご相談にはお答えできません。</p>
         <p><a href="mailto:jutaku-sale@tethtechlabs.com">jutaku-sale@tethtechlabs.com</a></p>
+        <p>ユーザーサポート専用です。営業目的のご連絡はご遠慮ください。返信しません。</p>
         <p class="support-owner">提供：TethTechLabs</p>
       </section>
 
