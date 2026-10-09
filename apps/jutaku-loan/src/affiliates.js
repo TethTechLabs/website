@@ -1,17 +1,17 @@
 /**
  * Web版だけの商品紹介（広告）。ストアアプリでは出さない。
  *
- * Amazon は審査がある。楽天は先に通ることが多い。
  * 空の ID は出さない。入っているネットのボタンだけ出す。
  * 住宅ローン商品・銀行申込の送客は置かない。
  *
- * ID が届いたら、下の amazonTag / rakutenId に貼るだけ。
+ * Amazon アソシエイトは 2026-08-19 申込。2027-02-15 までに他人の購入3件が要るので、
+ * AdSense 通過を待たずに出す（2026-10-10 判断）。
  */
 export const AFFILIATE = {
-  /** Amazon アソシエイトのトラッキング ID。発行済み tethtechlabs-22。審査と AdSense 通過まで空のまま。 */
-  amazonTag: "",
-  /** 楽天アフィリエイト ID。発行済み 56afa1ad.d9f67324.56afa1ae.7bb4984d。AdSense 通過まで空のまま。 */
-  rakutenId: "",
+  /** Amazon アソシエイトのトラッキング ID。 */
+  amazonTag: "tethtechlabs-22",
+  /** 楽天アフィリエイト ID。 */
+  rakutenId: "56afa1ad.d9f67324.56afa1ae.7bb4984d",
 };
 
 const RELAY_ORIGIN = "https://app-waitlist.tethtechlabs.workers.dev";
@@ -91,8 +91,9 @@ export function affiliateHtml({
 
   const items = ITEMS.map((item) => {
     const links = [];
-    if (amazon) links.push(storeLink("Amazonで探す", relayUrl("amazon", item.id)));
-    if (rakuten) links.push(storeLink("楽天で探す", relayUrl("rakuten", item.id)));
+    // 中継（/go/aff）は Worker 側の ID が未設定で 404 になるので直リンク。クリックは app.js が計測する。
+    if (amazon) links.push(storeLink("Amazonで探す", amazonUrl(item.query, amazonTag)));
+    if (rakuten) links.push(storeLink("楽天で探す", rakutenUrl(item.query, rakutenId)));
     return `<article class="aff-item">
         <h3>${item.title}</h3>
         <p>${item.blurb}</p>
