@@ -9,7 +9,7 @@
  */
 export const AFFILIATE = {
   /** Amazon アソシエイトのトラッキング ID。 */
-  amazonTag: "tethtechlabs-22",
+  amazonTag: "tethtech-loan-22",
   /** 楽天アフィリエイト ID。 */
   rakutenId: "56afa1ad.d9f67324.56afa1ae.7bb4984d",
 };
