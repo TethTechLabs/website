@@ -93,6 +93,7 @@ export function affiliateHtml({
 
   const items = ITEMS.map((item) => {
     const links = [];
+    // 中継（/go/aff）は Worker 側の ID が未設定で 404 になるので直リンク。クリックは app.js が計測する。
     if (amazon) links.push(storeLink("Amazonで探す", amazonUrl(item.query, amazonTag)));
     if (rakuten) links.push(storeLink("楽天で探す", rakutenUrl(item.query, rakutenId)));
     return `<article class="aff-item">

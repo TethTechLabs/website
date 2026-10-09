@@ -55,6 +55,25 @@ const STORAGE_KEY = "sale-sim-v1";
  */
 const APP_URL = "https://tethtechlabs.com/apps/jutaku-sale/";
 
+// Webでは紹介ページ、ストアアプリでは利用中のOSのストアへ開く。
+// 計算の途中ではなく設定にだけ置く、関連アプリへの任意導線。
+const RELATED_APP = {
+  loan: {
+    web: "https://tethtechlabs.com/apps/jutaku-loan/",
+    ios: "https://apps.apple.com/jp/app/id6802691364",
+    android: "https://play.google.com/store/apps/details?id=com.tethtechlabs.jutakuloan",
+  },
+};
+
+function relatedAppUrl(id) {
+  const app = RELATED_APP[id];
+  if (!app) return "#";
+  const platform = globalThis.Capacitor?.getPlatform?.();
+  if (platform === "ios") return app.ios;
+  if (platform === "android") return app.android;
+  return app.web;
+}
+
 const AREA_DEFAULTS = { mansion: 70, house: 110, land: 150 };
 
 const defaults = {
@@ -866,14 +885,22 @@ function scaffold() {
 
       <section class="support">
         <h2>制作者について</h2>
-        <p>本サービスは、<b>1級ファイナンシャル・プランニング技能士</b>、および<b>宅地建物取引士資格試験合格者</b>が設計しています。</p>
+        <p>1級ファイナンシャル・プランニング技能士、宅建士資格保有（未登録）が、設計したアプリです。</p>
         <p class="support-strong">ただし本サービスは税務相談・法律相談を行うものではありません。<b>個別のご相談はお受けしません。</b>ご自身の物件の価格、税額、特例の適用可否についてのお問い合わせには、お答えできません。税理士・税務署・弁護士・宅地建物取引業者など、それぞれの専門家にご相談ください。</p>
+      </section>
+
+      <section class="support related-app" aria-labelledby="h-related-app">
+        <h2 id="h-related-app">住宅関連のアプリ</h2>
+        <a class="related-app-link" data-related-app="loan" href="https://tethtechlabs.com/apps/jutaku-loan/" target="_blank" rel="noopener">
+          <img class="related-app-icon" src="./related-apps/loan-icon-512.png" alt="住宅ローン試算のアプリアイコン" />
+          <span class="related-app-copy"><b>住宅ローン試算</b><span>借入額・返済期間・金利から、月々の返済額と総返済額を確認できます。</span></span>
+          <span class="related-app-arrow" aria-hidden="true">→</span>
+        </a>
       </section>
 
       <section class="support">
         <h2>お問い合わせ</h2>
-        <p>不具合のご報告、機能に関するご要望はこちらへお願いします。上記のとおり、個別のご相談にはお答えできません。</p>
-        <p><a href="mailto:jutaku-sale@tethtechlabs.com">jutaku-sale@tethtechlabs.com</a></p>
+        <p>不具合のご報告、機能に関するご要望は、ストア内のレビュー、もしくは <a href="mailto:jutaku-sale@tethtechlabs.com">jutaku-sale@tethtechlabs.com</a> へお願いします。上記のとおり、個別のご相談にはお答えできません。</p>
         <p>ユーザーサポート専用です。営業目的のご連絡はご遠慮ください。返信しません。</p>
         <p class="support-owner">提供：TethTechLabs</p>
       </section>
@@ -903,6 +930,10 @@ function scaffold() {
 
 const app = document.getElementById("app");
 app.innerHTML = scaffold();
+
+for (const link of app.querySelectorAll("[data-related-app]")) {
+  link.href = relatedAppUrl(link.dataset.relatedApp);
+}
 
 const out = {};
 for (const node of app.querySelectorAll("[data-out]")) out[node.dataset.out] = node;
@@ -1021,8 +1052,6 @@ function applyScreen() {
   const inFlow = i >= 0;
 
   // 税額を出す画面ではバナーを引っ込める（方針: 税額の中と隣に広告を置かない）。
-  // 出しっぱなしにすると、手取りや税額のすぐ下に広告が並び、広告が試算の結果と
-  // 関係あるものとして読めてしまう。モジュールは一度読めばキャッシュされる。
   if (globalThis.Capacitor?.isNativePlatform?.()) {
     import("./ads-native.js")
       .then((m) => m.setBannerVisible(screen !== "result"))
@@ -1034,13 +1063,6 @@ function applyScreen() {
   // scaffold 内に <ins> を書くと、AdSense スクリプトが初期化時に DOM を触り
   // レイアウトが壊れる。
   setTimeout(fillAdSlots, 100);
-
-  // 画面が変わったら pick は閉じる。外側スクロールのロックを持ち越さない。
-  for (const key of Object.keys(pickOpen)) {
-    pickOpen[key] = false;
-    pickQuery[key] = "";
-  }
-  syncPickLock();
 
   // 数字を入れる前に答えを出さない。売る値段に触れる画面から先で出す。
   const hero = app.querySelector("#hero");
@@ -1401,26 +1423,6 @@ const STAGE_HINT = {
  * 政令市の区は市名で <optgroup> にまとめる。大阪市の次が堺市、そのあと豊中市、
  * という並びでも、グループが変わるタイミングで開閉する。
  */
-function cityOptionsHtml(data, selected) {
-  const chunks = [];
-  let open = "";
-  for (const c of cityList(data)) {
-    const g = c.group || "";
-    if (g !== open) {
-      if (open) chunks.push("</optgroup>");
-      if (g) chunks.push(`<optgroup label="${esc(g)}">`);
-      open = g;
-    }
-    chunks.push(
-      `<option value="${c.code}"${c.code === selected ? " selected" : ""}>${esc(c.name)}</option>`
-    );
-  }
-  if (open) chunks.push("</optgroup>");
-  return chunks.join("") || "<option>—</option>";
-}
-
-const pickQuery = { casePref: "", caseCity: "" };
-const pickOpen = { casePref: false, caseCity: false };
 let bandTuneOpen = false;
 
 function prefPickItems() {
@@ -1437,98 +1439,16 @@ function cityPickItems(data) {
   return cityList(data).map((c) => ({ value: c.code, label: c.name, group: c.group || "" }));
 }
 
-function pickItemsOf(key) {
-  if (key === "casePref") return prefPickItems();
-  const st = casesState(S.casePref);
-  return st.status === "ready" ? cityPickItems(st.data) : [];
-}
-
-function pickFilter(items, q, selectedLabel) {
-  const t = String(q || "").trim();
-  if (!t || t === selectedLabel) return items;
-  return items.filter((it) => it.label.includes(t) || (it.group && it.group.includes(t)));
-}
-
-function pickListHtml(items, selected, q) {
-  const current = items.find((it) => it.value === selected);
-  const shown = pickFilter(items, q, current?.label || "");
-  if (!shown.length) return `<p class="pick-empty">該当なし</p>`;
-  const rows = [];
-  let open = "";
-  for (const it of shown) {
-    const g = it.group || "";
-    if (g && g !== open) {
-      rows.push(`<li class="pick-group">${esc(g)}</li>`);
-      open = g;
-    } else if (!g) open = "";
-    rows.push(
-      `<li><button type="button" class="pick-opt${it.value === selected ? " is-on" : ""}" data-pick-opt data-value="${esc(
-        it.value
-      )}">${esc(it.label)}</button></li>`
-    );
-  }
-  return `<ul class="pick-list">${rows.join("")}</ul>`;
-}
-
-function pickSelectInner(key, items, selected, disabled) {
-  if (key === "caseCity") {
-    if (disabled) return "<option>—</option>";
-    const st = casesState(S.casePref);
-    return st.status === "ready" ? cityOptionsHtml(st.data, selected) : "<option>—</option>";
-  }
-  return items
+function pickControlHtml({ key, caption, items, selected, disabled, placeholder }) {
+  const optionsHtml = items
     .map((it) => `<option value="${esc(it.value)}"${it.value === selected ? " selected" : ""}>${esc(it.label)}</option>`)
     .join("");
+  return `<label>
+    ${caption}
+    <select data-select="${key}" ${disabled ? "disabled" : ""}>${optionsHtml}</select>
+  </label>`;
 }
 
-function pickControlHtml({ key, caption, items, selected, disabled, placeholder }) {
-  const current = items.find((it) => it.value === selected);
-  const open = pickOpen[key] && !disabled;
-  const q = open ? pickQuery[key] : "";
-  const inputValue = open ? pickQuery[key] : current?.label || "";
-  return `<div class="pick${disabled ? " is-off" : ""}" data-pick-box="${key}">
-    <label>${caption}
-      <input type="search" enterkeyhint="search" autocomplete="off" autocorrect="off" spellcheck="false"
-        data-pick-q="${key}" value="${esc(inputValue)}" placeholder="${esc(placeholder)}"
-        ${disabled ? " disabled" : ""} aria-expanded="${open}" aria-autocomplete="list" />
-    </label>
-    <select data-select="${key}" class="visually-hidden" tabindex="-1"${disabled ? " disabled" : ""}>${pickSelectInner(
-      key,
-      items,
-      selected,
-      disabled
-    )}</select>
-    <div data-pick-host>${open ? pickListHtml(items, selected, q) : ""}</div>
-  </div>`;
-}
-
-function syncPickLock() {
-  // iOS Safari routes touches to the outermost scrollable ancestor first.
-  // When a pick-list is open, lock the outer scroll so iOS sends touches
-  // to the inner list instead. Remove the lock when all lists are closed.
-  const scroll = app.querySelector("[data-screen-scroll]");
-  if (scroll) scroll.classList.toggle("pick-locked", Object.values(pickOpen).some(Boolean));
-}
-
-function refreshPickList(key) {
-  const box = app.querySelector(`[data-pick-box="${key}"]`);
-  const host = box?.querySelector("[data-pick-host]");
-  if (!host) return;
-  host.innerHTML = pickOpen[key] ? pickListHtml(pickItemsOf(key), S[key], pickQuery[key]) : "";
-  const input = box.querySelector("[data-pick-q]");
-  if (input) input.setAttribute("aria-expanded", String(Boolean(pickOpen[key])));
-  syncPickLock();
-}
-
-function applyPickValue(key, value) {
-  const select = app.querySelector(`[data-select="${key}"]`);
-  if (!select) return;
-  pickOpen[key] = false;
-  pickQuery[key] = "";
-  syncPickLock();
-  select.value = value;
-  select.dispatchEvent(new Event("change", { bubbles: true }));
-}
 
 function casesPanelHtml() {
   const state = casesState(S.casePref);
@@ -1750,7 +1670,7 @@ function shareData(c) {
 
 /* ------------------------------------------------------------ 描画 */
 
-const FOCUS_KEY_ATTRS = ["data-field", "data-extra-label", "data-extra-man", "data-pick-q"];
+const FOCUS_KEY_ATTRS = ["data-field", "data-extra-label", "data-extra-man"];
 
 /**
  * innerHTML を丸ごと差し替える再描画は、入力中の欄も一緒に作り直してしまい
@@ -1765,19 +1685,6 @@ function replacePreservingFocus(el, html) {
     active.matches &&
     active.matches("[data-field], [data-extra-label], [data-extra-man]")
   ) {
-    return;
-  }
-  // 選択が終わって閉じている pick の検索欄には、フォーカスを戻さない。
-  // 戻すと focusin がリストを開き直し、外側スクロールがロックされたまま
-  // ページが動かなくなる（syncPickLock を参照）。
-  if (
-    el.contains(active) &&
-    active.matches &&
-    active.matches("[data-pick-q]") &&
-    !pickOpen[active.dataset.pickQ]
-  ) {
-    el.innerHTML = html;
-    syncPickLock();
     return;
   }
   if (!el.contains(active)) {
@@ -1966,14 +1873,6 @@ app.addEventListener("input", (e) => {
     update();
     return;
   }
-  const pq = e.target.closest("[data-pick-q]");
-  if (pq) {
-    const key = pq.dataset.pickQ;
-    pickQuery[key] = pq.value;
-    pickOpen[key] = true;
-    refreshPickList(key);
-    return;
-  }
   const label = e.target.closest("[data-extra-label]");
   if (label) {
     const items = extrasCopy();
@@ -2013,12 +1912,8 @@ app.addEventListener("change", (e) => {
       // 都道府県が変われば市区町村も種別も選び直しになる。
       S.caseCity = "";
       S.casePicked = -1;
-      pickOpen.caseCity = false;
-      pickQuery.caseCity = "";
     }
     if (select.dataset.select === "caseCity") S.casePicked = -1;
-    pickOpen[select.dataset.select] = false;
-    pickQuery[select.dataset.select] = "";
     const state = casesState(S.casePref);
     if (state.status === "ready") {
       const cities = cityList(state.data);
@@ -2054,61 +1949,12 @@ function stopRepeat() {
 ["pointerup", "pointercancel", "blur"].forEach((ev) => window.addEventListener(ev, stopRepeat, true));
 
 app.addEventListener("pointerdown", (e) => {
-  const pickOpt = e.target.closest("[data-pick-opt]");
-  if (pickOpt) {
-    e.preventDefault();
-    const box = pickOpt.closest("[data-pick-box]");
-    if (box) applyPickValue(box.dataset.pickBox, pickOpt.dataset.value);
-    return;
-  }
   const nudge = e.target.closest("[data-nudge]");
   if (nudge) {
     const key = nudge.closest(".ctrl").dataset.key;
     const dir = Number(nudge.dataset.nudge);
     const step = key === "priceMan" ? num(S.priceStep) : 10;
     startRepeat(() => setKey(key, num(S[key]) + dir * step));
-  }
-});
-
-app.addEventListener("focusin", (e) => {
-  const pq = e.target.closest("[data-pick-q]");
-  if (!pq || pq.disabled) return;
-  const key = pq.dataset.pickQ;
-  pickOpen[key] = true;
-  refreshPickList(key);
-  pq.select();
-});
-
-app.addEventListener("focusout", (e) => {
-  const box = e.target.closest("[data-pick-box]");
-  if (!box) return;
-  const key = box.dataset.pickBox;
-  // relatedTarget は「次にフォーカスが移る先」。requestAnimationFrame で
-  // activeElement を見に行くと、バックグラウンドのタブや省電力で rAF が
-  // 止まったときに閉じる処理ごと止まり、外側スクロールがロックされたまま
-  // ページが動かなくなる。同期的に判定する。
-  if (box.contains(e.relatedTarget)) return;
-  if (!pickOpen[key]) return;
-  pickOpen[key] = false;
-  pickQuery[key] = "";
-  const input = box.querySelector("[data-pick-q]");
-  const select = box.querySelector("[data-select]");
-  if (input) input.value = select?.selectedOptions[0]?.textContent || "";
-  refreshPickList(key);
-});
-
-app.addEventListener("keydown", (e) => {
-  const pq = e.target.closest("[data-pick-q]");
-  if (!pq) return;
-  if (e.key === "Enter") {
-    e.preventDefault();
-    const first = pq.closest("[data-pick-box]")?.querySelector("[data-pick-opt]");
-    if (first) applyPickValue(pq.dataset.pickQ, first.dataset.value);
-  }
-  if (e.key === "Escape") {
-    pickOpen[pq.dataset.pickQ] = false;
-    pickQuery[pq.dataset.pickQ] = "";
-    pq.blur();
   }
 });
 

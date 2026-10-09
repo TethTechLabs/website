@@ -27,6 +27,13 @@
   --num: "SF Mono", "Menlo", "Consolas", ui-monospace, monospace;
   --font: system-ui, -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN",
     "Yu Gothic", "Noto Sans JP", sans-serif;
+
+  /* Capacitor 8 は Android の正しいインセットを --safe-area-inset-* に入れる。
+     iOS と Web では CSS の env() をそのまま使う。 */
+  --safe-top: var(--safe-area-inset-top, env(safe-area-inset-top, 0px));
+  --safe-bottom: var(--safe-area-inset-bottom, env(safe-area-inset-bottom, 0px));
+  /* AdMob が実際に表示した高さ。広告なし・読み込み失敗時は 0px。 */
+  --native-banner-height: 0px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -118,6 +125,7 @@ button {
   height: 100dvh;
   max-width: 780px;
   margin: 0 auto;
+  padding-top: var(--safe-top);
   overflow: hidden;
 }
 
@@ -127,13 +135,8 @@ button {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior-y: contain;
-  padding: 22px 16px 28px;
-}
-
-/* pick-list open: outer scroll locked so iOS routes touches to the inner list */
-.screen-scroll.pick-locked {
-  overflow-y: hidden;
-  touch-action: none;
+  /* 入口画面にも結果以外の補助画面にも、ノッチの下から一貫した余白を置く。 */
+  padding: 30px 16px calc(32px + var(--native-banner-height));
 }
 
 .tnum {
@@ -178,7 +181,8 @@ button {
 .hero {
   flex: 0 0 auto;
   z-index: 20;
-  padding: calc(22px + env(safe-area-inset-top)) 20px 16px;
+  /* .app が安全領域を受け持つので、結果だけ二重に空けない。 */
+  padding: 22px 20px 16px;
   background: var(--surface);
   border-bottom: 1px solid var(--line);
   display: grid;
@@ -607,81 +611,6 @@ input[type="number"] {
 
 .grid-inputs.tight {
   margin-bottom: 14px;
-}
-
-.pick-grid {
-  grid-template-columns: 1fr;
-}
-
-.pick {
-  position: relative;
-}
-
-.pick .visually-hidden,
-.grid-inputs .pick select.visually-hidden {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  min-height: 0;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
-
-.pick-list {
-  list-style: none;
-  margin: 4px 0 0;
-  padding: 4px;
-  max-height: 300px;
-  overflow-y: auto;
-  /* 外側の画面スクロールに奪われず、リスト内を最後まで送れるようにする */
-  overscroll-behavior: contain;
-  -webkit-overflow-scrolling: touch;
-  touch-action: pan-y;
-  border: 1px solid var(--line-strong);
-  border-radius: 10px;
-  background: var(--surface);
-}
-
-.pick-group {
-  padding: 8px 10px 4px;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--faint);
-}
-
-.pick-opt {
-  display: block;
-  width: 100%;
-  min-height: 40px;
-  padding: 8px 10px;
-  border: 0;
-  border-radius: 8px;
-  background: none;
-  text-align: left;
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--ink);
-}
-
-.pick-opt:hover,
-.pick-opt:focus-visible {
-  background: var(--surface-2);
-}
-
-.pick-opt.is-on {
-  background: color-mix(in oklab, var(--accent) 12%, var(--surface));
-  color: var(--accent);
-}
-
-.pick-empty {
-  margin: 4px 0 0;
-  padding: 10px 12px;
-  font-size: 13px;
-  color: var(--muted);
 }
 
 .minis {
@@ -1343,6 +1272,58 @@ input[type="number"] {
 
 .support a {
   font-weight: 600;
+  color: var(--accent);
+}
+
+.related-app {
+  border-color: color-mix(in oklab, var(--accent) 30%, var(--line));
+  background: color-mix(in oklab, var(--accent) 5%, var(--surface));
+}
+
+.related-app-link {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  min-height: 68px;
+  margin-top: 7px;
+  padding: 8px 10px;
+  border: 1px solid color-mix(in oklab, var(--accent) 35%, var(--line));
+  border-radius: 10px;
+  background: var(--surface);
+  text-decoration: none;
+}
+
+.related-app-link:hover {
+  background: color-mix(in oklab, var(--accent) 9%, var(--surface));
+}
+
+.related-app-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 11px;
+}
+
+.related-app-copy {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  color: var(--ink);
+}
+
+.related-app-copy b {
+  font-size: 14px;
+}
+
+.related-app-copy span {
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.related-app-arrow {
+  font-size: 19px;
   color: var(--accent);
 }
 
@@ -2710,7 +2691,9 @@ input[type="number"] {
   z-index: 30;
   display: flex;
   gap: 8px;
-  padding: 8px 14px calc(8px + env(safe-area-inset-bottom));
+  /* ネイティブ広告はWebViewの上に重なる。広告の実測高だけ操作バーを持ち上げる。 */
+  margin-bottom: var(--native-banner-height);
+  padding: 8px 14px calc(8px + var(--safe-bottom));
   background: var(--surface);
   border-top: 1px solid var(--line);
 }
@@ -3466,7 +3449,9 @@ input[type="number"] {
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 10px;
-  padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+  /* 次へ／戻るを、最下部に固定したAdMobバナーより必ず上へ置く。 */
+  margin-bottom: var(--native-banner-height);
+  padding: 10px 14px calc(10px + var(--safe-bottom));
   border-top: 1px solid var(--line);
   background: color-mix(in oklab, var(--surface) 92%, transparent);
   backdrop-filter: blur(12px);

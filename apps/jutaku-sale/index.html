@@ -35,14 +35,16 @@
     <!-- adsense:start — Web版のみ。AdSenseはアプリ内での使用が規約で禁止されているため、
          ストアアプリ用のビルド（scripts/build-dist.sh）ではこのブロックごと削除する。
          アプリ側の広告は AdMob（src/ads-native.js）で出す。 -->
+    <meta name="google-adsense-account" content="ca-pub-9222260774149288" />
     <script
       async
       src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-9222260774149288"
       crossorigin="anonymous"
     ></script>
+    <!-- Cloudflare Web Analytics（会社サイトと同じ計測。アプリには入れない） --><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7487423d34c14ee1b51f28a905a89006"}'></script>
     <!-- adsense:end -->
 
-    <link rel="stylesheet" href="./src/styles.css?v=16" />
+    <link rel="stylesheet" href="./src/styles.css?v=18" />
     <script>
       // 保存した表示設定を、描画前に当てる。読み込み直後のちらつきを避ける。
       try {
@@ -56,7 +58,6 @@
   </head>
   <body>
     <main class="app" id="app"></main>
-    <script type="module" src="./src/app.js?v=16"></script>
-    <!-- Cloudflare Web Analytics --><script type="module" src="https://static.cloudflareinsights.com/beacon.min.js" data-cf-beacon='{"token": "7487423d34c14ee1b51f28a905a89006"}'></script><!-- End Cloudflare Web Analytics -->
+    <script type="module" src="./src/app.js?v=18"></script>
   </body>
 </html>
