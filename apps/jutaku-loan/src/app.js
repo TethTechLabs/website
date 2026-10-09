@@ -1785,4 +1785,9 @@ if (globalThis.Capacitor?.isNativePlatform?.()) {
   import("./ads-native.js")
     .then((m) => m.initNativeAds())
     .catch(() => {});
+} else {
+  // Web は AdSense 自動広告のみ。アフィリエイトは未表示なので aff_view は送らない。
+  import("./monetization.js")
+    .then((m) => m.createMonetization({ propertyId: "jutaku-loan" }).pageView({ placement: "auto" }))
+    .catch(() => {});
 }
