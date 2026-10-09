@@ -27,6 +27,8 @@
   --num: "SF Mono", "Menlo", "Consolas", ui-monospace, monospace;
   --font: system-ui, -apple-system, "Hiragino Sans", "Hiragino Kaku Gothic ProN",
     "Yu Gothic", "Noto Sans JP", sans-serif;
+
+  --ad-banner-height: 0px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -259,9 +261,23 @@ button {
   gap: 10px;
 }
 
+.ctrl-head-stack {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  margin-bottom: 2px;
+}
+
 .ctrl-label {
   font-size: 14px;
   font-weight: 700;
+}
+
+.ctrl-req {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--warn);
+  line-height: 1.45;
 }
 
 .ctrl-hint {
@@ -603,6 +619,85 @@ button {
 .ad-slot-copy {
   margin: 0;
   font-size: 12px;
+  color: var(--faint);
+}
+
+.aff {
+  margin-bottom: 12px;
+  padding: 16px 18px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.aff-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.aff h2 {
+  margin: 0;
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+.aff-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--faint);
+}
+
+.aff-lead {
+  margin: 0 0 4px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.aff-item {
+  padding: 12px 0;
+  border-top: 1px solid var(--line);
+}
+
+.aff-item:first-of-type {
+  margin-top: 8px;
+}
+
+.aff-item h3 {
+  margin: 0 0 4px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.aff-item p {
+  margin: 0 0 10px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.aff-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.aff-links a.pill {
+  display: inline-flex;
+  align-items: center;
+  text-decoration: none;
+}
+
+.aff-note {
+  margin: 12px 0 0;
+  font-size: 11px;
+  line-height: 1.7;
   color: var(--faint);
 }
 
@@ -1101,6 +1196,58 @@ button {
 
 .support a {
   font-weight: 600;
+  color: var(--accent);
+}
+
+.related-app {
+  border-color: color-mix(in oklab, var(--accent) 30%, var(--line));
+  background: color-mix(in oklab, var(--accent) 5%, var(--surface));
+}
+
+.related-app-link {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  min-height: 68px;
+  margin-top: 7px;
+  padding: 8px 10px;
+  border: 1px solid color-mix(in oklab, var(--accent) 35%, var(--line));
+  border-radius: 10px;
+  background: var(--surface);
+  text-decoration: none;
+}
+
+.related-app-link:hover {
+  background: color-mix(in oklab, var(--accent) 9%, var(--surface));
+}
+
+.related-app-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 11px;
+}
+
+.related-app-copy {
+  display: grid;
+  gap: 3px;
+  min-width: 0;
+  color: var(--ink);
+}
+
+.related-app-copy b {
+  font-size: 14px;
+}
+
+.related-app-copy span {
+  font-size: 11.5px;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.related-app-arrow {
+  font-size: 19px;
   color: var(--accent);
 }
 
@@ -1713,6 +1860,21 @@ button {
   color: var(--warn);
 }
 
+.result-entry {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
+  margin-top: 8px;
+  border: 0;
+  border-radius: var(--radius);
+  background: var(--accent);
+  color: var(--accent-ink);
+  font-size: 15px;
+  font-weight: 700;
+}
+
 .costs-entry {
   display: flex;
   align-items: center;
@@ -2292,12 +2454,12 @@ button {
   border-radius: 999px;
   background: color-mix(in oklab, var(--accent) 12%, var(--surface));
   color: var(--accent);
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 700;
 }
 
 .cond-date {
-  font-size: 11.5px;
+  font-size: 12.5px;
   color: var(--muted);
   font-variant-numeric: tabular-nums;
 }
@@ -2318,13 +2480,13 @@ button {
 }
 
 .cond-item span {
-  font-size: 10.5px;
+  font-size: 11.5px;
   color: var(--muted);
 }
 
 .cond-item b {
   color: var(--ink);
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
   line-height: 1.35;
   overflow-wrap: break-word;
@@ -2333,8 +2495,16 @@ button {
 
 .cond-foot {
   margin: 10px 0 0;
-  font-size: 11px;
+  font-size: 12px;
   color: var(--faint);
+}
+
+.share-panel .panel-sub {
+  font-size: 13px;
+}
+
+.share-panel .pill {
+  font-size: 14px;
 }
 
 .share-panel .share-actions {
@@ -2347,7 +2517,7 @@ button {
   min-height: 16px;
   margin: 10px 0 0;
   padding: 0;
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 600;
   color: var(--accent);
 }
@@ -2409,42 +2579,47 @@ button {
    ============================================================ */
 
 .back-btn {
-  min-height: 38px;
-  padding: 0 4px;
-  margin-bottom: 10px;
+  flex: 0 0 auto;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  min-height: 44px;
+  margin: 0;
+  padding: max(60px, calc(10px + env(safe-area-inset-top, 0px))) 18px 12px;
   border: 0;
-  background: none;
+  border-bottom: 1px solid var(--line);
+  background: var(--bg);
   color: var(--accent);
-  font-size: 13px;
-  font-weight: 600;
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.back-btn[hidden] {
+  display: none;
 }
 
 /* --- 結果画面のタブ --- */
 
-.result-meta {
-  margin: 0 0 10px;
-  font-size: 11px;
-  line-height: 1.6;
-  color: var(--faint);
-}
-
 .tabbar {
   display: flex;
-  gap: 4px;
-  margin-bottom: 12px;
-  padding-bottom: 2px;
+  gap: 3px;
+  margin-bottom: 14px;
+  padding: 4px;
+  border: 1px solid var(--line-strong);
+  border-radius: 14px;
+  background: var(--surface-2);
 }
 
 .tabbar button {
   flex: 1 1 0;
   min-width: 0;
-  min-height: 40px;
-  padding: 0 4px;
-  border: 1px solid var(--line-strong);
-  border-radius: 999px;
-  background: var(--surface);
-  font-size: 12px;
-  font-weight: 600;
+  min-height: 48px;
+  padding: 0 6px;
+  border: 0;
+  border-radius: 11px;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 700;
   color: var(--muted);
   white-space: nowrap;
   overflow: hidden;
@@ -2452,9 +2627,8 @@ button {
 }
 
 .tabbar button[aria-selected="true"] {
-  background: var(--ink);
-  border-color: var(--ink);
-  color: var(--surface);
+  background: var(--accent);
+  color: var(--accent-ink);
 }
 
 [data-tabpanel][hidden] {
@@ -2473,8 +2647,22 @@ button {
   border-top: 1px solid var(--line);
 }
 
+.app.has-native-ad {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+.app.has-native-ad .bottom-nav {
+  padding-bottom: 8px;
+}
+
 .bottom-nav[hidden] {
   display: none;
+}
+
+.ad-dock {
+  flex: 0 0 auto;
+  height: var(--ad-banner-height, 0px);
+  background: var(--bg);
 }
 
 .nav-main {

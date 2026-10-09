@@ -40,7 +40,7 @@ export function buildShareCanvas(data, colors) {
 
   ctx.fillStyle = colors.accent;
   ctx.font = `700 30px ${sans}`;
-  ctx.fillText("試算値", 64, 92);
+  ctx.fillText("試算", 64, 92);
 
   ctx.fillStyle = colors.muted;
   ctx.font = `500 26px ${sans}`;
