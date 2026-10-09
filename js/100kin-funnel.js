@@ -7,26 +7,59 @@ function readPhase() {
   return document.documentElement.getAttribute("data-lp-phase") === "store" ? "store" : "waitlist";
 }
 
+/** UTM が無い来訪の流入元。管理画面の X / YT / 直接 / 他 に合わせる。 */
+function sourceFromReferrer() {
+  const raw = document.referrer || "";
+  if (!raw) return { utm_source: "direct" };
+  try {
+    const host = new URL(raw).hostname.replace(/^www\./, "");
+    if (
+      host === "youtube.com" ||
+      host === "m.youtube.com" ||
+      host === "youtu.be" ||
+      host === "youtube-nocookie.com"
+    ) {
+      return { utm_source: "youtube", utm_medium: "social" };
+    }
+    if (host === "x.com" || host === "twitter.com" || host === "t.co") {
+      return { utm_source: "x", utm_medium: "social" };
+    }
+  } catch {
+    /* ignore invalid referrer */
+  }
+  return { utm_source: "other" };
+}
+
+function canonicalSource(value) {
+  const raw = String(value || "").trim().toLowerCase();
+  if (["youtube", "yt", "shorts", "youtube_shorts", "youtu"].includes(raw)) return "youtube";
+  return String(value || "").trim();
+}
+
 function readAttribution() {
   const params = new URLSearchParams(location.search);
   const current = Object.fromEntries(
     ATTR_KEYS.map((key) => [key, (params.get(key) || "").slice(0, 100)]).filter(([, value]) => value)
   );
+  if (current.utm_source) current.utm_source = canonicalSource(current.utm_source);
 
-  if (Object.keys(current).length) {
+  // 再読み込みや LP 内の移動では、最初に来たときの流入元を使い続ける。
+  if (!Object.keys(current).length) {
     try {
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(current));
+      const stored = JSON.parse(sessionStorage.getItem(STORAGE_KEY) || "{}") || {};
+      if (stored.utm_source) return stored;
     } catch {
       // Measurement must never block the LP.
     }
-    return current;
   }
+  if (!current.utm_source) Object.assign(current, sourceFromReferrer());
 
   try {
-    return JSON.parse(sessionStorage.getItem(STORAGE_KEY) || "{}") || {};
+    sessionStorage.setItem(STORAGE_KEY, JSON.stringify(current));
   } catch {
-    return {};
+    // Measurement must never block the LP.
   }
+  return current;
 }
 
 const attribution = readAttribution();
