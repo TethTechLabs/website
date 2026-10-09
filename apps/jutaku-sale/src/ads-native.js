@@ -128,6 +128,21 @@ async function registerAdListeners(AdMob) {
   });
 }
 
+/** 結果画面の「Amazon / 楽天で探す」を押したとき（アプリ内アフィリエイト）。 */
+export function trackAffiliateClick(network) {
+  postMonetization({
+    event: "aff_click",
+    property_id: PROPERTY_ID,
+    channel: "app_aff",
+    network,
+    placement: "result",
+    format: "link",
+    creative: "",
+    platform: isIos() ? "ios" : "android",
+    status: "",
+  });
+}
+
 export async function initNativeAds() {
   trackOpen();
   const AdMob = plugin();
