@@ -12,7 +12,7 @@
  * 空の ID は出さない。入っているネットのボタンだけ出す。
  */
 export const AFFILIATE = {
-  amazonTag: "tethtechlabs-22",
+  amazonTag: "tethtech-sale-22",
   rakutenId: "56afa1ad.d9f67324.56afa1ae.7bb4984d",
 };
 
