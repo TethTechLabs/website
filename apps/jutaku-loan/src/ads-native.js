@@ -100,7 +100,8 @@ async function registerAdListeners(AdMob) {
   await AdMob.addListener("bannerAdImpression", () => {
     trackAd("ad_impression", { format: "banner", creative: banner });
   });
-  await AdMob.addListener("bannerAdOpened", () => {
+  // bannerAdClicked はパッチで足したイベント（patches/）。AdMob のクリック数と同じ契機で数える。
+  await AdMob.addListener("bannerAdClicked", () => {
     trackAd("ad_clicked", { format: "banner", creative: banner });
   });
   await AdMob.addListener("interstitialAdLoaded", () => {
