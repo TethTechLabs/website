@@ -2366,4 +2366,13 @@ if (globalThis.Capacitor?.isNativePlatform?.()) {
   for (const network of shownAffiliateNetworks()) {
     mon?.affiliateView({ network, placement: "result" });
   }
+  // リンクは Amazon・楽天へ直接飛ぶ（中継しない）ので、押した瞬間にクリックを送る。
+  document.addEventListener("click", (e) => {
+    const link = e.target.closest?.(".aff a[href]");
+    if (!link) return;
+    const host = new URL(link.href).hostname;
+    const network = host.endsWith("rakuten.co.jp") ? "rakuten" : host.endsWith("amazon.co.jp") ? "amazon" : "";
+    if (!network) return;
+    mon?.track("aff_click", { channel: "web_aff", network, placement: "result", format: "link", creative: "" });
+  });
 }
