@@ -21,7 +21,7 @@ import {
   xForIndex,
 } from "./charts.js";
 import { buildShareCanvas, buildShareText } from "./share.js";
-import { affiliateHtml, shownAffiliateNetworks } from "./affiliates.js";
+import { affiliateHtml, onAffiliateClick, shownAffiliateNetworks } from "./affiliates.js";
 
 const TODAY_LABEL = new Date().toLocaleDateString("ja-JP", {
   year: "numeric",
@@ -1819,7 +1819,10 @@ syncAll();
 
 if (globalThis.Capacitor?.isNativePlatform?.()) {
   import("./ads-native.js")
-    .then((m) => m.initNativeAds())
+    .then((m) => {
+      onAffiliateClick((network) => m.trackAffiliateClick(network));
+      return m.initNativeAds();
+    })
     .catch(() => {});
 } else {
   import("./monetization.js")
@@ -1830,14 +1833,9 @@ if (globalThis.Capacitor?.isNativePlatform?.()) {
         mon.affiliateView({ network, placement: "result" });
       }
       // リンクは Amazon・楽天へ直接飛ぶ（中継しない）ので、押した瞬間にクリックを送る。
-      document.addEventListener("click", (e) => {
-        const link = e.target.closest?.(".aff a[href]");
-        if (!link) return;
-        const host = new URL(link.href).hostname;
-        const network = host.endsWith("rakuten.co.jp") ? "rakuten" : host.endsWith("amazon.co.jp") ? "amazon" : "";
-        if (!network) return;
-        mon.track("aff_click", { channel: "web_aff", network, placement: "result", format: "link", creative: "" });
-      });
+      onAffiliateClick((network) =>
+        mon.track("aff_click", { channel: "web_aff", network, placement: "result", format: "link", creative: "" })
+      );
     })
     .catch(() => {});
 }

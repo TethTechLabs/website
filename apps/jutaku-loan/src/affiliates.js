@@ -38,10 +38,6 @@ const ITEMS = [
   },
 ];
 
-function isNativeApp() {
-  return globalThis.Capacitor?.isNativePlatform?.() === true;
-}
-
 function amazonUrl(query, tag) {
   const url = new URL("https://www.amazon.co.jp/s");
   url.searchParams.set("k", query);
@@ -64,11 +60,9 @@ function storeLink(label, href) {
 }
 
 export function shownAffiliateNetworks({
-  native = isNativeApp(),
   amazonTag = AFFILIATE.amazonTag,
   rakutenId = AFFILIATE.rakutenId,
 } = {}) {
-  if (native) return [];
   const networks = [];
   if (amazonTag) networks.push("amazon");
   if (rakutenId) networks.push("rakuten");
@@ -77,14 +71,14 @@ export function shownAffiliateNetworks({
 
 /**
  * 結果画面の下に出す HTML。
- * native / amazonTag / rakutenId はテスト用に上書きできる。
+ * amazonTag / rakutenId はテスト用に上書きできる。
+ * ストアアプリにも出す（実物の商品なので外部決済で問題ない。Amazon アソシエイトにアプリの登録が要る）。
+ * リンクは target="_blank" で、アプリでは Safari / Chrome（または Amazon・楽天のアプリ）が開く。
  */
 export function affiliateHtml({
-  native = isNativeApp(),
   amazonTag = AFFILIATE.amazonTag,
   rakutenId = AFFILIATE.rakutenId,
 } = {}) {
-  if (native) return "";
   const amazon = Boolean(amazonTag);
   const rakuten = Boolean(rakutenId);
   if (!amazon && !rakuten) return "";
@@ -120,4 +114,26 @@ export function affiliateHtml({
       ${items}
       <p class="aff-note">${notes.join(" ")}</p>
     </aside>`;
+}
+
+/** リンク先から Amazon / 楽天を見分ける。どちらでもなければ空文字。 */
+export function affiliateNetworkOf(href) {
+  try {
+    const host = new URL(href).hostname;
+    if (host.endsWith("rakuten.co.jp")) return "rakuten";
+    if (host.endsWith("amazon.co.jp")) return "amazon";
+  } catch {
+    /* 壊れた href は数えない */
+  }
+  return "";
+}
+
+/** 「〜で探す」が押された瞬間に network を渡す。Web とアプリで送り先だけ変える。 */
+export function onAffiliateClick(handler, root = globalThis.document) {
+  root?.addEventListener?.("click", (e) => {
+    const link = e.target?.closest?.(".aff a[href]");
+    if (!link) return;
+    const network = affiliateNetworkOf(link.href);
+    if (network) handler(network);
+  });
 }
