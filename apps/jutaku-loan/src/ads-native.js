@@ -11,6 +11,15 @@ const ADS = {
   iosInterstitial: "ca-app-pub-9222260774149288/7064563769",
 };
 
+/**
+ * 本人の端末。ここに入れた端末だけテスト広告になる（他の利用者は本番のまま）。
+ * ID は端末で起動したときの「<Google> To get test ads on this device」ログから取る。
+ * アプリを消して入れ直すと変わることがある。
+ */
+const TEST_DEVICES = [
+  "bedfe98781d67a99ffda524951925a96", // iPhone 17（2026-10-10）
+];
+
 const PROPERTY_ID = "jutaku-loan";
 const ENDPOINT = "https://app-waitlist.tethtechlabs.workers.dev/api/monetization";
 
@@ -146,7 +155,8 @@ export async function initNativeAds() {
   await registerAdListeners(AdMob);
 
   try {
-    await AdMob.initialize({ initializeForTesting: false });
+    // initializeForTesting は TEST_DEVICES を登録するだけ。広告ユニットは本番のまま。
+    await AdMob.initialize({ initializeForTesting: true, testingDevices: TEST_DEVICES });
     await AdMob.showBanner({
       adId: isIos() ? ADS.iosBanner : ADS.androidBanner,
       adSize: "ADAPTIVE_BANNER",
