@@ -813,12 +813,13 @@ function scaffold() {
         </div>
         <a class="src-item" href="http://www.contract.reins.or.jp/" target="_blank" rel="noopener">
           <b>レインズ・マーケット・インフォメーション</b>
-          <span>成約は多いですが、このアプリには入っていません。自分で見て、㎡単価に戻してください。</span>
+          <span>運営：公益財団法人 不動産流通推進センター（指定流通機構）。成約は多いですが、このアプリには入っていません。自分で見て、㎡単価に戻してください。</span>
         </a>
         <a class="src-item" href="https://www.chikamap.jp/" target="_blank" rel="noopener">
           <b>全国地価マップ</b>
-          <span>路線価と固定資産税評価額を地図で引けます。このアプリの試算には使いません。</span>
+          <span>運営：一般財団法人 資産評価システム研究センター。路線価と固定資産税評価額を地図で引けます。このアプリの試算には使いません。</span>
         </a>
+        <p class="legal-lead">上記はいずれも外部サイトです。本アプリは TethTechLabs が開発・運営する民間のアプリであり、これらの運営団体および国土交通省・国税庁その他の政府機関とは一切関係がありません。各機関が提供、保証、推奨するものではありません。</p>
       </section>
       ${adSlotHtml(AD_SLOT)}
     </div>
@@ -1537,7 +1538,7 @@ function casesPanelHtml() {
       state.data.generated || ""
     )} 取得）<br />${esc(state.data.attribution || "")}<br />${esc(
       state.data.note || ""
-    )}選んだ事例の㎡単価に、入力された面積を掛けています。個別の物件を評価したものではありません。<br />本サービスは TethTechLabs が開発・運営するものであり、国土交通省が提供・保証するものではありません。</p>`;
+    )}選んだ事例の㎡単価に、入力された面積を掛けています。個別の物件を評価したものではありません。<br />元データの提供元：<a href="https://www.reinfolib.mlit.go.jp/" target="_blank" rel="noopener">国土交通省 不動産情報ライブラリ（https://www.reinfolib.mlit.go.jp/）</a><br />本サービスは TethTechLabs が開発・運営する民間のアプリであり、国土交通省その他の政府機関とは一切関係がありません。各機関が提供、保証、推奨するものではありません。</p>`;
 }
 
 function estPanelHtml() {
@@ -1963,7 +1964,33 @@ app.addEventListener("toggle", (e) => {
   if (d) bandTuneOpen = d.open;
 }, true);
 
+/**
+ * 外部サイトへのリンク。
+ *
+ * ネイティブでは target="_blank" を当てにできない。iOS は WKWebView 側が
+ * 外部ブラウザへ渡すが、Android の Capacitor には onCreateWindow の実装が
+ * 無く、タップしても何も起きない。リンクが開かないと、出典として示している
+ * 公的機関の URL が「アクセスできない」ことになる（Play の審査で実際に
+ * 指摘された）。プラグイン経由で明示的に開く。
+ */
+function openExternal(url) {
+  const Browser = globalThis.Capacitor?.Plugins?.Browser;
+  if (Browser?.open) {
+    Browser.open({ url }).catch(() => {
+      globalThis.open?.(url, "_blank", "noopener");
+    });
+    return;
+  }
+  globalThis.open?.(url, "_blank", "noopener");
+}
+
 app.addEventListener("click", (e) => {
+  const external = e.target.closest('a[target="_blank"][href^="http"]');
+  if (external) {
+    e.preventDefault();
+    openExternal(external.href);
+    return;
+  }
   const goto = e.target.closest("[data-goto]");
   if (goto) {
     setScreen(goto.dataset.goto);

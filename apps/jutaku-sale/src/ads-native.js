@@ -39,7 +39,22 @@ function interstitialCreative() {
   return isIos() ? "sale-int-ios" : "sale-int-and";
 }
 
-let bannerReady = false;
+/**
+ * バナーを出してよい条件。すべて満たしたときだけ実際に出す。
+ * 可視性を決める入力は複数あるので、個々の呼び出し側で hide/show を命令せず、
+ * ここに条件を集めて syncBanner() が現状との差分だけを適用する。
+ * 条件が増えるときもこのオブジェクトに足す。
+ */
+const allow = {
+  loaded: false,      // AdMob の初期化が済んでいる
+  screen: true,       // 画面が広告を許す（結果画面では出さない）
+  foreground: true,   // アプリが前面にある
+};
+let shown = false;      // いま実際に出ているか
+// リスナーは AdMob インスタンスごとに一度だけ張る。二重に張ると
+// 1 回の表示で同じイベントが複数回飛び、計測が水増しされる。
+const listenersFor = new WeakSet();
+let syncing = Promise.resolve();
 let bannerHeight = 0;
 
 /**
@@ -53,7 +68,63 @@ function setBannerSpace(height) {
 
 function setBannerHeight(height) {
   bannerHeight = Math.max(0, Math.round(Number(height) || 0));
-  setBannerSpace(bannerHeight);
+  setBannerSpace(shown ? bannerHeight : 0);
+}
+
+function bannerOptions() {
+  return {
+    adId: isIos() ? AD_UNITS.iosBanner : AD_UNITS.androidBanner,
+    adSize: "ADAPTIVE_BANNER",
+    position: "BOTTOM_CENTER",
+    // 画面最下部に置く。操作バー側が SizeChanged の実測高を予約する。
+    margin: 0,
+    isTesting: false,
+  };
+}
+
+/**
+ * 条件から「出すべきか」を決め、現状と違うときだけ操作する。
+ * 直前の同期を待ってから動くので、画面遷移が続いても show と remove が競合しない。
+ */
+function syncBanner() {
+  syncing = syncing.then(applyBannerState, applyBannerState);
+  return syncing;
+}
+
+async function applyBannerState() {
+  const AdMob = plugin();
+  if (!AdMob) return;
+  const want = allow.loaded && allow.screen && allow.foreground;
+  if (want === shown) return;
+  try {
+    if (want) {
+      await AdMob.showBanner(bannerOptions());
+      shown = true;
+      setBannerSpace(bannerHeight);
+    } else {
+      // hideBanner では AdMob のバナーが生き残り自動更新を続けるため、破棄する。
+      await AdMob.removeBanner();
+      shown = false;
+      setBannerSpace(0);
+    }
+  } catch {
+    // 端末や在庫の都合で失敗する。広告のために画面を止めず、空白も残さない。
+    shown = false;
+    setBannerSpace(0);
+  }
+}
+
+/**
+ * WebView はアプリが裏に回っても動き続ける。バナーを残すと AdMob が
+ * 自動更新を繰り返し、誰も見ていない表示が積み上がって無効トラフィックになる。
+ */
+function watchAppState() {
+  const App = globalThis.Capacitor?.Plugins?.App;
+  if (!App?.addListener) return;
+  App.addListener("appStateChange", ({ isActive }) => {
+    allow.foreground = Boolean(isActive);
+    syncBanner();
+  });
 }
 
 function postMonetization(payload) {
@@ -101,7 +172,8 @@ function trackAd(event, { format, creative, status = "" }) {
 }
 
 async function registerAdListeners(AdMob) {
-  if (!AdMob.addListener) return;
+  if (listenersFor.has(AdMob) || !AdMob.addListener) return;
+  listenersFor.add(AdMob);
   const banner = bannerCreative();
   const interstitial = interstitialCreative();
 
@@ -160,17 +232,16 @@ export async function initNativeAds() {
     // initializeForTesting は TEST_DEVICES を登録するだけ。広告ユニットは本番のまま。
     await AdMob.initialize({ initializeForTesting: true, testingDevices: TEST_DEVICES });
     await registerAdListeners(AdMob);
-    await AdMob.showBanner({
-      adId: isIos() ? AD_UNITS.iosBanner : AD_UNITS.androidBanner,
-      adSize: "ADAPTIVE_BANNER",
-      position: "BOTTOM_CENTER",
-      // 画面最下部に置く。操作バー側が SizeChanged の実測高を予約する。
-      margin: 0,
-      isTesting: false,
-    });
-    bannerReady = true;
+    watchAppState();
+    // 起動時はまだ何も出ていない。前回の値を引きずらないよう条件を初期化する。
+    allow.screen = true;
+    allow.foreground = true;
+    shown = false;
+    allow.loaded = true;
+    await syncBanner();
   } catch {
     // 広告が無い・読めない場合は、操作部のための空白も残さない。
+    allow.loaded = false;
     setBannerHeight(0);
   }
 }
@@ -180,25 +251,9 @@ export async function initNativeAds() {
  * 出しっぱなしにすると、手取りや税額のすぐ下に広告が並び、
  * 広告が試算の結果と関係あるものとして読めてしまう。
  */
-export async function setBannerVisible(visible) {
-  const AdMob = plugin();
-  if (!AdMob || !bannerReady) {
-    setBannerSpace(0);
-    return;
-  }
-  try {
-    if (visible) {
-      // 読み込み済みの高さを先に戻し、広告の再表示までボタン位置を安定させる。
-      setBannerSpace(bannerHeight);
-      await AdMob.resumeBanner();
-    } else {
-      await AdMob.hideBanner();
-      setBannerSpace(0);
-    }
-  } catch {
-    // 端末や広告の状態によっては失敗する。広告のために画面を止めず、空白も残さない。
-    setBannerHeight(0);
-  }
+export function setBannerVisible(visible) {
+  allow.screen = Boolean(visible);
+  return syncBanner();
 }
 
 export async function showMatrixInterstitial() {
