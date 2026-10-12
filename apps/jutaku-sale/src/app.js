@@ -161,25 +161,6 @@ const EST_METHODS = [
   { id: "unit", label: "㎡単価" },
 ];
 
-/** 価格を調べられる公的なところ。どこも登録なしで見られる。 */
-const PRICE_SOURCES = [
-  {
-    href: "https://www.reinfolib.mlit.go.jp/",
-    title: "不動産情報ライブラリ（国土交通省）",
-    blurb: "実際に取引された価格を地図から探せる。まずここ。",
-  },
-  {
-    href: "http://www.contract.reins.or.jp/",
-    title: "レインズ・マーケット・インフォメーション",
-    blurb: "不動産会社が使う成約データ。面積・築年で絞れる。",
-  },
-  {
-    href: "https://www.chikamap.jp/",
-    title: "全国地価マップ",
-    blurb: "路線価と固定資産税評価額を地図で引ける。",
-  },
-];
-
 const THEMES = [
   { id: "system", label: "端末に合わせる" },
   { id: "light", label: "ライト" },
@@ -808,18 +789,18 @@ function scaffold() {
 
       <section class="panel ref-panel" aria-labelledby="h-ref">
         <div class="panel-head">
-          <h2 id="h-ref">参考（自分で見て戻る）</h2>
-          <p class="panel-sub">事例が足りないときだけ。見てきた数字は上の㎡単価に入れてください。</p>
+          <h2 id="h-ref">参考（ほかの調べ方）</h2>
+          <p class="panel-sub">事例が足りないときの参考です。ほかで調べた数字は上の㎡単価に入れられます。</p>
         </div>
-        <a class="src-item" href="http://www.contract.reins.or.jp/" target="_blank" rel="noopener">
+        <div class="src-item">
           <b>レインズ・マーケット・インフォメーション</b>
-          <span>運営：公益財団法人 不動産流通推進センター（指定流通機構）。成約は多いですが、このアプリには入っていません。自分で見て、㎡単価に戻してください。</span>
-        </a>
-        <a class="src-item" href="https://www.chikamap.jp/" target="_blank" rel="noopener">
+          <span>不動産会社が使う成約データです。このアプリには入っていません。</span>
+        </div>
+        <div class="src-item">
           <b>全国地価マップ</b>
-          <span>運営：一般財団法人 資産評価システム研究センター。路線価と固定資産税評価額を地図で引けます。このアプリの試算には使いません。</span>
-        </a>
-        <p class="legal-lead">上記はいずれも外部サイトです。本アプリは TethTechLabs が開発・運営する民間のアプリであり、これらの運営団体および国土交通省・国税庁その他の政府機関とは一切関係がありません。各機関が提供、保証、推奨するものではありません。</p>
+          <span>路線価と固定資産税評価額を地図で引けます。このアプリの試算には使いません。</span>
+        </div>
+        <p class="legal-lead">名称を挙げているだけで、リンクはしていません。本アプリは TethTechLabs が開発・運営する民間のアプリであり、政府機関とは一切関係がありません。</p>
       </section>
       ${adSlotHtml(AD_SLOT)}
     </div>
@@ -1556,7 +1537,7 @@ function estPanelHtml() {
     <p class="hint">${
       S.areaUnit === "tsubo"
         ? `${num(S.areaSqm)}坪 は ${area.toFixed(1)}㎡ です。単価は㎡あたりで入れてください。`
-        : `レインズで見た成約の㎡単価を入れてください。坪単価しか分からないときは、坪単価÷3.31が㎡単価です。`
+        : `把握している㎡単価を入れてください。坪単価しか分からないときは、坪単価÷3.31が㎡単価です。`
     }</p>`;
 }
 

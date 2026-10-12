@@ -3075,9 +3075,10 @@ input[type="number"] {
   text-decoration: none;
 }
 
+/* リンクではなく名称の提示。押せると誤解させないよう本文色にする。 */
 .src-item b {
   font-size: 13.5px;
-  color: var(--accent);
+  color: var(--ink);
 }
 
 .src-item span {
