@@ -1,10 +1,9 @@
 /*
  * 100均アイデア LP（2026-11 作り直し）
  * 土台: 売り場の有孔ボードに、値札の形のカードを掛ける。
- * 色は3案（<html data-lp-theme="a|b|c">）。PM が1つ選んだら残りは消す。
+ * 色は値札の朱（PM 2026-11-14 に3案から選んだ）。色は :root の変数だけで決まる。
  */
 .hyakkin-lp {
-  /* 案A: 値札の朱（既定） */
   --lp-board: #df4a2c;
   --lp-board-deep: #b93518;
   --lp-on-board: #ffffff;
@@ -29,42 +28,6 @@
   background: var(--lp-paper);
   line-height: 1.8;
   font-feature-settings: "palt";
-}
-
-/* 案B: 夜の紺に黄色い値札 */
-html[data-lp-theme="b"] .hyakkin-lp {
-  --lp-board: #1c2b52;
-  --lp-board-deep: #121d3b;
-  --lp-on-board: #ffffff;
-  --lp-on-board-soft: rgba(255, 255, 255, 0.88);
-  --lp-dot: rgba(5, 10, 28, 0.55);
-  --lp-hilite: #ffd84a;
-  --lp-accent: #2f55d4;
-  --lp-sticker: #ffd84a;
-  --lp-on-sticker: #141b2e;
-  --lp-paper: #f2f4fa;
-  --lp-ink: #141b2e;
-  --lp-ink-soft: #55607a;
-  --lp-line: #d7dcea;
-  --lp-shadow: 10, 16, 40;
-}
-
-/* 案C: 黄色い売り場に墨の文字 */
-html[data-lp-theme="c"] .hyakkin-lp {
-  --lp-board: #ffd23c;
-  --lp-board-deep: #1d1b16;
-  --lp-on-board: #1d1b16;
-  --lp-on-board-soft: rgba(29, 27, 22, 0.86);
-  --lp-dot: rgba(120, 84, 0, 0.3);
-  --lp-hilite: #1d1b16;
-  --lp-accent: #e8442a;
-  --lp-sticker: #e8442a;
-  --lp-on-sticker: #ffffff;
-  --lp-paper: #fffaf0;
-  --lp-ink: #1d1b16;
-  --lp-ink-soft: #625c50;
-  --lp-line: #ece3cf;
-  --lp-shadow: 60, 44, 0;
 }
 
 /* 広告から来た人の最初の画面を広く使う。共通ヘッダーは追従させず低くする */
