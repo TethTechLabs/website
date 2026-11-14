@@ -1,0 +1,467 @@
+/*
+ * 100均アイデア LP（2026-11 作り直し）
+ * 土台: 売り場の有孔ボード（深緑）に、値札の形のカードを掛ける。
+ * 色は5つだけ。黄色は値札シールにしか使わない。
+ */
+.hyakkin-lp {
+  --lp-board: #1f4d36;
+  --lp-board-deep: #173b29;
+  --lp-leaf: #2f7d55;
+  --lp-paper: #f3f7ec;
+  --lp-sticker: #ffd84a;
+  --lp-ink: #17251c;
+  --lp-ink-soft: #4d5e53;
+  --lp-line: #d5dfcc;
+  --lp-white: #ffffff;
+  --lp-font: "Zen Kaku Gothic New", "Hiragino Sans", "Noto Sans JP", "Yu Gothic", sans-serif;
+  --lp-gutter: 20px;
+  --lp-max: 1120px;
+
+  font-family: var(--lp-font);
+  color: var(--lp-ink);
+  background: var(--lp-paper);
+  line-height: 1.8;
+  font-feature-settings: "palt";
+}
+
+/* 広告から来た人の最初の画面を広く使う。共通ヘッダーは追従させず低くする */
+.hyakkin-lp .site-header {
+  position: static;
+  height: 52px;
+  background: var(--lp-board-deep);
+  border-bottom: 0;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+.hyakkin-lp .site-header .logo,
+.hyakkin-lp .site-header .nav-desktop a { color: rgba(255, 255, 255, 0.78); }
+.hyakkin-lp .site-header .logo:hover,
+.hyakkin-lp .site-header .nav-desktop a:hover { color: #fff; }
+.hyakkin-lp .site-header .nav-toggle { color: #fff; }
+.hyakkin-lp .site-header .nav-mobile { top: 52px; }
+
+.lp-wrap {
+  max-width: var(--lp-max);
+  margin: 0 auto;
+  padding-inline: var(--lp-gutter);
+}
+
+.lp-h2 {
+  font-size: clamp(1.625rem, 6.4vw, 2.5rem);
+  font-weight: 900;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+}
+.lp-nb { display: inline-block; }
+
+.hyakkin-lp a:focus-visible,
+.hyakkin-lp button:focus-visible,
+.hyakkin-lp video:focus-visible {
+  outline: 3px solid var(--lp-sticker);
+  outline-offset: 3px;
+}
+
+/* 公開前後の出し分け（RELEASE_SWITCH.md） */
+html:not([data-lp-phase="store"]) .hk-phase-store,
+html[data-lp-phase="store"] .hk-phase-waitlist { display: none !important; }
+
+/* ---------- 最初の画面 ---------- */
+.lp-hero {
+  color: #fff;
+  background-color: var(--lp-board);
+  background-image: radial-gradient(circle, rgba(8, 26, 17, 0.5) 0 3px, transparent 3.6px);
+  background-size: 28px 28px;
+  background-position: 14px 14px;
+  padding-block: 28px 44px;
+  overflow: hidden;
+}
+
+.lp-hero-grid { display: grid; gap: 28px; }
+.lp-hero-grid > * { min-width: 0; }
+
+.lp-brand { display: flex; align-items: center; gap: 10px; }
+.lp-brand img { width: 44px; height: 44px; border-radius: 11px; }
+.lp-brand-name { font-size: 1.0625rem; font-weight: 700; letter-spacing: 0.02em; }
+
+.lp-hero-title {
+  margin-top: 16px;
+  font-size: clamp(1.875rem, 8.3vw, 3.25rem);
+  font-weight: 900;
+  line-height: 1.22;
+  letter-spacing: 0.005em;
+}
+.lp-hero-title span { display: block; white-space: nowrap; }
+
+.lp-hero-lead {
+  margin-top: 14px;
+  max-width: 30em;
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.lp-status {
+  margin-top: 20px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--lp-sticker);
+}
+
+.lp-stores { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 10px; }
+.lp-store { display: block; border-radius: 9px; }
+.lp-store img { height: 52px; width: auto; }
+.lp-store--google img { height: 70px; margin: -9px -9px; } /* Google のバッジは余白込みの画像 */
+
+.lp-waitlist {
+  display: inline-block;
+  margin-top: 10px;
+  padding: 14px 22px;
+  border-radius: 12px;
+  background: var(--lp-sticker);
+  color: var(--lp-ink);
+  font-weight: 900;
+  line-height: 1.4;
+}
+.lp-waitlist small { display: block; font-size: 0.75rem; font-weight: 500; }
+
+/* 値札の形のカード。上の穴で有孔ボードに掛かっている */
+.lp-tags {
+  display: flex;
+  gap: 14px;
+  margin-inline: calc(var(--lp-gutter) * -1);
+  padding: 14px var(--lp-gutter) 8px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.lp-tags::-webkit-scrollbar { display: none; }
+
+.lp-tag {
+  position: relative;
+  flex: 0 0 min(64vw, 250px);
+  scroll-snap-align: center;
+  padding: 30px 10px 10px;
+  border-radius: 16px;
+  background: var(--lp-white);
+  color: var(--lp-ink);
+  box-shadow: 0 14px 0 -8px rgba(8, 26, 17, 0.35), 0 18px 34px rgba(8, 26, 17, 0.35);
+}
+.lp-tag::before {
+  content: "";
+  position: absolute;
+  top: 9px;
+  left: 50%;
+  width: 14px;
+  height: 14px;
+  margin-left: -7px;
+  border-radius: 50%;
+  background: var(--lp-board-deep);
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.5);
+}
+.lp-tag-from {
+  display: block;
+  padding-inline: 4px;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.5;
+  color: var(--lp-ink-soft);
+}
+.lp-tag-to {
+  display: block;
+  padding-inline: 4px;
+  margin-bottom: 8px;
+  font-size: 1.1875rem;
+  font-weight: 900;
+  line-height: 1.4;
+}
+.lp-tag video,
+.lp-tag img.lp-tag-still {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 2 / 3;
+  object-fit: cover;
+  border-radius: 10px;
+  background: #dfe7d6;
+}
+
+.lp-sticker {
+  position: absolute;
+  bottom: 26px;
+  right: -10px;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: var(--lp-sticker);
+  color: var(--lp-ink);
+  font-size: 0.8125rem;
+  font-weight: 900;
+  line-height: 1.25;
+  text-align: center;
+  transform: rotate(9deg);
+  box-shadow: 0 4px 10px rgba(8, 26, 17, 0.3);
+}
+
+.lp-hero-note {
+  margin-top: 10px;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+/* ---------- 何しに100均へ ---------- */
+.lp-why { padding-block: 56px; }
+.lp-why-grid { display: grid; gap: 32px; }
+.lp-why-stat {
+  margin-top: 18px;
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.7;
+}
+.lp-why-stat b {
+  font-size: 2.5rem;
+  font-weight: 900;
+  line-height: 1;
+  color: var(--lp-leaf);
+}
+.lp-source { margin-top: 4px; font-size: 0.75rem; color: var(--lp-ink-soft); }
+.lp-why-body { margin-top: 18px; max-width: 34em; font-size: 1rem; font-weight: 500; }
+
+/* レシート。いま入っている数を、日付つきで */
+.lp-receipt {
+  position: relative;
+  max-width: 340px;
+  margin-inline: auto;
+  padding: 24px 22px 30px;
+  background: var(--lp-white);
+  font-variant-numeric: tabular-nums;
+  box-shadow: 0 12px 28px rgba(23, 37, 28, 0.12);
+  transform: rotate(-1.5deg);
+}
+.lp-receipt::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -9px;
+  height: 10px;
+  background:
+    linear-gradient(-45deg, transparent 7px, var(--lp-white) 0) 0 0 / 14px 10px repeat-x,
+    linear-gradient(45deg, transparent 7px, var(--lp-white) 0) 0 0 / 14px 10px repeat-x;
+  transform: scaleY(-1);
+}
+.lp-receipt-head { text-align: center; font-weight: 900; font-size: 1.0625rem; }
+.lp-receipt-date { text-align: center; font-size: 0.8125rem; color: var(--lp-ink-soft); }
+.lp-receipt dl { margin-top: 14px; padding-top: 12px; border-top: 2px dashed var(--lp-line); }
+.lp-receipt-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding-block: 5px;
+  font-weight: 500;
+}
+.lp-receipt-row dt { flex: 1; display: flex; align-items: baseline; gap: 8px; }
+.lp-receipt-row dt::after {
+  content: "";
+  flex: 1;
+  border-bottom: 2px dotted var(--lp-line);
+  transform: translateY(-4px);
+}
+.lp-receipt-row dd { font-size: 1.25rem; font-weight: 900; }
+.lp-receipt-row dd small { font-size: 0.8125rem; font-weight: 700; margin-left: 2px; }
+.lp-receipt-total {
+  margin-top: 8px;
+  padding-top: 10px;
+  border-top: 2px dashed var(--lp-line);
+}
+.lp-receipt-total dd { font-size: 1.75rem; color: var(--lp-leaf); }
+
+/* ---------- できること ---------- */
+.lp-features { padding-block: 56px; background: var(--lp-white); }
+.lp-feature-list { display: grid; gap: 44px; margin-top: 32px; }
+.lp-feature { display: grid; gap: 16px; justify-items: center; }
+.lp-feature-copy { width: 100%; max-width: 30em; }
+.lp-feature h3 { font-size: 1.3125rem; font-weight: 900; line-height: 1.45; }
+.lp-feature p { margin-top: 6px; font-size: 0.9688rem; font-weight: 500; color: var(--lp-ink-soft); }
+.lp-feature p.lp-fine { font-size: 0.75rem; line-height: 1.6; }
+
+.lp-phone {
+  width: min(72vw, 270px);
+  aspect-ratio: 393 / 600;
+  border: 7px solid var(--lp-ink);
+  border-bottom: 0;
+  border-radius: 34px 34px 0 0;
+  overflow: hidden;
+  background: var(--lp-paper);
+}
+.lp-phone img { width: 100%; height: 100%; object-fit: cover; object-position: top; }
+
+.lp-ranks { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px; }
+.lp-rank {
+  padding: 2px 12px;
+  border-radius: 999px;
+  font-size: 0.8125rem;
+  font-weight: 900;
+}
+.lp-rank--hall { background: #fff0cf; color: #8a5a00; }
+.lp-rank--s { background: #ece4f7; color: #5a3f8a; }
+.lp-rank--a { background: #e2f1df; color: #2c6a3a; }
+.lp-rank--b { background: #ecefea; color: #4d5e53; }
+
+/* ---------- 料金 ---------- */
+.lp-price { padding-block: 56px; }
+.lp-price-lead { margin-top: 10px; max-width: 34em; font-weight: 500; color: var(--lp-ink-soft); }
+.lp-price-grid { display: grid; gap: 22px; margin-top: 30px; }
+.lp-plan {
+  position: relative;
+  padding: 44px 22px 24px;
+  border-radius: 18px;
+  background: var(--lp-white);
+  box-shadow: 0 10px 26px rgba(23, 37, 28, 0.1);
+}
+.lp-plan::before {
+  content: "";
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  width: 16px;
+  height: 16px;
+  margin-left: -8px;
+  border-radius: 50%;
+  background: var(--lp-paper);
+  box-shadow: inset 0 2px 3px rgba(23, 37, 28, 0.25);
+}
+.lp-plan--pro { background: var(--lp-board); color: #fff; }
+.lp-plan--pro::before { background: var(--lp-paper); }
+.lp-plan-name { font-size: 1rem; font-weight: 900; }
+.lp-plan-cost { margin-top: 2px; font-size: 3rem; font-weight: 900; line-height: 1.15; }
+.lp-plan-cost small { font-size: 1rem; font-weight: 700; margin-inline: 2px; }
+.lp-plan--pro .lp-plan-cost { color: var(--lp-sticker); }
+.lp-plan ul { margin-top: 14px; list-style: none; display: grid; gap: 8px; }
+.lp-plan li {
+  position: relative;
+  padding-left: 1.5em;
+  font-size: 0.9688rem;
+  font-weight: 500;
+  line-height: 1.65;
+}
+.lp-plan li::before {
+  content: "";
+  position: absolute;
+  left: 0.15em;
+  top: 0.45em;
+  width: 0.7em;
+  height: 0.38em;
+  border-left: 3px solid var(--lp-leaf);
+  border-bottom: 3px solid var(--lp-leaf);
+  transform: rotate(-45deg);
+}
+.lp-plan--pro li::before { border-color: var(--lp-sticker); }
+.lp-plan li b { font-weight: 900; }
+.lp-price-note { margin-top: 20px; font-size: 0.8125rem; color: var(--lp-ink-soft); max-width: 44em; }
+
+/* ---------- ご利用にあたって ---------- */
+.lp-notes { padding-block: 44px; background: var(--lp-white); border-top: 1px solid var(--lp-line); }
+.lp-notes h2 { font-size: 1.125rem; font-weight: 900; }
+.lp-notes ul { margin-top: 12px; padding-left: 1.2em; display: grid; gap: 6px; max-width: 48em; }
+.lp-notes li { font-size: 0.875rem; font-weight: 500; line-height: 1.75; color: var(--lp-ink-soft); }
+
+/* ---------- 最後のボタン ---------- */
+.lp-last {
+  color: #fff;
+  background-color: var(--lp-board);
+  background-image: radial-gradient(circle, rgba(8, 26, 17, 0.5) 0 3px, transparent 3.6px);
+  background-size: 28px 28px;
+  background-position: 14px 14px;
+  padding-block: 52px 60px;
+  text-align: center;
+}
+.lp-last-text { margin-top: 8px; font-weight: 500; color: rgba(255, 255, 255, 0.88); }
+.lp-last .lp-stores { justify-content: center; margin-top: 20px; }
+.lp-operator { margin-top: 36px; font-size: 0.8125rem; color: rgba(255, 255, 255, 0.72); }
+.lp-operator a { color: #fff; text-decoration: underline; text-underline-offset: 3px; margin-inline: 8px; }
+
+/* ---------- スマホで追従するボタン ---------- */
+.lp-dock {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  z-index: 90;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 8px 8px 10px;
+  border-radius: 18px;
+  background: var(--lp-white);
+  box-shadow: 0 10px 30px rgba(8, 26, 17, 0.28);
+  transform: translateY(140%);
+  transition: transform 0.25s ease;
+}
+.lp-dock.is-on { transform: translateY(0); }
+.lp-dock[hidden] { display: none; }
+.lp-dock img { width: 40px; height: 40px; border-radius: 10px; }
+.lp-dock-name { flex: 1; font-size: 0.875rem; font-weight: 900; line-height: 1.35; color: var(--lp-ink); }
+.lp-dock-name small { display: block; font-size: 0.75rem; font-weight: 500; color: var(--lp-ink-soft); }
+.lp-dock-go {
+  padding: 11px 18px;
+  border-radius: 12px;
+  background: var(--lp-leaf);
+  color: #fff;
+  font-size: 0.9375rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+.lp-dock-go:hover { color: #fff; background: var(--lp-board); }
+
+@media (prefers-reduced-motion: reduce) {
+  .lp-dock { transition: none; }
+}
+
+/* ---------- 広い画面 ---------- */
+@media (min-width: 900px) {
+  .hyakkin-lp { --lp-gutter: 32px; }
+
+  .lp-hero { padding-block: 56px 72px; }
+  .lp-hero-grid { grid-template-columns: minmax(0, 5fr) minmax(0, 6fr); align-items: center; gap: 48px; }
+  .lp-hero-lead { font-size: 1.125rem; }
+  .lp-store img { height: 56px; }
+  .lp-store--google img { height: 75px; margin: -9.5px -10px; }
+
+  .lp-tags {
+    margin: 0;
+    padding: 20px 0 0;
+    overflow: visible;
+    justify-content: center;
+    gap: 18px;
+  }
+  .lp-tag { flex: 1 1 0; max-width: 200px; }
+  .lp-hero-title { font-size: clamp(2.25rem, 3.5vw, 2.75rem); }
+  .lp-tag-from { min-height: 3em; }
+  .lp-tag-to { min-height: 2.8em; }
+  .lp-tag:nth-child(1) { transform: rotate(-2.5deg); }
+  .lp-tag:nth-child(2) { transform: translateY(-22px) rotate(1deg); }
+  .lp-tag:nth-child(3) { transform: rotate(2.5deg); }
+  .lp-tag-to { font-size: 1rem; }
+  .lp-hero-note { text-align: center; margin-top: 18px; }
+
+  .lp-why { padding-block: 88px; }
+  .lp-why-grid { grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); align-items: center; gap: 56px; }
+
+  .lp-features { padding-block: 88px; }
+  .lp-feature-list { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 28px; margin-top: 44px; }
+  .lp-feature { align-content: start; }
+  .lp-phone { width: 100%; max-width: 240px; order: -1; }
+
+  .lp-price { padding-block: 88px; }
+  .lp-price-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; max-width: 880px; }
+  .lp-plan { padding: 52px 32px 32px; }
+
+  .lp-last { padding-block: 80px 88px; }
+  .lp-dock { display: none; }
+}
