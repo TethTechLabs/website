@@ -135,20 +135,16 @@ html[data-lp-phase="store"] .hk-phase-waitlist { display: none !important; }
 /* 値札の形のカード。上の穴で有孔ボードに掛かっている */
 .lp-tags {
   display: flex;
-  gap: 14px;
-  margin-inline: calc(var(--lp-gutter) * -1);
-  padding: 14px var(--lp-gutter) 8px;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  scrollbar-width: none;
-  -webkit-overflow-scrolling: touch;
+  justify-content: center;
+  padding-top: 14px;
+  list-style: none;
 }
-.lp-tags::-webkit-scrollbar { display: none; }
 
 .lp-tag {
   position: relative;
-  flex: 0 0 min(64vw, 250px);
-  scroll-snap-align: center;
+  flex: 0 1 340px;
+  width: 100%;
+  transform: rotate(-1.5deg);
   padding: 30px 10px 10px;
   border-radius: 16px;
   background: var(--lp-white);
@@ -196,8 +192,8 @@ html[data-lp-phase="store"] .hk-phase-waitlist { display: none !important; }
 
 .lp-sticker {
   position: absolute;
-  bottom: 26px;
-  right: -10px;
+  top: -16px;
+  right: -14px;
   z-index: 1;
   display: grid;
   place-items: center;
@@ -440,21 +436,9 @@ html[data-lp-phase="store"] .hk-phase-waitlist { display: none !important; }
   .lp-store img { height: 56px; }
   .lp-store--google img { height: 75px; margin: -9.5px -10px; }
 
-  .lp-tags {
-    margin: 0;
-    padding: 20px 0 0;
-    overflow: visible;
-    justify-content: center;
-    gap: 18px;
-  }
-  .lp-tag { flex: 1 1 0; max-width: 200px; }
+  .lp-tags { padding-top: 6px; }
+  .lp-tag { flex-basis: 330px; }
   .lp-hero-title { font-size: clamp(2.25rem, 3.5vw, 2.75rem); }
-  .lp-tag-from { min-height: 3em; }
-  .lp-tag-to { min-height: 2.8em; }
-  .lp-tag:nth-child(1) { transform: rotate(-2.5deg); }
-  .lp-tag:nth-child(2) { transform: translateY(-22px) rotate(1deg); }
-  .lp-tag:nth-child(3) { transform: rotate(2.5deg); }
-  .lp-tag-to { font-size: 1rem; }
   .lp-hero-note { text-align: center; margin-top: 18px; }
 
   .lp-why { padding-block: 88px; }
