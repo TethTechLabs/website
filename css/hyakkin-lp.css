@@ -1,17 +1,24 @@
 /*
  * 100均アイデア LP（2026-11 作り直し）
- * 土台: 売り場の有孔ボード（深緑）に、値札の形のカードを掛ける。
- * 色は5つだけ。黄色は値札シールにしか使わない。
+ * 土台: 売り場の有孔ボードに、値札の形のカードを掛ける。
+ * 色は3案（<html data-lp-theme="a|b|c">）。PM が1つ選んだら残りは消す。
  */
 .hyakkin-lp {
-  --lp-board: #1f4d36;
-  --lp-board-deep: #173b29;
-  --lp-leaf: #2f7d55;
-  --lp-paper: #f3f7ec;
+  /* 案A: 値札の朱（既定） */
+  --lp-board: #df4a2c;
+  --lp-board-deep: #b93518;
+  --lp-on-board: #ffffff;
+  --lp-on-board-soft: rgba(255, 255, 255, 0.9);
+  --lp-dot: rgba(96, 20, 4, 0.34);
+  --lp-hilite: #ffe066;
+  --lp-accent: #c9391b;
   --lp-sticker: #ffd84a;
-  --lp-ink: #17251c;
-  --lp-ink-soft: #4d5e53;
-  --lp-line: #d5dfcc;
+  --lp-on-sticker: #26190f;
+  --lp-paper: #fbf5ee;
+  --lp-ink: #26190f;
+  --lp-ink-soft: #6a5a4e;
+  --lp-line: #e7dbcd;
+  --lp-shadow: 70, 22, 8;
   --lp-white: #ffffff;
   --lp-font: "Zen Kaku Gothic New", "Hiragino Sans", "Noto Sans JP", "Yu Gothic", sans-serif;
   --lp-gutter: 20px;
@@ -22,6 +29,42 @@
   background: var(--lp-paper);
   line-height: 1.8;
   font-feature-settings: "palt";
+}
+
+/* 案B: 夜の紺に黄色い値札 */
+html[data-lp-theme="b"] .hyakkin-lp {
+  --lp-board: #1c2b52;
+  --lp-board-deep: #121d3b;
+  --lp-on-board: #ffffff;
+  --lp-on-board-soft: rgba(255, 255, 255, 0.88);
+  --lp-dot: rgba(5, 10, 28, 0.55);
+  --lp-hilite: #ffd84a;
+  --lp-accent: #2f55d4;
+  --lp-sticker: #ffd84a;
+  --lp-on-sticker: #141b2e;
+  --lp-paper: #f2f4fa;
+  --lp-ink: #141b2e;
+  --lp-ink-soft: #55607a;
+  --lp-line: #d7dcea;
+  --lp-shadow: 10, 16, 40;
+}
+
+/* 案C: 黄色い売り場に墨の文字 */
+html[data-lp-theme="c"] .hyakkin-lp {
+  --lp-board: #ffd23c;
+  --lp-board-deep: #1d1b16;
+  --lp-on-board: #1d1b16;
+  --lp-on-board-soft: rgba(29, 27, 22, 0.86);
+  --lp-dot: rgba(120, 84, 0, 0.3);
+  --lp-hilite: #1d1b16;
+  --lp-accent: #e8442a;
+  --lp-sticker: #e8442a;
+  --lp-on-sticker: #ffffff;
+  --lp-paper: #fffaf0;
+  --lp-ink: #1d1b16;
+  --lp-ink-soft: #625c50;
+  --lp-line: #ece3cf;
+  --lp-shadow: 60, 44, 0;
 }
 
 /* 広告から来た人の最初の画面を広く使う。共通ヘッダーは追従させず低くする */
@@ -53,6 +96,7 @@
   letter-spacing: 0.01em;
 }
 .lp-nb { display: inline-block; }
+.lp-h2, .lp-hero-lead, .lp-last-text { text-wrap: balance; }
 
 .hyakkin-lp a:focus-visible,
 .hyakkin-lp button:focus-visible,
@@ -67,9 +111,9 @@ html[data-lp-phase="store"] .hk-phase-waitlist { display: none !important; }
 
 /* ---------- 最初の画面 ---------- */
 .lp-hero {
-  color: #fff;
+  color: var(--lp-on-board);
   background-color: var(--lp-board);
-  background-image: radial-gradient(circle, rgba(8, 26, 17, 0.5) 0 3px, transparent 3.6px);
+  background-image: radial-gradient(circle, var(--lp-dot) 0 3px, transparent 3.6px);
   background-size: 28px 28px;
   background-position: 14px 14px;
   padding-block: 28px 44px;
@@ -98,14 +142,14 @@ html[data-lp-phase="store"] .hk-phase-waitlist { display: none !important; }
   font-size: 1rem;
   font-weight: 500;
   line-height: 1.75;
-  color: rgba(255, 255, 255, 0.9);
+  color: var(--lp-on-board-soft);
 }
 
 .lp-status {
   margin-top: 20px;
   font-size: 0.875rem;
   font-weight: 700;
-  color: var(--lp-sticker);
+  color: var(--lp-hilite);
 }
 
 .lp-stores { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-top: 10px; }
@@ -119,7 +163,7 @@ html[data-lp-phase="store"] .hk-phase-waitlist { display: none !important; }
   padding: 14px 22px;
   border-radius: 12px;
   background: var(--lp-sticker);
-  color: var(--lp-ink);
+  color: var(--lp-on-sticker);
   font-weight: 900;
   line-height: 1.4;
 }
@@ -146,7 +190,7 @@ html[data-lp-phase="store"] .hk-phase-waitlist { display: none !important; }
   border-radius: 16px;
   background: var(--lp-white);
   color: var(--lp-ink);
-  box-shadow: 0 14px 0 -8px rgba(8, 26, 17, 0.35), 0 18px 34px rgba(8, 26, 17, 0.35);
+  box-shadow: 0 14px 0 -8px rgba(var(--lp-shadow), 0.35), 0 18px 34px rgba(var(--lp-shadow), 0.35);
 }
 .lp-tag::before {
   content: "";
@@ -157,8 +201,8 @@ html[data-lp-phase="store"] .hk-phase-waitlist { display: none !important; }
   height: 14px;
   margin-left: -7px;
   border-radius: 50%;
-  background: var(--lp-board-deep);
-  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.5);
+  background: var(--lp-board);
+  box-shadow: inset 0 2px 3px rgba(0, 0, 0, 0.35);
 }
 .lp-tag-from {
   display: block;
@@ -184,7 +228,7 @@ html[data-lp-phase="store"] .hk-phase-waitlist { display: none !important; }
   aspect-ratio: 2 / 3;
   object-fit: cover;
   border-radius: 10px;
-  background: #dfe7d6;
+  background: var(--lp-line);
 }
 
 .lp-sticker {
@@ -198,20 +242,20 @@ html[data-lp-phase="store"] .hk-phase-waitlist { display: none !important; }
   height: 76px;
   border-radius: 50%;
   background: var(--lp-sticker);
-  color: var(--lp-ink);
+  color: var(--lp-on-sticker);
   font-size: 0.8125rem;
   font-weight: 900;
   line-height: 1.25;
   text-align: center;
   transform: rotate(9deg);
-  box-shadow: 0 4px 10px rgba(8, 26, 17, 0.3);
+  box-shadow: 0 4px 10px rgba(var(--lp-shadow), 0.3);
 }
 
 .lp-hero-note {
   margin-top: 10px;
   font-size: 0.75rem;
   line-height: 1.6;
-  color: rgba(255, 255, 255, 0.72);
+  color: var(--lp-on-board-soft);
 }
 
 /* ---------- 何しに100均へ ---------- */
@@ -227,7 +271,7 @@ html[data-lp-phase="store"] .hk-phase-waitlist { display: none !important; }
   font-size: 2.5rem;
   font-weight: 900;
   line-height: 1;
-  color: var(--lp-leaf);
+  color: var(--lp-accent);
 }
 .lp-source { margin-top: 4px; font-size: 0.75rem; color: var(--lp-ink-soft); }
 .lp-why-body { margin-top: 18px; max-width: 34em; font-size: 1rem; font-weight: 500; }
@@ -240,7 +284,7 @@ html[data-lp-phase="store"] .hk-phase-waitlist { display: none !important; }
   padding: 24px 22px 30px;
   background: var(--lp-white);
   font-variant-numeric: tabular-nums;
-  box-shadow: 0 12px 28px rgba(23, 37, 28, 0.12);
+  box-shadow: 0 12px 28px rgba(var(--lp-shadow), 0.12);
   transform: rotate(-1.5deg);
 }
 .lp-receipt::after {
@@ -279,7 +323,7 @@ html[data-lp-phase="store"] .hk-phase-waitlist { display: none !important; }
   padding-top: 10px;
   border-top: 2px dashed var(--lp-line);
 }
-.lp-receipt-total dd { font-size: 1.75rem; color: var(--lp-leaf); }
+.lp-receipt-total dd { font-size: 1.75rem; color: var(--lp-accent); }
 
 /* ---------- できること ---------- */
 .lp-features { padding-block: 56px; background: var(--lp-white); }
@@ -322,7 +366,7 @@ html[data-lp-phase="store"] .hk-phase-waitlist { display: none !important; }
   padding: 44px 22px 24px;
   border-radius: 18px;
   background: var(--lp-white);
-  box-shadow: 0 10px 26px rgba(23, 37, 28, 0.1);
+  box-shadow: 0 10px 26px rgba(var(--lp-shadow), 0.1);
 }
 .lp-plan::before {
   content: "";
@@ -334,14 +378,14 @@ html[data-lp-phase="store"] .hk-phase-waitlist { display: none !important; }
   margin-left: -8px;
   border-radius: 50%;
   background: var(--lp-paper);
-  box-shadow: inset 0 2px 3px rgba(23, 37, 28, 0.25);
+  box-shadow: inset 0 2px 3px rgba(var(--lp-shadow), 0.25);
 }
-.lp-plan--pro { background: var(--lp-board); color: #fff; }
+.lp-plan--pro { background: var(--lp-ink); color: #fff; }
 .lp-plan--pro::before { background: var(--lp-paper); }
 .lp-plan-name { font-size: 1rem; font-weight: 900; }
 .lp-plan-cost { margin-top: 2px; font-size: 3rem; font-weight: 900; line-height: 1.15; }
 .lp-plan-cost small { font-size: 1rem; font-weight: 700; margin-inline: 2px; }
-.lp-plan--pro .lp-plan-cost { color: var(--lp-sticker); }
+.lp-plan--pro .lp-plan-cost { color: #ffd84a; }
 .lp-plan ul { margin-top: 14px; list-style: none; display: grid; gap: 8px; }
 .lp-plan li {
   position: relative;
@@ -357,11 +401,11 @@ html[data-lp-phase="store"] .hk-phase-waitlist { display: none !important; }
   top: 0.45em;
   width: 0.7em;
   height: 0.38em;
-  border-left: 3px solid var(--lp-leaf);
-  border-bottom: 3px solid var(--lp-leaf);
+  border-left: 3px solid var(--lp-accent);
+  border-bottom: 3px solid var(--lp-accent);
   transform: rotate(-45deg);
 }
-.lp-plan--pro li::before { border-color: var(--lp-sticker); }
+.lp-plan--pro li::before { border-color: #ffd84a; }
 .lp-plan li b { font-weight: 900; }
 .lp-price-note { margin-top: 20px; font-size: 0.8125rem; color: var(--lp-ink-soft); max-width: 44em; }
 
@@ -373,18 +417,18 @@ html[data-lp-phase="store"] .hk-phase-waitlist { display: none !important; }
 
 /* ---------- 最後のボタン ---------- */
 .lp-last {
-  color: #fff;
+  color: var(--lp-on-board);
   background-color: var(--lp-board);
-  background-image: radial-gradient(circle, rgba(8, 26, 17, 0.5) 0 3px, transparent 3.6px);
+  background-image: radial-gradient(circle, var(--lp-dot) 0 3px, transparent 3.6px);
   background-size: 28px 28px;
   background-position: 14px 14px;
   padding-block: 52px 60px;
   text-align: center;
 }
-.lp-last-text { margin-top: 8px; font-weight: 500; color: rgba(255, 255, 255, 0.88); }
+.lp-last-text { margin-top: 8px; font-weight: 500; color: var(--lp-on-board-soft); }
 .lp-last .lp-stores { justify-content: center; margin-top: 20px; }
-.lp-operator { margin-top: 36px; font-size: 0.8125rem; color: rgba(255, 255, 255, 0.72); }
-.lp-operator a { color: #fff; text-decoration: underline; text-underline-offset: 3px; margin-inline: 8px; }
+.lp-operator { margin-top: 36px; font-size: 0.8125rem; color: var(--lp-on-board-soft); }
+.lp-operator a { color: var(--lp-on-board); text-decoration: underline; text-underline-offset: 3px; margin-inline: 8px; }
 
 /* ---------- スマホで追従するボタン ---------- */
 .lp-dock {
@@ -399,7 +443,7 @@ html[data-lp-phase="store"] .hk-phase-waitlist { display: none !important; }
   padding: 8px 8px 8px 10px;
   border-radius: 18px;
   background: var(--lp-white);
-  box-shadow: 0 10px 30px rgba(8, 26, 17, 0.28);
+  box-shadow: 0 10px 30px rgba(var(--lp-shadow), 0.28);
   transform: translateY(140%);
   transition: transform 0.25s ease;
 }
@@ -411,13 +455,13 @@ html[data-lp-phase="store"] .hk-phase-waitlist { display: none !important; }
 .lp-dock-go {
   padding: 11px 18px;
   border-radius: 12px;
-  background: var(--lp-leaf);
+  background: var(--lp-accent);
   color: #fff;
   font-size: 0.9375rem;
   font-weight: 900;
   white-space: nowrap;
 }
-.lp-dock-go:hover { color: #fff; background: var(--lp-board); }
+.lp-dock-go:hover { color: #fff; background: var(--lp-ink); }
 
 @media (prefers-reduced-motion: reduce) {
   .lp-dock { transition: none; }
@@ -464,4 +508,21 @@ html[data-lp-phase="store"] .hk-phase-waitlist { display: none !important; }
 
   .lp-last { padding-block: 80px 88px; }
   .lp-dock { display: none; }
+}
+
+/* ---------- 英語版 ---------- */
+.hyakkin-lp.lp-en {
+  --lp-font: "Outfit", "Helvetica Neue", Arial, sans-serif;
+  font-feature-settings: normal;
+  line-height: 1.65;
+}
+.lp-en .lp-hero-title { font-size: clamp(1.875rem, 8.6vw, 3rem); line-height: 1.12; letter-spacing: -0.01em; }
+.lp-en .lp-h2 { line-height: 1.2; letter-spacing: -0.01em; }
+.lp-en .lp-tag-to { line-height: 1.25; }
+.lp-en .lp-sticker { font-size: 0.75rem; }
+.lp-lang { margin-left: auto; font-size: 0.8125rem; font-weight: 700; color: var(--lp-on-board); text-decoration: underline; text-underline-offset: 3px; }
+.lp-lang:hover { color: var(--lp-on-board); }
+@media (min-width: 900px) {
+  .lp-en .lp-hero-title { font-size: clamp(2.5rem, 4vw, 3.25rem); }
+  .lp-feature-list--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); max-width: 900px; }
 }
